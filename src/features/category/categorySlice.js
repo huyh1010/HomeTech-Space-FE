@@ -67,6 +67,7 @@ export const categorySlice = createSlice({
     });
     builder.addCase(getProductsByCategory.fulfilled, (state, action) => {
       state.loading = false;
+
       state.productsByCategory = action.payload;
     });
     builder.addCase(getCategories.rejected, (state, action) => {

@@ -7,7 +7,7 @@ import CategoryCard from "./CategoryCard";
 function CategoriesBanner() {
   const {
     categories: { categories },
-  } = useSelector((state) => state.categories);
+  } = useSelector((state) => state?.categories);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -21,12 +21,11 @@ function CategoriesBanner() {
           Shop Our Top Categories
         </Typography>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          {categories &&
-            categories.map((category) => (
-              <Grid item xs={12} sm={6} md={4} lg={2} key={category._id}>
-                <CategoryCard category={category} />
-              </Grid>
-            ))}
+          {categories?.map((category) => (
+            <Grid item xs={12} sm={6} md={4} lg={2} key={category._id}>
+              <CategoryCard category={category} />
+            </Grid>
+          ))}
         </Grid>
       </Container>
     </>

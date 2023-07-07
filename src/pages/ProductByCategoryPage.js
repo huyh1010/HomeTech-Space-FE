@@ -12,7 +12,7 @@ function ProductByCategoryPage() {
     (state) => state?.categories?.productsByCategory?.category?.products
   );
   const { coverImgUrl } = useSelector(
-    (state) => state?.categories?.productsByCategory?.category
+    (state) => state?.categories?.productsByCategory?.category || {}
   );
 
   const params = useParams();
@@ -20,7 +20,11 @@ function ProductByCategoryPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProductsByCategory(categoryId));
+    try {
+      dispatch(getProductsByCategory(categoryId));
+    } catch (error) {
+      console.log(error);
+    }
   }, [dispatch, categoryId]);
 
   return (

@@ -13,6 +13,7 @@ import AccountPage from "../pages/AccountPage";
 import AuthRequire from "./AuthRequire";
 import ProductByCategoryPage from "../pages/ProductByCategoryPage";
 import ProductPage from "../pages/ProductPage";
+import CartPage from "../pages/CartPage";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/order" element={<Order />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route
           path="/payment"
           element={

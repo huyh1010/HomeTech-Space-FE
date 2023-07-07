@@ -9,22 +9,28 @@ import {
 import { fCurrency } from "../../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { addProductToCart } from "../cart/cartSlice";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleCart = (productId) => {
+    dispatch(addProductToCart({ product_id: productId }));
+  };
   return (
     <Card
       sx={{
         height: "300px",
         cursor: "pointer",
       }}
-      onClick={() => navigate(`/product/${product._id}`)}
     >
       <CardMedia
         component={"img"}
         image={product.poster_path}
         title={product.name}
         sx={{ height: "50%", objectFit: "contain" }}
+        onClick={() => navigate(`/product/${product._id}`)}
       />
       <CardContent>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -48,6 +54,7 @@ function ProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
+          onClick={() => handleCart(product._id)}
         >
           Add to Cart
         </Button>

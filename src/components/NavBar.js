@@ -175,7 +175,7 @@ function NavBar() {
                 <AccountCircleIcon color="dark" />
               </IconButton>
               {renderMenu}
-              <IconButton>
+              <IconButton onClick={() => navigate("/cart")}>
                 {" "}
                 <ShoppingCartIcon color="dark" />
               </IconButton>

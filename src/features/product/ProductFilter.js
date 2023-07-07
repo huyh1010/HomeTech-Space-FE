@@ -13,9 +13,9 @@ export const FILTER_CATEGORY_OPTIONS = [
 ];
 
 export const FILTER_PRICE_OPTIONS = [
-  { value: "below", label: "Below $25" },
-  { value: "between", label: "Between $25 - $75" },
-  { value: "above", label: "Above $75" },
+  { value: "below_25", label: "Below $25" },
+  { value: "between_25_75", label: "Between $25 - $75" },
+  { value: "above_75", label: "Above $75" },
 ];
 function ProductFilter({ resetFilter }) {
   return (

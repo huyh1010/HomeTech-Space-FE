@@ -44,6 +44,7 @@ export const getSingleProduct = createAsyncThunk(
     }
   }
 );
+
 const initialState = {
   newProducts: [],
   products: [],
