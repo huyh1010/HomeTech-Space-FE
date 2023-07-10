@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 
 export const addProductToCart = createAsyncThunk(
@@ -23,10 +23,33 @@ export const addProductToCart = createAsyncThunk(
 );
 export const removeProductQuantity = createAsyncThunk(
   "carts/removeProductQuantity",
-  async ({ product_id }, { rejectWithValue }) => {
+  async (productId, { rejectWithValue }) => {
     try {
-      let url = `/carts/quantity/${product_id}`;
-      const res = await apiService.delete(url);
+      console.log(productId);
+      let url = "/carts/quantity/dec";
+      const res = await apiService.put(url, { product_id: productId });
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
+export const AddProductQuantity = createAsyncThunk(
+  "carts/AddProductQuantity",
+  async (productId, { rejectWithValue }) => {
+    try {
+      let url = "/carts/quantity/inc";
+      const res = await apiService.put(url, { product_id: productId });
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -63,15 +86,40 @@ export const getProductFromCart = createAsyncThunk(
   }
 );
 
+export const removeProduct = createAsyncThunk(
+  "carts/removeProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      let url = "/carts/product";
+      const res = await apiService.delete(url, {
+        data: { product_id: productId },
+      });
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
 const initialState = {
   cart: [],
-  totalPrice: 0,
+
   loading: false,
   error: null,
 };
 export const cartSlice = createSlice({
   name: "carts",
   initialState,
+  reducer: {},
   extraReducers: (builder) => {
     builder.addCase(addProductToCart.pending, (state) => {
       state.loading = true;
@@ -85,6 +133,14 @@ export const cartSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(AddProductQuantity.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(removeProduct.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(addProductToCart.fulfilled, (state, action) => {
       state.loading = false;
       state.cart = action.payload;
@@ -95,8 +151,40 @@ export const cartSlice = createSlice({
     });
     builder.addCase(removeProductQuantity.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart = action.payload;
+      const { productId } = action.payload;
+
+      const item = state.cart.cart[0].items?.find(
+        (item) => item.productId._id === productId
+      );
+
+      if (item?.quantity === 1) {
+        item.quantity = 1;
+      } else {
+        item.quantity--;
+      }
+      item.total = item.quantity * item.price;
     });
+    builder.addCase(AddProductQuantity.fulfilled, (state, action) => {
+      state.loading = false;
+      const { productId } = action.payload;
+
+      const item = state.cart.cart[0].items?.find(
+        (item) => item.productId._id === productId
+      );
+
+      item.quantity++;
+
+      item.total = item.quantity * item.price;
+    });
+    builder.addCase(removeProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      const { productId } = action.payload;
+
+      state.cart.cart[0].items = state.cart.cart[0].items?.filter(
+        (item) => item.productId._id !== productId
+      );
+    });
+
     builder.addCase(addProductToCart.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
@@ -121,8 +209,17 @@ export const cartSlice = createSlice({
         state.error = action.error.message;
       }
     });
+    builder.addCase(AddProductQuantity.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+      } else {
+        state.error = action.error.message;
+      }
+    });
   },
 });
-
+export const { increment } = cartSlice.actions;
 const { reducer } = cartSlice;
+
 export default reducer;

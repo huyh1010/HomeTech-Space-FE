@@ -3,11 +3,12 @@ import apiService from "../../app/apiService";
 
 export const getProducts = createAsyncThunk(
   "products/GetProducts",
-  async ({ page, name, category, limit }, { rejectWithValue }) => {
+  async ({ page, name, category, limit, price }, { rejectWithValue }) => {
     try {
       let url = `/products?page=${page}&limit=${limit}`;
       if (name) url += `&name=${name}`;
       if (category) url += `&category=${category}`;
+      if (price) url += `&price=${price}`;
       const res = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {

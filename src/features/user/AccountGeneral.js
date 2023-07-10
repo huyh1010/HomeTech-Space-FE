@@ -1,7 +1,7 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth.js";
 import { FTextField, FormProvider } from "../../components/form";
-import { Container } from "@mui/material";
+import { Button, Card, Container, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,10 +31,15 @@ function AccountGeneral() {
 
   return (
     <FormProvider methods={methods}>
-      <Container>
-        <FTextField name="name" label="Name" />
-        <FTextField name="phone" label="Phone Number" disabled />
-        <FTextField name="address" label="Address" />
+      <Container sx={{ py: 10, px: 3, textAlign: "center" }}>
+        <Card sx={{ p: 3 }}>
+          <Stack spacing={2}>
+            <FTextField name="name" label="Name" />
+            <FTextField name="phone" label="Phone Number" />
+            <FTextField name="address" label="Address" />
+          </Stack>
+          <Button color="red">Save Changes</Button>
+        </Card>
       </Container>
     </FormProvider>
   );

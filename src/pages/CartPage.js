@@ -13,11 +13,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addProductToCart,
+  AddProductQuantity,
   getProductFromCart,
+  removeProduct,
   removeProductQuantity,
 } from "../features/cart/cartSlice";
 import { fCurrency } from "../utils/numberFormat";
@@ -27,17 +28,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 function CartPage() {
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(1);
+
   const {
     cart: { cart },
   } = useSelector((state) => state?.carts);
 
-  const addItem = (productId) => {
-    dispatch(addProductToCart({ product_id: productId }));
+  const totalPrice = () => {
+    let total = 0;
+
+    cart?.map((e) =>
+      e.items.map((item) => (total = total + item.quantity * item.price))
+    );
+    return total;
   };
-  // const decreaseItem = (productId) => {
-  //   dispatch(removeProductQuantity({ product_id: productId }));
-  // };
+
+  const addItem = (productId) => {
+    dispatch(AddProductQuantity(productId));
+  };
+  const decreaseItem = (productId) => {
+    dispatch(removeProductQuantity(productId));
+  };
+  const removeItem = (productId) => {
+    dispatch(removeProduct(productId));
+  };
 
   useEffect(() => {
     dispatch(getProductFromCart());
@@ -65,7 +78,7 @@ function CartPage() {
             </TableHead>
             <TableBody>
               {cart?.map((e) =>
-                e.items.map((item) => (
+                e?.items?.map((item) => (
                   <TableRow>
                     <TableCell
                       sx={{
@@ -76,15 +89,15 @@ function CartPage() {
                       }}
                     >
                       <Avatar
-                        src={item.productId.poster_path}
+                        src={item?.productId?.poster_path}
                         sx={{ mr: 2, width: 50, height: 50 }}
-                        alt={item.productId.name}
+                        alt={item?.productId?.name}
                       />
                       <Typography variant="body1">
-                        {item.productId.name}
+                        {item?.productId?.name}
                       </Typography>
                     </TableCell>
-                    <TableCell>{fCurrency(item.productId.price)}</TableCell>
+                    <TableCell>{fCurrency(item?.productId?.price)}</TableCell>
                     <TableCell
                       sx={{
                         display: "flex",
@@ -92,28 +105,40 @@ function CartPage() {
                         justifyContent: "center",
                       }}
                     >
-                      <IconButton onClick={() => addItem(item.productId._id)}>
+                      <IconButton onClick={() => addItem(item?.productId?._id)}>
                         <AddIcon />
                       </IconButton>
                       {/* <Typography variant="subtitle2">
                         
                       </Typography> */}
-                      {item.quantity}
+                      {item?.quantity}
                       <IconButton
-                      // onClick={() => decreaseItem(item.productId._id)}
+                        onClick={() => decreaseItem(item.productId._id)}
+                        disabled={item.quantity === 1}
                       >
                         <RemoveIcon />
                       </IconButton>
                     </TableCell>
-                    <TableCell>{fCurrency(item.total)}</TableCell>
+                    <TableCell>{fCurrency(item?.total)}</TableCell>
                     <TableCell>
-                      <IconButton>
-                        <DeleteIcon />
+                      <IconButton
+                        onClick={() => removeItem(item.productId._id)}
+                      >
+                        <DeleteIcon color="red" />
                       </IconButton>
                     </TableCell>
                   </TableRow>
                 ))
               )}
+              <TableRow>
+                <TableCell rowSpan={3} />
+                <TableCell colSpan={2}>Subtotal</TableCell>
+                <TableCell align="right">{fCurrency(totalPrice())}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2}>Total</TableCell>
+                <TableCell align="right">{fCurrency(totalPrice())}</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

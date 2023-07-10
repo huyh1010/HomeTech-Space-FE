@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../features/product/productSlice";
@@ -11,6 +11,8 @@ import ProductList from "../features/product/ProductList";
 
 const defaultValues = {
   name: "",
+  category: "",
+  price: "",
 };
 
 function ProductPage() {
@@ -28,8 +30,6 @@ function ProductPage() {
     defaultValues,
   });
 
-  const { reset } = methods;
-
   useEffect(() => {
     dispatch(getProducts({ name, page, limit }));
   }, [dispatch, name, page]);
@@ -37,9 +37,7 @@ function ProductPage() {
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
       <Stack>
-        <FormProvider methods={methods}>
-          <ProductFilter resetFilter={reset} />
-        </FormProvider>
+        <ProductFilter />
       </Stack>
       <Stack sx={{ flexGrow: 1, justifyContent: "center" }}>
         <FormProvider methods={methods}>
