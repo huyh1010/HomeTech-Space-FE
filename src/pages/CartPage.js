@@ -25,9 +25,11 @@ import { fCurrency } from "../utils/numberFormat";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     cart: { cart },
@@ -122,7 +124,7 @@ function CartPage() {
                     <TableCell>{fCurrency(item?.total)}</TableCell>
                     <TableCell>
                       <IconButton
-                        onClick={() => removeItem(item.productId._id)}
+                        onClick={() => removeItem(item?.productId?._id)}
                       >
                         <DeleteIcon color="red" />
                       </IconButton>
@@ -145,6 +147,7 @@ function CartPage() {
       </Paper>
       <Box textAlign={"center"} mt={4}>
         <Button
+          onClick={() => navigate("/checkout")}
           size="large"
           style={{
             backgroundColor: "black",

@@ -7,13 +7,13 @@ import NotFoundPage from "../pages/NotFoundPage";
 import RegisterPage from "../pages/RegisterPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import Order from "../pages/Order";
-import Payment from "../pages/Payment";
 import OrderInvoice from "../pages/OrderInvoice";
 import AccountPage from "../pages/AccountPage";
 import AuthRequire from "./AuthRequire";
 import ProductByCategoryPage from "../pages/ProductByCategoryPage";
 import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
+import CheckOutPage from "../pages/CheckOutPage";
 
 function Router() {
   return (
@@ -30,10 +30,10 @@ function Router() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route
-          path="/payment"
+          path="/checkout"
           element={
             <AuthRequire>
-              <Payment />
+              <CheckOutPage />
             </AuthRequire>
           }
         />

@@ -32,7 +32,7 @@ function ProductPage() {
 
   useEffect(() => {
     dispatch(getProducts({ name, page, limit }));
-  }, [dispatch, name, page]);
+  }, [dispatch, name, page, limit]);
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>

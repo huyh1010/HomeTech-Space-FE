@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 
 export const addProductToCart = createAsyncThunk(
@@ -112,7 +112,6 @@ export const removeProduct = createAsyncThunk(
 
 const initialState = {
   cart: [],
-
   loading: false,
   error: null,
 };
@@ -180,9 +179,17 @@ export const cartSlice = createSlice({
       state.loading = false;
       const { productId } = action.payload;
 
-      state.cart.cart[0].items = state.cart.cart[0].items?.filter(
-        (item) => item.productId._id !== productId
+      // state.cart.cart[0].items = state.cart.cart[0].items?.filter(
+      //   (item) => item.productId._id !== productId
+      // );
+      const removeItem = state.cart.cart[0].items?.findIndex(
+        (item) => item.productId._id === productId
       );
+      console.log(removeItem);
+
+      state.cart.cart[0].items = state.cart.cart[0].items.slice(removeItem, 1);
+
+      // state.cart.cart[0].items = state.cart.cart[0].items.splice(index, 1);
     });
 
     builder.addCase(addProductToCart.rejected, (state, action) => {

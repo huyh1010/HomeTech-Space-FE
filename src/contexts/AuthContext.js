@@ -91,6 +91,7 @@ const AuthProvider = ({ children }) => {
   };
   const logout = async (callback) => {
     setSession(null);
+    // localStorage.removeItem('cart')
     dispatch({ type: LOGOUT });
     callback();
   };
