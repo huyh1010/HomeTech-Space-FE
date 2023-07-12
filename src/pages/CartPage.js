@@ -32,7 +32,7 @@ function CartPage() {
   const navigate = useNavigate();
 
   const { cart } = useSelector((state) => state?.carts || []);
-  console.log(cart);
+
   const totalPrice = () => {
     let total = 0;
 
@@ -63,95 +63,107 @@ function CartPage() {
       <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
         My Cart
       </Typography>
-      <Paper>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Product</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Qty.</TableCell>
-                <TableCell>Sum</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cart?.items?.map((item) => (
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
+      {cart ? (
+        <>
+          <Paper>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Product</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Qty.</TableCell>
+                    <TableCell>Sum</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {cart?.items?.map((item) => (
+                    <TableRow>
+                      <TableCell
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
 
-                      cursor: "pointer",
-                    }}
-                  >
-                    <Avatar
-                      src={item?.productId?.poster_path}
-                      sx={{ mr: 2, width: 50, height: 50 }}
-                      alt={item?.productId?.name}
-                    />
-                    <Typography variant="body1">
-                      {item?.productId?.name}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{fCurrency(item?.productId?.price)}</TableCell>
-                  <TableCell
-                    sx={{
-                      display: "flex",
-                      // alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <IconButton onClick={() => addItem(item?.productId?._id)}>
-                      <AddIcon />
-                    </IconButton>
-                    {/* <Typography variant="subtitle2">
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Avatar
+                          src={item?.productId?.poster_path}
+                          sx={{ mr: 2, width: 50, height: 50 }}
+                          alt={item?.productId?.name}
+                        />
+                        <Typography variant="body1">
+                          {item?.productId?.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{fCurrency(item?.productId?.price)}</TableCell>
+                      <TableCell
+                        sx={{
+                          display: "flex",
+                          // alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <IconButton
+                          onClick={() => addItem(item?.productId?._id)}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                        {/* <Typography variant="subtitle2">
                         
                       </Typography> */}
-                    {item?.quantity}
-                    <IconButton
-                      onClick={() => decreaseItem(item.productId._id)}
-                      disabled={item.quantity === 1}
-                    >
-                      <RemoveIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>{fCurrency(item?.total)}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      onClick={() => removeItem(item?.productId?._id)}
-                    >
-                      <DeleteIcon color="red" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-              <TableRow>
-                <TableCell rowSpan={3} />
-                <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="right">{fCurrency(totalPrice())}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={2}>Total</TableCell>
-                <TableCell align="right">{fCurrency(totalPrice())}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <Box textAlign={"center"} mt={4}>
-        <Button
-          onClick={() => navigate("/checkout")}
-          size="large"
-          style={{
-            backgroundColor: "black",
-            margin: "auto",
-            borderRadius: 14,
-          }}
-        >
-          Check Out
-        </Button>
-      </Box>
+                        {item?.quantity}
+                        <IconButton
+                          onClick={() => decreaseItem(item.productId._id)}
+                          disabled={item.quantity === 1}
+                        >
+                          <RemoveIcon />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>{fCurrency(item?.total)}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => removeItem(item?.productId?._id)}
+                        >
+                          <DeleteIcon color="red" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow>
+                    <TableCell rowSpan={3} />
+                    <TableCell colSpan={2}>Subtotal</TableCell>
+                    <TableCell align="right">
+                      {fCurrency(totalPrice())}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2}>Total</TableCell>
+                    <TableCell align="right">
+                      {fCurrency(totalPrice())}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          <Box textAlign={"center"} mt={4}>
+            <Button
+              onClick={() => navigate("/checkout")}
+              size="large"
+              style={{
+                backgroundColor: "black",
+                margin: "auto",
+                borderRadius: 14,
+              }}
+            >
+              Check Out
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <Typography>Cart is Empty</Typography>
+      )}
     </Container>
   );
 }

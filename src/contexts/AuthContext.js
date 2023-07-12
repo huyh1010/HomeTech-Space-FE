@@ -2,6 +2,7 @@ import { createContext, useEffect, useReducer } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
 import { assignCartToUser } from "../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
   isInitialized: false,
@@ -44,6 +45,8 @@ const setSession = (accessToken) => {
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const dispatchFunction = useDispatch();
+  const cart = useSelector((state) => state.carts.cart);
 
   useEffect(() => {
     const initialize = async () => {
@@ -87,8 +90,10 @@ const AuthProvider = ({ children }) => {
   const login = async ({ email, password }, callback) => {
     const res = await apiService.post("/auth/login", { email, password });
     const { user, accessToken } = res.data;
-    if (user) {
-      dispatch(assignCartToUser({ user_id: user._id }));
+    if (user && cart) {
+      dispatchFunction(
+        assignCartToUser({ user_id: user._id, cart_id: cart._id })
+      );
     }
     setSession(accessToken);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });

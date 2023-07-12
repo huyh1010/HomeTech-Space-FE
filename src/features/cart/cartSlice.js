@@ -88,11 +88,10 @@ export const getProductFromCart = createAsyncThunk(
 
 export const assignCartToUser = createAsyncThunk(
   "users/assignCartToUser",
-  async ({ user_id }, { rejectWithValue }) => {
-    console.log(user_id);
+  async ({ user_id, cart_id }, { rejectWithValue }) => {
     try {
       let url = `/carts/user`;
-      const res = await apiService.put(url, { user_id });
+      const res = await apiService.put(url, { user_id, cart_id });
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -134,7 +133,7 @@ export const removeProduct = createAsyncThunk(
 
 const initialState = {
   cart: [],
-  cartItemCount: null,
+  cartItemCount: 0,
   loading: false,
   error: null,
 };
@@ -170,15 +169,19 @@ export const cartSlice = createSlice({
     builder.addCase(addProductToCart.fulfilled, (state, action) => {
       state.loading = false;
       console.log(action.payload);
-      const { items } = action.payload;
+      const cart = action.payload;
       state.cart = action.payload;
-      state.cartItemCount = items.length;
+      if (cart) {
+        state.cartItemCount = cart.items.length;
+      }
     });
     builder.addCase(getProductFromCart.fulfilled, (state, action) => {
       state.loading = false;
-      const { items } = action.payload;
+      const cart = action.payload;
       state.cart = action.payload;
-      state.cartItemCount = items.length;
+      if (cart) {
+        state.cartItemCount = cart.items.length;
+      }
     });
     builder.addCase(removeProductQuantity.fulfilled, (state, action) => {
       state.loading = false;
@@ -212,6 +215,7 @@ export const cartSlice = createSlice({
     builder.addCase(assignCartToUser.fulfilled, (state, action) => {
       state.loading = false;
       console.log(action.payload);
+      state.cart = action.payload;
     });
     builder.addCase(removeProduct.fulfilled, (state, action) => {
       state.loading = false;

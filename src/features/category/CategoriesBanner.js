@@ -16,11 +16,11 @@ function CategoriesBanner() {
 
   return (
     <>
-      <Container justifyContent="center" sx={{ mt: 4 }}>
+      <Container sx={{ mt: 4 }}>
         <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
           Shop Our Top Categories
         </Typography>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
+        <Grid container spacing={2} alignItems="center">
           {categories?.map((category) => (
             <Grid item xs={12} sm={6} md={4} lg={2} key={category._id}>
               <CategoryCard category={category} />

@@ -28,8 +28,8 @@ function NewProductList() {
       >
         {products &&
           products.map((product) => (
-            <Grid item xs={12} sm={4} md={4}>
-              <NewProductCard product={product} key={product._id} />
+            <Grid item xs={12} sm={4} md={4} key={product._id}>
+              <NewProductCard product={product} />
             </Grid>
           ))}
       </Grid>

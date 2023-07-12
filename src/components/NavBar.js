@@ -24,8 +24,8 @@ function NavBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { cartItemCount } = useSelector((state) => state.carts);
-  console.log(cartItemCount);
+  const { cartItemCount } = useSelector((state) => state?.carts);
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -105,7 +105,7 @@ function NavBar() {
   );
   return (
     <Box>
-      <AppBar sx={{ height: "70px", justifyContent: "center" }} elevation={0.9}>
+      <AppBar sx={{ height: "70px", justifyContent: "center" }}>
         <Container>
           <Toolbar variant="dense" sx={{ justifyContent: "space-around" }}>
             <Stack direction="row" alignItems="center">

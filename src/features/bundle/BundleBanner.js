@@ -10,7 +10,7 @@ function BundleBanner() {
     },
   };
   return (
-    <Container justifyContent="center" sx={{ mt: 10 }}>
+    <Container sx={{ mt: 10 }}>
       <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
         Shop Our Pack Product
       </Typography>
