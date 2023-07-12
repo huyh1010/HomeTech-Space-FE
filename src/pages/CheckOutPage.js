@@ -25,7 +25,7 @@ function CheckOutPage() {
       cart: [cart],
     },
   } = useSelector((state) => state?.carts);
-
+  console.log(cart);
   const methods = useForm({
     defaultValues: {
       name: "",

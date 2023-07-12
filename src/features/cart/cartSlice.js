@@ -15,7 +15,7 @@ export const addProductToCart = createAsyncThunk(
         });
       };
       await timeout();
-      return res.data;
+      return res.data[0];
     } catch (error) {
       rejectWithValue(error);
     }
@@ -79,7 +79,7 @@ export const getProductFromCart = createAsyncThunk(
         });
       };
       await timeout();
-      return res.data;
+      return res.data[0];
     } catch (error) {
       rejectWithValue(error);
     }
@@ -150,9 +150,10 @@ export const cartSlice = createSlice({
     });
     builder.addCase(removeProductQuantity.fulfilled, (state, action) => {
       state.loading = false;
+      console.log(action.payload);
       const { productId } = action.payload;
 
-      const item = state.cart.cart[0].items?.find(
+      const item = state.cart.items.find(
         (item) => item.productId._id === productId
       );
 
@@ -167,7 +168,7 @@ export const cartSlice = createSlice({
       state.loading = false;
       const { productId } = action.payload;
 
-      const item = state.cart.cart[0].items?.find(
+      const item = state.cart.items.find(
         (item) => item.productId._id === productId
       );
 
@@ -178,18 +179,17 @@ export const cartSlice = createSlice({
     builder.addCase(removeProduct.fulfilled, (state, action) => {
       state.loading = false;
       const { productId } = action.payload;
-
-      // state.cart.cart[0].items = state.cart.cart[0].items?.filter(
+      console.log(productId);
+      // state.cart.items = state.cart.items?.filter(
       //   (item) => item.productId._id !== productId
       // );
-      const removeItem = state.cart.cart[0].items?.findIndex(
+      let itemIndex = state.cart.items.findIndex(
         (item) => item.productId._id === productId
       );
-      console.log(removeItem);
 
-      state.cart.cart[0].items = state.cart.cart[0].items.slice(removeItem, 1);
-
-      // state.cart.cart[0].items = state.cart.cart[0].items.splice(index, 1);
+      if (itemIndex > -1) {
+        state.cart.items.splice(itemIndex, 1);
+      }
     });
 
     builder.addCase(addProductToCart.rejected, (state, action) => {

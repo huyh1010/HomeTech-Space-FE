@@ -23,7 +23,7 @@ function ProductPage() {
   const dispatch = useDispatch();
   const {
     products: { products, totalPages },
-  } = useSelector((state) => state.products);
+  } = useSelector((state) => state?.products);
   const { loading, error } = useSelector((state) => state.products);
 
   const methods = useForm({
