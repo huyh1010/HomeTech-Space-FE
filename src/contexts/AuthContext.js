@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
+import { assignCartToUser } from "../features/cart/cartSlice";
 
 const initialState = {
   isInitialized: false,
@@ -78,6 +79,7 @@ const AuthProvider = ({ children }) => {
   const register = async ({ name, email, password }, callback) => {
     const res = await apiService.post("/users", { name, email, password });
     const { user, accessToken } = res.data;
+    //dispatch another function update user in cart controller
     setSession(accessToken);
     dispatch({ type: REGISTER_SUCCESS, payload: { user } });
     callback();
@@ -85,6 +87,9 @@ const AuthProvider = ({ children }) => {
   const login = async ({ email, password }, callback) => {
     const res = await apiService.post("/auth/login", { email, password });
     const { user, accessToken } = res.data;
+    if (user) {
+      dispatch(assignCartToUser({ user_id: user._id }));
+    }
     setSession(accessToken);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
     callback();

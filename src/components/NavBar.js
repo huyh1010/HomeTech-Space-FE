@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Container,
@@ -17,11 +18,14 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Logo from "../components/Logo.js";
 import useAuth from "../hooks/useAuth.js";
+import { useSelector } from "react-redux";
 
 function NavBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { cartItemCount } = useSelector((state) => state.carts);
+  console.log(cartItemCount);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -177,7 +181,9 @@ function NavBar() {
               {renderMenu}
               <IconButton onClick={() => navigate("/cart")}>
                 {" "}
-                <ShoppingCartIcon color="dark" />
+                <Badge badgeContent={cartItemCount} color="secondary">
+                  <ShoppingCartIcon color="dark" />
+                </Badge>
               </IconButton>
             </Stack>
           </Toolbar>

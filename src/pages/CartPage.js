@@ -31,7 +31,7 @@ function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { cart } = useSelector((state) => state?.carts);
+  const { cart } = useSelector((state) => state?.carts || []);
   console.log(cart);
   const totalPrice = () => {
     let total = 0;
@@ -40,13 +40,13 @@ function CartPage() {
     return total;
   };
 
-  const addItem = (productId) => {
+  const addItem = async (productId) => {
     dispatch(AddProductQuantity(productId));
   };
-  const decreaseItem = (productId) => {
+  const decreaseItem = async (productId) => {
     dispatch(removeProductQuantity(productId));
   };
-  const removeItem = (productId) => {
+  const removeItem = async (productId) => {
     dispatch(removeProduct(productId));
   };
 

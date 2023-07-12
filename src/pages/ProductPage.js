@@ -21,9 +21,9 @@ function ProductPage() {
   const limit = 12;
 
   const dispatch = useDispatch();
-  const {
-    products: { products, totalPages },
-  } = useSelector((state) => state?.products);
+  const { products, totalPages } = useSelector(
+    (state) => state?.products?.products
+  );
   const { loading, error } = useSelector((state) => state.products);
 
   const methods = useForm({
