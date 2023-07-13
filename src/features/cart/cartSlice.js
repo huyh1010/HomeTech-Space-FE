@@ -67,10 +67,11 @@ export const AddProductQuantity = createAsyncThunk(
 
 export const getProductFromCart = createAsyncThunk(
   "carts/getProductFromCart",
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
       let url = `/carts`;
-      const res = await apiService.get(url);
+
+      const res = await apiService.get(url, { user_id: userId });
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -130,7 +131,11 @@ export const removeProduct = createAsyncThunk(
     }
   }
 );
-
+// const cart =
+//   localStorage.getItem("cart") !== null
+//     ? JSON.parse(localStorage.getItem("cart"))
+//     : [];
+// console.log(cart);
 const initialState = {
   cart: [],
   cartItemCount: 0,
@@ -168,9 +173,9 @@ export const cartSlice = createSlice({
     });
     builder.addCase(addProductToCart.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       const cart = action.payload;
       state.cart = action.payload;
+      // localStorage.setItem("cart", JSON.stringify(state.cart));
       if (cart) {
         state.cartItemCount = cart.items.length;
       }

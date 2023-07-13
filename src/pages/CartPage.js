@@ -26,13 +26,16 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const { cart } = useSelector((state) => state?.carts || []);
 
+  console.log(cart);
   const totalPrice = () => {
     let total = 0;
 
@@ -40,6 +43,7 @@ function CartPage() {
     return total;
   };
 
+  console.log(user);
   const addItem = async (productId) => {
     dispatch(AddProductQuantity(productId));
   };
@@ -51,8 +55,13 @@ function CartPage() {
   };
 
   useEffect(() => {
-    dispatch(getProductFromCart());
-  }, [dispatch]);
+    if (user) {
+      const userId = user._id;
+      dispatch(getProductFromCart(userId));
+    } else {
+      dispatch(getProductFromCart());
+    }
+  }, [dispatch, user]);
 
   return (
     <Container
