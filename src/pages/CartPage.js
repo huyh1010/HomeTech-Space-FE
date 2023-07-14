@@ -17,7 +17,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AddProductQuantity,
+  decrementQuantity,
   getProductFromCart,
+  getProductFromUserCart,
+  incrementQuantity,
+  removeItem,
   removeProduct,
   removeProductQuantity,
 } from "../features/cart/cartSlice";
@@ -31,35 +35,39 @@ import useAuth from "../hooks/useAuth";
 function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useAuth();
-
+  const user = useAuth();
   const { cart } = useSelector((state) => state?.carts || []);
 
   console.log(cart);
   const totalPrice = () => {
     let total = 0;
 
-    cart?.items?.map((item) => (total = total + item.quantity * item.price));
+    cart.map((item) => (total = total + item.quantity * item.price));
     return total;
   };
 
-  console.log(user);
-  const addItem = async (productId) => {
-    dispatch(AddProductQuantity(productId));
-  };
-  const decreaseItem = async (productId) => {
-    dispatch(removeProductQuantity(productId));
-  };
-  const removeItem = async (productId) => {
-    dispatch(removeProduct(productId));
-  };
+  // const productTotalPrice = () => {
+  //   let productTotal = 0;
+  //   cart.map((item) => (item.quantity * item.price));
+  //   console.log(productTotal);
+  //   return productTotal;
+  // };
+
+  // console.log(user);
+  // const addItem = async (productId) => {
+  //   dispatch(AddProductQuantity(productId));
+  // };
+  // const decreaseItem = async (productId) => {
+  //   dispatch(removeProductQuantity(productId));
+  // };
+  // const removeItem = async (productId) => {
+  //   dispatch(removeProduct(productId));
+  // };
 
   useEffect(() => {
     if (user) {
-      const userId = user._id;
-      dispatch(getProductFromCart(userId));
-    } else {
-      dispatch(getProductFromCart());
+      const id = user._id;
+      dispatch(getProductFromCart(id));
     }
   }, [dispatch, user]);
 
@@ -72,7 +80,7 @@ function CartPage() {
       <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
         My Cart
       </Typography>
-      {cart ? (
+      {cart.length ? (
         <>
           <Paper>
             <TableContainer>
@@ -86,7 +94,7 @@ function CartPage() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {cart?.items?.map((item) => (
+                  {cart?.map((item) => (
                     <TableRow>
                       <TableCell
                         sx={{
@@ -97,15 +105,13 @@ function CartPage() {
                         }}
                       >
                         <Avatar
-                          src={item?.productId?.poster_path}
+                          src={item.poster_path}
                           sx={{ mr: 2, width: 50, height: 50 }}
-                          alt={item?.productId?.name}
+                          alt={item.name}
                         />
-                        <Typography variant="body1">
-                          {item?.productId?.name}
-                        </Typography>
+                        <Typography variant="body1">{item.name}</Typography>
                       </TableCell>
-                      <TableCell>{fCurrency(item?.productId?.price)}</TableCell>
+                      <TableCell>{fCurrency(item.price)}</TableCell>
                       <TableCell
                         sx={{
                           display: "flex",
@@ -114,25 +120,27 @@ function CartPage() {
                         }}
                       >
                         <IconButton
-                          onClick={() => addItem(item?.productId?._id)}
+                          onClick={() => dispatch(incrementQuantity(item._id))}
                         >
                           <AddIcon />
                         </IconButton>
                         {/* <Typography variant="subtitle2">
                         
                       </Typography> */}
-                        {item?.quantity}
+                        {item.quantity}
                         <IconButton
-                          onClick={() => decreaseItem(item.productId._id)}
+                          onClick={() => dispatch(decrementQuantity(item._id))}
                           disabled={item.quantity === 1}
                         >
                           <RemoveIcon />
                         </IconButton>
                       </TableCell>
-                      <TableCell>{fCurrency(item?.total)}</TableCell>
+                      <TableCell>
+                        {fCurrency(item.price * item.quantity)}
+                      </TableCell>
                       <TableCell>
                         <IconButton
-                          onClick={() => removeItem(item?.productId?._id)}
+                          onClick={() => dispatch(removeItem(item._id))}
                         >
                           <DeleteIcon color="red" />
                         </IconButton>

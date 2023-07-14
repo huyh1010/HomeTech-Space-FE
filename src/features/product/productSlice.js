@@ -18,6 +18,7 @@ export const getProducts = createAsyncThunk(
         });
       };
       await timeout();
+
       return res.data;
     } catch (error) {
       rejectWithValue(error);

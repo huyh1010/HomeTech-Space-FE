@@ -10,14 +10,15 @@ import { fCurrency } from "../../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addProductToCart } from "../cart/cartSlice";
+import { addProductToCart, addToCart } from "../cart/cartSlice";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleCart = (productId) => {
-    dispatch(addProductToCart({ product_id: productId }));
-  };
+  // const handleCart = (productId) => {
+  //   dispatch(addProductToCart({ product_id: productId }));
+  // };
+
   return (
     <Card
       sx={{
@@ -54,7 +55,7 @@ function ProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
-          onClick={() => handleCart(product._id)}
+          onClick={() => dispatch(addToCart(product))}
         >
           Add to Cart
         </Button>

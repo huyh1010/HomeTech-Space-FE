@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
-import { assignCartToUser } from "../features/cart/cartSlice";
+import { assignCartToUser, createCart } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
@@ -33,11 +33,13 @@ const reducer = (state, action) => {
 };
 
 const AuthContext = createContext({ ...initialState });
-const setSession = (accessToken) => {
-  if (accessToken) {
+const setSession = (accessToken, user) => {
+  if (accessToken && user) {
+    window.localStorage.setItem("user", JSON.stringify(user));
     window.localStorage.setItem("accessToken", accessToken);
     apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
+    window.localStorage.removeItem("user");
     window.localStorage.removeItem("accessToken");
     delete apiService.defaults.headers.common.Authorization;
   }
@@ -91,18 +93,19 @@ const AuthProvider = ({ children }) => {
     const res = await apiService.post("/auth/login", { email, password });
     const { user, accessToken } = res.data;
     if (user && cart) {
-      dispatchFunction(
-        assignCartToUser({ user_id: user._id, cart_id: cart._id })
-      );
+      dispatchFunction(createCart({ user_id: user._id, cart: cart }));
     }
-    setSession(accessToken);
+    setSession(accessToken, user);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
+
+    localStorage.removeItem("cart");
     callback();
   };
   const logout = async (callback) => {
     setSession(null);
-    // localStorage.removeItem('cart')
+    // localStorage.removeItem("cart");
     dispatch({ type: LOGOUT });
+
     callback();
   };
   return (
