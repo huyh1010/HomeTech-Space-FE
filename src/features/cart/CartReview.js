@@ -3,16 +3,18 @@ import React from "react";
 import { fCurrency } from "../../utils/numberFormat";
 
 function CartReview({ cart }) {
+  let shipping_fees = 4.99;
+  let tax_fees = 1.99;
   const subTotal = () => {
     let total = 0;
 
-    cart.items.map((item) => (total = total + item.quantity * item.price));
+    cart.map((item) => (total = total + item.quantity * item.price));
     return total;
   };
   const totalPrice = () => {
     let total = 0;
-    cart.items.map((item) => (total = total + item.quantity * item.price));
-    total = total + cart.tax_fees + cart.shipping_fees;
+    cart.map((item) => (total = total + item.quantity * item.price));
+    total = total + tax_fees + shipping_fees;
     return total;
   };
   return (
@@ -21,7 +23,7 @@ function CartReview({ cart }) {
         Current Cart
       </Typography>
       <Divider sx={{ mb: 1, borderBottomWidth: 1, borderColor: "gray" }} />
-      {cart.items.map((item) => (
+      {cart.map((item) => (
         <Box
           sx={{
             display: "flex",
@@ -32,9 +34,9 @@ function CartReview({ cart }) {
         >
           <Stack>
             <Avatar
-              src={item?.productId?.poster_path}
+              src={item.poster_path}
               sx={{ mr: 2, width: 50, height: 50 }}
-              alt={item?.productId?.name}
+              alt={item.name}
             />
             <Stack>
               <Typography
@@ -45,7 +47,7 @@ function CartReview({ cart }) {
                   whiteSpace: "nowrap",
                 }}
               >
-                {item.productId.name}
+                {item.name}
               </Typography>
               <Typography sx={{ fontWeight: "bold" }}>
                 Qty: {item.quantity}
@@ -54,7 +56,7 @@ function CartReview({ cart }) {
           </Stack>
           <Stack>
             <Typography sx={{ fontWeight: "bold" }}>
-              {fCurrency(item.productId.price)}
+              {fCurrency(item.price)}
             </Typography>
           </Stack>
         </Box>
@@ -68,8 +70,8 @@ function CartReview({ cart }) {
         }}
       >
         <Typography>Subtotal: {fCurrency(subTotal())}</Typography>
-        <Typography>Tax fees: {fCurrency(cart.tax_fees)}</Typography>
-        <Typography>Shipping fees: {fCurrency(cart.shipping_fees)}</Typography>
+        <Typography>Tax fees: {fCurrency(tax_fees)}</Typography>
+        <Typography>Shipping fees: {fCurrency(shipping_fees)}</Typography>
       </Box>
       <Divider sx={{ my: 1, borderBottomWidth: 1, borderColor: "gray" }} />
       <Typography sx={{ textAlign: "right", fontWeight: "bold" }}>

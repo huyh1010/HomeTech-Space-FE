@@ -8,16 +8,29 @@ import {
 } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { addProductToCart, addToCart } from "../cart/cartSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, getProductFromCart, updateCart } from "../cart/cartSlice";
+import useAuth from "../../hooks/useAuth";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const handleCart = (productId) => {
-  //   dispatch(addProductToCart({ product_id: productId }));
-  // };
+  const { user } = useAuth();
+  const cart = useSelector((state) => state.carts.cart);
+  console.log(cart);
+  const handleAddToCart = (product) => {
+    if (user) {
+      const id = user._id;
+      dispatch(addToCart(product));
+      dispatch(updateCart({ id, cart }));
+    } else {
+      dispatch(addToCart(product));
+    }
+  };
+  useEffect(() => {
+    dispatch(getProductFromCart());
+  }, [dispatch]);
 
   return (
     <Card
@@ -55,7 +68,7 @@ function ProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
-          onClick={() => dispatch(addToCart(product))}
+          onClick={() => handleAddToCart(product)}
         >
           Add to Cart
         </Button>

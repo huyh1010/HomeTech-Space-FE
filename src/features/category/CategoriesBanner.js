@@ -5,9 +5,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import CategoryCard from "./CategoryCard";
 
 function CategoriesBanner() {
-  const {
-    categories: { categories },
-  } = useSelector((state) => state?.categories);
+  const { categories } = useSelector((state) => state?.categories?.categories);
 
   const dispatch = useDispatch();
   useEffect(() => {

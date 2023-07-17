@@ -98,12 +98,11 @@ const AuthProvider = ({ children }) => {
     setSession(accessToken, user);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
 
-    localStorage.removeItem("cart");
     callback();
   };
   const logout = async (callback) => {
     setSession(null);
-    // localStorage.removeItem("cart");
+    localStorage.removeItem("cart");
     dispatch({ type: LOGOUT });
 
     callback();

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   AddProductQuantity,
   decrementQuantity,
+  getCart,
   getProductFromCart,
   getProductFromUserCart,
   incrementQuantity,
@@ -35,14 +36,14 @@ import useAuth from "../hooks/useAuth";
 function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useAuth();
-  const { cart } = useSelector((state) => state?.carts || []);
+  // const user = useAuth();
+  const { cart } = useSelector((state) => state?.carts);
 
   console.log(cart);
   const totalPrice = () => {
     let total = 0;
 
-    cart.map((item) => (total = total + item.quantity * item.price));
+    cart?.map((item) => (total = total + item.quantity * item.price));
     return total;
   };
 
@@ -65,11 +66,8 @@ function CartPage() {
   // };
 
   useEffect(() => {
-    if (user) {
-      const id = user._id;
-      dispatch(getProductFromCart(id));
-    }
-  }, [dispatch, user]);
+    dispatch(getProductFromCart());
+  }, [dispatch]);
 
   return (
     <Container
@@ -80,7 +78,9 @@ function CartPage() {
       <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
         My Cart
       </Typography>
-      {cart.length ? (
+      {cart === null ? (
+        <Typography>Cart is Empty</Typography>
+      ) : (
         <>
           <Paper>
             <TableContainer>
@@ -125,8 +125,8 @@ function CartPage() {
                           <AddIcon />
                         </IconButton>
                         {/* <Typography variant="subtitle2">
-                        
-                      </Typography> */}
+                    
+                  </Typography> */}
                         {item.quantity}
                         <IconButton
                           onClick={() => dispatch(decrementQuantity(item._id))}
@@ -178,8 +178,6 @@ function CartPage() {
             </Button>
           </Box>
         </>
-      ) : (
-        <Typography>Cart is Empty</Typography>
       )}
     </Container>
   );

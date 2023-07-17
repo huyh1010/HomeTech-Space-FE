@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { getSingleProduct } from "../product/productSlice";
 import { useDispatch } from "react-redux";
+import useAuth from "../../hooks/useAuth";
 
 export const createCart = createAsyncThunk(
   "carts/createCart",
@@ -23,27 +24,27 @@ export const createCart = createAsyncThunk(
     }
   }
 );
-// export const addProductToCart = createAsyncThunk(
-//   "carts/addProductToCart",
-//   async ({ product_id, quantity = 1 }, { rejectWithValue }) => {
-//     try {
-//       let url = `/carts`;
-//       const res = await apiService.post(url, { product_id, quantity });
-//       const timeout = () => {
-//         return new Promise((resolve) => {
-//           setTimeout(() => {
-//             resolve("ok");
-//           }, 1000);
-//         });
-//       };
-//       await timeout();
-//       console.log(res.data);
-//       return res.data;
-//     } catch (error) {
-//       rejectWithValue(error);
-//     }
-//   }
-// );
+export const updateCart = createAsyncThunk(
+  "carts/updateCart",
+  async ({ id, cart }, { rejectWithValue }) => {
+    try {
+      console.log(cart);
+      let url = `/carts/${id}`;
+      const res = await apiService.put(url, { cart });
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data.cart;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
 export const removeProductQuantity = createAsyncThunk(
   "carts/removeProductQuantity",
   async (productId, { rejectWithValue }) => {
@@ -94,12 +95,13 @@ export const AddProductQuantity = createAsyncThunk(
 // then in cart page
 export const getProductFromCart = createAsyncThunk(
   "carts/getProductFromCart",
-  async ({ id }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      //if accesstoken or user => use api, else use localstorage
       const accessToken = window.localStorage.getItem("accessToken");
-
-      if (accessToken) {
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (accessToken && user) {
+        //if accesstoken or user => use api, else use localstorage
+        const id = user._id;
         let url = `/carts/user/${id}`;
 
         const res = await apiService.get(url);
@@ -111,10 +113,10 @@ export const getProductFromCart = createAsyncThunk(
           });
         };
         await timeout();
-        return res.data;
+
+        return res.data.cart;
       } else {
         const cart = JSON.parse(window.localStorage.getItem("cart"));
-
         return cart;
       }
     } catch (error) {
@@ -207,6 +209,7 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
+      console.log(action.payload);
       const itemInCart = state.cart.find(
         (item) => item._id === action.payload._id
       );
@@ -218,6 +221,7 @@ export const cartSlice = createSlice({
       state.cartItemCount = action.payload.length;
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
+
     incrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item._id === action.payload);
       item.quantity++;
@@ -242,10 +246,6 @@ export const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder.addCase(addProductToCart.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = "";
-    // });
     builder.addCase(createCart.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -254,6 +254,7 @@ export const cartSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+
     // builder.addCase(getProductFromUserCart.pending, (state) => {
     //   state.loading = true;
     //   state.error = "";
@@ -274,23 +275,17 @@ export const cartSlice = createSlice({
     //   state.loading = true;
     //   state.error = "";
     // });
-    // builder.addCase(addProductToCart.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   const cart = action.payload;
-    //   state.cart = action.payload;
-    //   localStorage.setItem("cart", JSON.stringify(state.cart));
-    //   if (cart) {
-    //     state.cartItemCount = cart.items.length;
-    //   }
-    // });
+
     builder.addCase(createCart.fulfilled, (state, action) => {
       state.loading = false;
       console.log(action.payload);
     });
     builder.addCase(getProductFromCart.fulfilled, (state, action) => {
       state.loading = false;
+      state.cart = action.payload;
       console.log(action.payload);
     });
+
     // builder.addCase(getProductFromUserCart.fulfilled, (state, action) => {
     //   state.loading = false;
 
@@ -351,14 +346,6 @@ export const cartSlice = createSlice({
     //   localStorage.setItem("cart", JSON.stringify(state.cart));
     // });
 
-    // builder.addCase(addProductToCart.rejected, (state, action) => {
-    //   state.loading = false;
-    //   if (action.payload) {
-    //     state.error = action.payload.message;
-    //   } else {
-    //     state.error = action.error.message;
-    //   }
-    // });
     builder.addCase(createCart.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
@@ -375,6 +362,7 @@ export const cartSlice = createSlice({
         state.error = action.error.message;
       }
     });
+
     // builder.addCase(getProductFromUserCart.rejected, (state, action) => {
     //   state.loading = false;
     //   if (action.payload) {
@@ -409,8 +397,13 @@ export const cartSlice = createSlice({
     // });
   },
 });
-export const { addToCart, incrementQuantity, decrementQuantity, removeItem } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  getCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeItem,
+} = cartSlice.actions;
 const { reducer } = cartSlice;
 
 export default reducer;
