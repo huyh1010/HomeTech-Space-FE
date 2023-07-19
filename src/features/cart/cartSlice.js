@@ -18,7 +18,7 @@ export const createCart = createAsyncThunk(
         });
       };
       await timeout();
-      return res.data;
+      return res.data.cart;
     } catch (error) {
       rejectWithValue(error);
     }
@@ -113,7 +113,7 @@ export const getProductFromCart = createAsyncThunk(
           });
         };
         await timeout();
-
+        console.log(res.data.cart);
         return res.data.cart;
       } else {
         const cart = JSON.parse(window.localStorage.getItem("cart"));
@@ -210,39 +210,53 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       console.log(action.payload);
-      const itemInCart = state.cart.find(
+      const checkCart = JSON.parse(localStorage.getItem("cart"));
+      if (!checkCart) window.localStorage.setItem("cart", JSON.stringify([]));
+      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      const itemInCart = cartOnLocal.find(
         (item) => item._id === action.payload._id
       );
       if (itemInCart) {
         itemInCart.quantity++;
       } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+        cartOnLocal.push({ ...action.payload, quantity: 1 });
       }
-      state.cartItemCount = action.payload.length;
-      localStorage.setItem("cart", JSON.stringify(state.cart));
+
+      state.cart = cartOnLocal;
+      state.cartItemCount = state.cart.length;
+      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
     },
 
     incrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item._id === action.payload);
+      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      const item = cartOnLocal.find((item) => item._id === action.payload);
       item.quantity++;
-      localStorage.setItem("cart", JSON.stringify(state.cart));
+      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      state.cart = cartOnLocal;
+      state.cartItemCount = state.cart.length;
     },
     decrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item._id === action.payload);
+      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      const item = cartOnLocal.find((item) => item._id === action.payload);
       if (item.quantity === 1) {
         item.quantity = 1;
       } else {
         item.quantity--;
       }
 
-      localStorage.setItem("cart", JSON.stringify(state.cart));
+      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      state.cart = cartOnLocal;
+      state.cartItemCount = state.cart.length;
     },
     removeItem: (state, action) => {
-      const removeItem = state.cart.filter(
+      let cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      const removeItem = cartOnLocal.filter(
         (item) => item._id !== action.payload
       );
-      state.cart = removeItem;
-      localStorage.setItem("cart", JSON.stringify(state.cart));
+      cartOnLocal = removeItem;
+      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      state.cart = cartOnLocal;
+      state.cartItemCount = state.cart.length;
     },
   },
   extraReducers: (builder) => {
@@ -251,6 +265,10 @@ export const cartSlice = createSlice({
       state.error = "";
     });
     builder.addCase(getProductFromCart.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateCart.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
@@ -279,13 +297,18 @@ export const cartSlice = createSlice({
     builder.addCase(createCart.fulfilled, (state, action) => {
       state.loading = false;
       console.log(action.payload);
+      state.cart = action.payload;
     });
     builder.addCase(getProductFromCart.fulfilled, (state, action) => {
       state.loading = false;
-      state.cart = action.payload;
       console.log(action.payload);
+      state.cart = action.payload;
     });
-
+    builder.addCase(updateCart.fulfilled, (state, action) => {
+      state.loading = false;
+      console.log(action.payload);
+      state.cart = action.payload;
+    });
     // builder.addCase(getProductFromUserCart.fulfilled, (state, action) => {
     //   state.loading = false;
 
@@ -355,6 +378,14 @@ export const cartSlice = createSlice({
       }
     });
     builder.addCase(getProductFromCart.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+      } else {
+        state.error = action.error.message;
+      }
+    });
+    builder.addCase(updateCart.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.error = action.payload.message;

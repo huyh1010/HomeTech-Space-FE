@@ -3,17 +3,18 @@ import React from "react";
 import { fCurrency } from "../../utils/numberFormat";
 
 function CartReview({ cart }) {
+  console.log(cart);
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
   const subTotal = () => {
     let total = 0;
 
-    cart.map((item) => (total = total + item.quantity * item.price));
+    cart?.map((item) => (total = total + item.quantity * item.price));
     return total;
   };
   const totalPrice = () => {
     let total = 0;
-    cart.map((item) => (total = total + item.quantity * item.price));
+    cart?.map((item) => (total = total + item.quantity * item.price));
     total = total + tax_fees + shipping_fees;
     return total;
   };
@@ -23,7 +24,7 @@ function CartReview({ cart }) {
         Current Cart
       </Typography>
       <Divider sx={{ mb: 1, borderBottomWidth: 1, borderColor: "gray" }} />
-      {cart.map((item) => (
+      {cart?.map((item) => (
         <Box
           sx={{
             display: "flex",
@@ -34,7 +35,7 @@ function CartReview({ cart }) {
         >
           <Stack>
             <Avatar
-              src={item.poster_path}
+              src={item?.poster_path}
               sx={{ mr: 2, width: 50, height: 50 }}
               alt={item.name}
             />
@@ -50,13 +51,13 @@ function CartReview({ cart }) {
                 {item.name}
               </Typography>
               <Typography sx={{ fontWeight: "bold" }}>
-                Qty: {item.quantity}
+                Qty: {item?.quantity}
               </Typography>
             </Stack>
           </Stack>
           <Stack>
             <Typography sx={{ fontWeight: "bold" }}>
-              {fCurrency(item.price)}
+              {fCurrency(item?.price)}
             </Typography>
           </Stack>
         </Box>

@@ -25,6 +25,7 @@ import {
   removeItem,
   removeProduct,
   removeProductQuantity,
+  updateCart,
 } from "../features/cart/cartSlice";
 import { fCurrency } from "../utils/numberFormat";
 import AddIcon from "@mui/icons-material/Add";
@@ -36,8 +37,9 @@ import useAuth from "../hooks/useAuth";
 function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const user = useAuth();
-  const { cart } = useSelector((state) => state?.carts);
+  const { user } = useAuth();
+  // const { cart } = useSelector((state) => state?.carts);
+  const cart = JSON.parse(window.localStorage.getItem("cart"));
 
   console.log(cart);
   const totalPrice = () => {
@@ -47,23 +49,27 @@ function CartPage() {
     return total;
   };
 
-  // const productTotalPrice = () => {
-  //   let productTotal = 0;
-  //   cart.map((item) => (item.quantity * item.price));
-  //   console.log(productTotal);
-  //   return productTotal;
-  // };
-
-  // console.log(user);
-  // const addItem = async (productId) => {
-  //   dispatch(AddProductQuantity(productId));
-  // };
-  // const decreaseItem = async (productId) => {
-  //   dispatch(removeProductQuantity(productId));
-  // };
-  // const removeItem = async (productId) => {
-  //   dispatch(removeProduct(productId));
-  // };
+  const addItem = (itemId, cart) => {
+    if (user) {
+      const id = user._id;
+      dispatch(updateCart({ id, cart }));
+    }
+    dispatch(incrementQuantity(itemId));
+  };
+  const decrementItem = (itemId, cart) => {
+    if (user) {
+      const id = user._id;
+      dispatch(updateCart({ id, cart }));
+    }
+    dispatch(decrementQuantity(itemId));
+  };
+  const removeCartItem = (itemId, cart) => {
+    if (user) {
+      const id = user._id;
+      dispatch(updateCart({ id, cart }));
+    }
+    dispatch(removeItem(itemId));
+  };
 
   useEffect(() => {
     dispatch(getProductFromCart());
@@ -95,7 +101,7 @@ function CartPage() {
                 </TableHead>
                 <TableBody>
                   {cart?.map((item) => (
-                    <TableRow>
+                    <TableRow key={item._id}>
                       <TableCell
                         sx={{
                           display: "flex",
@@ -119,9 +125,7 @@ function CartPage() {
                           justifyContent: "center",
                         }}
                       >
-                        <IconButton
-                          onClick={() => dispatch(incrementQuantity(item._id))}
-                        >
+                        <IconButton onClick={() => addItem(item._id, cart)}>
                           <AddIcon />
                         </IconButton>
                         {/* <Typography variant="subtitle2">
@@ -129,7 +133,7 @@ function CartPage() {
                   </Typography> */}
                         {item.quantity}
                         <IconButton
-                          onClick={() => dispatch(decrementQuantity(item._id))}
+                          onClick={() => decrementItem(item._id, cart)}
                           disabled={item.quantity === 1}
                         >
                           <RemoveIcon />
@@ -140,7 +144,7 @@ function CartPage() {
                       </TableCell>
                       <TableCell>
                         <IconButton
-                          onClick={() => dispatch(removeItem(item._id))}
+                          onClick={() => removeCartItem(item._id, cart)}
                         >
                           <DeleteIcon color="red" />
                         </IconButton>

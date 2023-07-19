@@ -17,20 +17,18 @@ function ProductCard({ product }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const cart = useSelector((state) => state.carts.cart);
-  console.log(cart);
-  const handleAddToCart = (product) => {
+  // const { cart } = useSelector((state) => state?.carts);
+  const cart = JSON.parse(window.localStorage.getItem("cart"));
+
+  const handleAddToCart = (product, cart) => {
     if (user) {
       const id = user._id;
-      dispatch(addToCart(product));
+
       dispatch(updateCart({ id, cart }));
-    } else {
-      dispatch(addToCart(product));
     }
+
+    dispatch(addToCart(product));
   };
-  useEffect(() => {
-    dispatch(getProductFromCart());
-  }, [dispatch]);
 
   return (
     <Card
@@ -68,7 +66,7 @@ function ProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
-          onClick={() => handleAddToCart(product)}
+          onClick={() => handleAddToCart(product, cart)}
         >
           Add to Cart
         </Button>

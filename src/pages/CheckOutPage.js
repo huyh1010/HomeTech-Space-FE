@@ -41,9 +41,9 @@ function CheckOutPage() {
     formState: { isSubmitting },
   } = methods;
 
-  // useEffect(() => {
-  //   dispatch(getProductFromCart());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getProductFromCart());
+  }, [dispatch]);
   const onSubmit = async (data) => {
     try {
     } catch (error) {
