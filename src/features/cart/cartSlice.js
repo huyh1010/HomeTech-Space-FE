@@ -28,7 +28,6 @@ export const updateCart = createAsyncThunk(
   "carts/updateCart",
   async ({ id, cart }, { rejectWithValue }) => {
     try {
-      console.log(cart);
       let url = `/carts/${id}`;
       const res = await apiService.put(url, { cart });
       const timeout = () => {
@@ -212,7 +211,7 @@ export const cartSlice = createSlice({
       console.log(action.payload);
       const checkCart = JSON.parse(localStorage.getItem("cart"));
       if (!checkCart) window.localStorage.setItem("cart", JSON.stringify([]));
-      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      let cartOnLocal = JSON.parse(localStorage.getItem("cart"));
       const itemInCart = cartOnLocal.find(
         (item) => item._id === action.payload._id
       );
@@ -223,20 +222,35 @@ export const cartSlice = createSlice({
       }
 
       state.cart = cartOnLocal;
-      state.cartItemCount = state.cart.length;
+      state.cartItemCount = cartOnLocal.length;
       localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user) {
+        const id = user._id;
+
+        let url = `/carts/${id}`;
+        const res = apiService.put(url, { cartOnLocal });
+        return res.data;
+      }
     },
 
     incrementQuantity: (state, action) => {
-      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      let cartOnLocal = JSON.parse(localStorage.getItem("cart"));
       const item = cartOnLocal.find((item) => item._id === action.payload);
       item.quantity++;
       localStorage.setItem("cart", JSON.stringify(cartOnLocal));
       state.cart = cartOnLocal;
-      state.cartItemCount = state.cart.length;
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user) {
+        const id = user._id;
+
+        let url = `/carts/${id}`;
+        const res = apiService.put(url, { cartOnLocal });
+        return res.data;
+      }
     },
     decrementQuantity: (state, action) => {
-      const cartOnLocal = JSON.parse(localStorage.getItem("cart"));
+      let cartOnLocal = JSON.parse(localStorage.getItem("cart"));
       const item = cartOnLocal.find((item) => item._id === action.payload);
       if (item.quantity === 1) {
         item.quantity = 1;
@@ -246,17 +260,41 @@ export const cartSlice = createSlice({
 
       localStorage.setItem("cart", JSON.stringify(cartOnLocal));
       state.cart = cartOnLocal;
-      state.cartItemCount = state.cart.length;
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user) {
+        const id = user._id;
+
+        let url = `/carts/${id}`;
+        const res = apiService.put(url, { cartOnLocal });
+        return res.data;
+      }
     },
     removeItem: (state, action) => {
       let cartOnLocal = JSON.parse(localStorage.getItem("cart"));
-      const removeItem = cartOnLocal.filter(
-        (item) => item._id !== action.payload
-      );
-      cartOnLocal = removeItem;
-      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      cartOnLocal = cartOnLocal.filter((item) => item._id !== action.payload);
+
       state.cart = cartOnLocal;
-      state.cartItemCount = state.cart.length;
+      state.cartItemCount = cartOnLocal.length;
+      localStorage.setItem("cart", JSON.stringify(cartOnLocal));
+      const user = JSON.parse(window.localStorage.getItem("user"));
+      if (user) {
+        const id = user._id;
+
+        let url = `/carts/${id}`;
+        const res = apiService.put(url, { cartOnLocal });
+        return res.data;
+      }
+    },
+    logInUser: (state, action) => {
+      console.log(action.payload);
+      state.cart = action.payload;
+      state.cartItemCount = action.payload.length;
+      localStorage.setItem("cart", JSON.stringify(action.payload));
+    },
+    logOutUser: (state) => {
+      state.cartItemCount = 0;
+      state.cart = [];
+      localStorage.removeItem("cart");
     },
   },
   extraReducers: (builder) => {
@@ -296,17 +334,14 @@ export const cartSlice = createSlice({
 
     builder.addCase(createCart.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       state.cart = action.payload;
     });
     builder.addCase(getProductFromCart.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       state.cart = action.payload;
     });
     builder.addCase(updateCart.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       state.cart = action.payload;
     });
     // builder.addCase(getProductFromUserCart.fulfilled, (state, action) => {
@@ -434,6 +469,8 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeItem,
+  logInUser,
+  logOutUser,
 } = cartSlice.actions;
 const { reducer } = cartSlice;
 

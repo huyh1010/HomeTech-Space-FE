@@ -16,15 +16,9 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  AddProductQuantity,
   decrementQuantity,
-  getCart,
-  getProductFromCart,
-  getProductFromUserCart,
   incrementQuantity,
   removeItem,
-  removeProduct,
-  removeProductQuantity,
   updateCart,
 } from "../features/cart/cartSlice";
 import { fCurrency } from "../utils/numberFormat";
@@ -38,10 +32,8 @@ function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
-  // const { cart } = useSelector((state) => state?.carts);
-  const cart = JSON.parse(window.localStorage.getItem("cart"));
+  const { cart } = useSelector((state) => state?.carts);
 
-  console.log(cart);
   const totalPrice = () => {
     let total = 0;
 
@@ -49,31 +41,22 @@ function CartPage() {
     return total;
   };
 
-  const addItem = (itemId, cart) => {
-    if (user) {
-      const id = user._id;
-      dispatch(updateCart({ id, cart }));
-    }
+  const handleIncrease = (itemId) => {
     dispatch(incrementQuantity(itemId));
   };
-  const decrementItem = (itemId, cart) => {
-    if (user) {
-      const id = user._id;
-      dispatch(updateCart({ id, cart }));
-    }
+  const handleDecrease = (itemId) => {
     dispatch(decrementQuantity(itemId));
   };
-  const removeCartItem = (itemId, cart) => {
-    if (user) {
-      const id = user._id;
-      dispatch(updateCart({ id, cart }));
-    }
+  const handleDelete = (itemId) => {
     dispatch(removeItem(itemId));
   };
 
-  useEffect(() => {
-    dispatch(getProductFromCart());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (user) {
+  //     const id = user._id;
+  //     dispatch(updateCart({ id, cart: cart }));
+  //   }
+  // }, [cart]);
 
   return (
     <Container
@@ -84,7 +67,7 @@ function CartPage() {
       <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
         My Cart
       </Typography>
-      {cart === null ? (
+      {cart?.length < 1 ? (
         <Typography>Cart is Empty</Typography>
       ) : (
         <>
@@ -125,7 +108,7 @@ function CartPage() {
                           justifyContent: "center",
                         }}
                       >
-                        <IconButton onClick={() => addItem(item._id, cart)}>
+                        <IconButton onClick={() => handleIncrease(item._id)}>
                           <AddIcon />
                         </IconButton>
                         {/* <Typography variant="subtitle2">
@@ -133,7 +116,7 @@ function CartPage() {
                   </Typography> */}
                         {item.quantity}
                         <IconButton
-                          onClick={() => decrementItem(item._id, cart)}
+                          onClick={() => handleDecrease(item._id)}
                           disabled={item.quantity === 1}
                         >
                           <RemoveIcon />
@@ -143,9 +126,7 @@ function CartPage() {
                         {fCurrency(item.price * item.quantity)}
                       </TableCell>
                       <TableCell>
-                        <IconButton
-                          onClick={() => removeCartItem(item._id, cart)}
-                        >
+                        <IconButton onClick={() => handleDelete(item._id)}>
                           <DeleteIcon color="red" />
                         </IconButton>
                       </TableCell>

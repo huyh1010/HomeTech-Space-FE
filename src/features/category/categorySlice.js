@@ -44,6 +44,7 @@ export const getProductsByCategory = createAsyncThunk(
 );
 const initialState = {
   categories: [],
+  totalProductsinCategory: 0,
   productsByCategory: [],
   loading: false,
   error: null,
@@ -69,6 +70,7 @@ export const categorySlice = createSlice({
       state.loading = false;
 
       state.productsByCategory = action.payload;
+      state.totalProductsinCategory = action.payload.category.products.length;
     });
     builder.addCase(getCategories.rejected, (state, action) => {
       state.loading = false;

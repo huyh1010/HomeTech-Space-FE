@@ -14,6 +14,7 @@ import ProductByCategoryPage from "../pages/ProductByCategoryPage";
 import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
 import CheckOutPage from "../pages/CheckOutPage";
+import BundlePage from "../pages/BundlePage";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
         <Route path="/order" element={<Order />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/bundle" element={<BundlePage />} />
         <Route
           path="/checkout"
           element={

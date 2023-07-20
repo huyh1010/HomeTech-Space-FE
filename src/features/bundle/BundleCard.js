@@ -6,22 +6,14 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import React from "react";
 import { fCurrency } from "../../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, getProductFromCart, updateCart } from "../cart/cartSlice";
-import useAuth from "../../hooks/useAuth";
 
-function ProductCard({ product }) {
+function BundleCard({ bundle }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  // const { user } = useAuth();
-  // const { cart } = useSelector((state) => state?.carts);
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
+  console.log(bundle);
 
   return (
     <Card
@@ -32,14 +24,14 @@ function ProductCard({ product }) {
     >
       <CardMedia
         component={"img"}
-        image={product.poster_path}
-        title={product.name}
+        image={bundle.poster_path}
+        title={bundle.name}
         sx={{ height: "50%", objectFit: "contain" }}
-        onClick={() => navigate(`/product/${product._id}`)}
+        // onClick={() => navigate(`/product/${product._id}`)}
       />
       <CardContent>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          {fCurrency(product.price)}
+          {fCurrency(bundle.price)}
         </Typography>
 
         <Typography
@@ -49,7 +41,7 @@ function ProductCard({ product }) {
             whiteSpace: "nowrap",
           }}
         >
-          {product.name}
+          {bundle.name}
         </Typography>
       </CardContent>
       <CardActions>
@@ -59,7 +51,7 @@ function ProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
-          onClick={() => handleAddToCart(product)}
+          // onClick={() => handleAddToCart(product)}
         >
           Add to Cart
         </Button>
@@ -68,4 +60,4 @@ function ProductCard({ product }) {
   );
 }
 
-export default ProductCard;
+export default BundleCard;

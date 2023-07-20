@@ -159,7 +159,7 @@ function NavBar() {
               </Button>
               <Button
                 component={RouterLink}
-                to="/inner"
+                to="/bundle"
                 sx={{
                   textDecoration: "none",
                   fontWeight: "bold",

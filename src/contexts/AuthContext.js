@@ -1,8 +1,14 @@
 import { createContext, useEffect, useReducer } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
-import { assignCartToUser, createCart } from "../features/cart/cartSlice";
+import {
+  assignCartToUser,
+  createCart,
+  logInUser,
+  logOutUser,
+} from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { duration } from "@mui/material";
 
 const initialState = {
   isInitialized: false,
@@ -48,7 +54,7 @@ const setSession = (accessToken, user) => {
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
-  const cart = useSelector((state) => state.carts.cart);
+  const cart = useSelector((state) => state?.carts?.cart);
 
   useEffect(() => {
     const initialize = async () => {
@@ -82,19 +88,29 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const register = async ({ name, email, password }, callback) => {
-    const res = await apiService.post("/users", { name, email, password });
-    const { user, accessToken } = res.data;
-    //dispatch another function update user in cart controller
-    setSession(accessToken);
+    const res = await apiService.post("/users", {
+      name,
+      email,
+      password,
+      cart,
+    });
+    const { user, accessToken, userCart } = res.data;
+
+    setSession(accessToken, user);
+    dispatchFunction(logInUser(userCart.cart));
     dispatch({ type: REGISTER_SUCCESS, payload: { user } });
     callback();
   };
   const login = async ({ email, password }, callback) => {
-    const res = await apiService.post("/auth/login", { email, password });
-    const { user, accessToken } = res.data;
-    if (user && cart) {
-      dispatchFunction(createCart({ user_id: user._id, cart: cart }));
-    }
+    const res = await apiService.post("/auth/login", {
+      email,
+      password,
+      cart,
+    });
+    const { user, accessToken, userCart } = res.data;
+
+    dispatchFunction(logInUser(userCart.cart));
+
     setSession(accessToken, user);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
 
@@ -102,9 +118,9 @@ const AuthProvider = ({ children }) => {
   };
   const logout = async (callback) => {
     setSession(null);
-    localStorage.removeItem("cart");
-    dispatch({ type: LOGOUT });
 
+    dispatch({ type: LOGOUT });
+    dispatchFunction(logOutUser());
     callback();
   };
   return (
