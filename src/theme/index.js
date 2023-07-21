@@ -31,6 +31,12 @@ const SUCCESS = {
   contrastText: "#FFF",
 };
 
+const TERTIARY = {
+  main: "#ffeaa7",
+  dark: "#fdcb6e",
+  darker: "#f1c40f",
+  contrastText: "#f39c12",
+};
 const DARK = {
   lighter: "#393e46",
   light: "#222831",
@@ -70,10 +76,16 @@ function ThemeProvider({ children }) {
     palette: {
       primary: PRIMARY,
       secondary: SECONDARY,
+      tertiary: TERTIARY,
       success: SUCCESS,
       dark: DARK,
       red: RED,
-      text: { primary: GREY[900], secondary: "#231f1e", disabled: GREY[500] },
+      text: {
+        primary: GREY[900],
+        secondary: "#231f1e",
+        tertiary: GREY[600],
+        disabled: GREY[500],
+      },
       background: { paper: "#fff", default: "#fff", neutral: GREY[200] },
       action: {
         active: GREY[600],

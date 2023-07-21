@@ -20,6 +20,7 @@ function Copyright() {
 }
 
 function App() {
+  console.log("abc");
   return (
     <AuthProvider>
       <BrowserRouter>

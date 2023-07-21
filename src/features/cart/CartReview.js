@@ -3,7 +3,6 @@ import React from "react";
 import { fCurrency } from "../../utils/numberFormat";
 
 function CartReview({ cart }) {
-  console.log(cart);
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
   const subTotal = () => {

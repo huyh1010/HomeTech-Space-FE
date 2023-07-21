@@ -15,6 +15,7 @@ import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
 import CheckOutPage from "../pages/CheckOutPage";
 import BundlePage from "../pages/BundlePage";
+import PurchaseOrder from "../pages/PurchaseOrder";
 
 function Router() {
   return (
@@ -40,10 +41,10 @@ function Router() {
           }
         />
         <Route
-          path="/order/:id"
+          path="/purchaseOrder"
           element={
             <AuthRequire>
-              <OrderInvoice />
+              <PurchaseOrder />
             </AuthRequire>
           }
         />

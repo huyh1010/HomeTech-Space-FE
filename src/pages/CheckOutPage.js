@@ -1,9 +1,7 @@
 import {
   Box,
-  Button,
   Card,
   Container,
-  FormControl,
   FormControlLabel,
   Grid,
   Radio,
@@ -13,15 +11,20 @@ import {
 import React, { useEffect } from "react";
 import CartReview from "../features/cart/CartReview";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductFromCart } from "../features/cart/cartSlice";
+import { clearCart, getProductFromCart } from "../features/cart/cartSlice";
 import { Controller, useForm } from "react-hook-form";
 import { FTextField, FormProvider } from "../components/form";
 import { LoadingButton } from "@mui/lab";
+import useAuth from "../hooks/useAuth";
+import { createOrder } from "../features/order/orderSlice";
+import { useNavigate } from "react-router-dom";
 
 function CheckOutPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const { cart } = useSelector((state) => state?.carts);
-  console.log(cart);
+
   const methods = useForm({
     defaultValues: {
       name: "",
@@ -44,8 +47,14 @@ function CheckOutPage() {
   useEffect(() => {
     dispatch(getProductFromCart());
   }, [dispatch]);
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, cart, user) => {
+    const user_id = user._id;
+    const customer_info = data;
     try {
+      await dispatch(createOrder({ customer_info, cart, user_id })).then(
+        navigate(`/purchaseOrder`),
+        dispatch(clearCart())
+      );
     } catch (error) {
       reset();
       setError(error);
@@ -53,7 +62,10 @@ function CheckOutPage() {
   };
   return (
     <Container sx={{ mt: 4 }}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider
+        methods={methods}
+        onSubmit={handleSubmit((data) => onSubmit(data, cart, user))}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} lg={8}>
             <Card sx={{ p: 3 }}>

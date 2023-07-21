@@ -296,6 +296,11 @@ export const cartSlice = createSlice({
       state.cart = [];
       localStorage.removeItem("cart");
     },
+    clearCart: (state) => {
+      state.cartItemCount = 0;
+      state.cart = [];
+      localStorage.removeItem("cart");
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createCart.pending, (state) => {
@@ -471,6 +476,7 @@ export const {
   removeItem,
   logInUser,
   logOutUser,
+  clearCart,
 } = cartSlice.actions;
 const { reducer } = cartSlice;
 

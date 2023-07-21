@@ -52,7 +52,8 @@ const setSession = (accessToken, user) => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  console.log("authProvider");
+  const [dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
 
@@ -60,6 +61,7 @@ const AuthProvider = ({ children }) => {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
+
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
           const res = await apiService.get("/users/me");
@@ -124,7 +126,7 @@ const AuthProvider = ({ children }) => {
     callback();
   };
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider value={{ login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

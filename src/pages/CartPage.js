@@ -31,7 +31,6 @@ import useAuth from "../hooks/useAuth";
 function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { cart } = useSelector((state) => state?.carts);
 
   const totalPrice = () => {
@@ -50,13 +49,6 @@ function CartPage() {
   const handleDelete = (itemId) => {
     dispatch(removeItem(itemId));
   };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     const id = user._id;
-  //     dispatch(updateCart({ id, cart: cart }));
-  //   }
-  // }, [cart]);
 
   return (
     <Container
