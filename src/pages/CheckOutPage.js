@@ -51,10 +51,14 @@ function CheckOutPage() {
     const user_id = user._id;
     const customer_info = data;
     try {
-      await dispatch(createOrder({ customer_info, cart, user_id })).then(
-        navigate(`/purchaseOrder`),
-        dispatch(clearCart())
+      const orderResult = await dispatch(
+        createOrder({ customer_info, cart, user_id })
       );
+      if (createOrder.fulfilled.match(orderResult)) {
+        const order_id = orderResult.payload.orderId;
+        navigate(`/order/${order_id}`);
+        dispatch(clearCart());
+      }
     } catch (error) {
       reset();
       setError(error);

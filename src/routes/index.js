@@ -6,8 +6,6 @@ import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import RegisterPage from "../pages/RegisterPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
-import Order from "../pages/Order";
-import OrderInvoice from "../pages/OrderInvoice";
 import AccountPage from "../pages/AccountPage";
 import AuthRequire from "./AuthRequire";
 import ProductByCategoryPage from "../pages/ProductByCategoryPage";
@@ -15,7 +13,9 @@ import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
 import CheckOutPage from "../pages/CheckOutPage";
 import BundlePage from "../pages/BundlePage";
-import PurchaseOrder from "../pages/PurchaseOrder";
+import OrderDetailPage from "../pages/OrderDetailPage";
+import OrderPage from "../pages/OrderPage";
+import BundleDetailPage from "../pages/BundleDetailPage";
 
 function Router() {
   return (
@@ -28,10 +28,11 @@ function Router() {
           element={<ProductByCategoryPage />}
         />
         <Route path="/product/:id" element={<ProductDetailPage />} />
-        <Route path="/order" element={<Order />} />
+        <Route path="/order" element={<OrderPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/bundle" element={<BundlePage />} />
+        <Route path="/bundle/:id" element={<BundleDetailPage />} />
         <Route
           path="/checkout"
           element={
@@ -41,10 +42,10 @@ function Router() {
           }
         />
         <Route
-          path="/purchaseOrder"
+          path="/order/:id"
           element={
             <AuthRequire>
-              <PurchaseOrder />
+              <OrderDetailPage />
             </AuthRequire>
           }
         />

@@ -13,10 +13,9 @@ import { useNavigate } from "react-router-dom";
 function BundleCard({ bundle }) {
   const navigate = useNavigate();
 
-  console.log(bundle);
-
   return (
     <Card
+      onClick={() => navigate(`/bundle/${bundle._id}`)}
       sx={{
         height: "300px",
         cursor: "pointer",
@@ -27,7 +26,6 @@ function BundleCard({ bundle }) {
         image={bundle.poster_path}
         title={bundle.name}
         sx={{ height: "50%", objectFit: "contain" }}
-        // onClick={() => navigate(`/product/${product._id}`)}
       />
       <CardContent>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>

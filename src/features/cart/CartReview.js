@@ -25,6 +25,7 @@ function CartReview({ cart }) {
       <Divider sx={{ mb: 1, borderBottomWidth: 1, borderColor: "gray" }} />
       {cart?.map((item) => (
         <Box
+          key={item._id}
           sx={{
             display: "flex",
             justifyContent: "space-around",

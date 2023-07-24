@@ -52,8 +52,7 @@ const setSession = (accessToken, user) => {
 };
 
 const AuthProvider = ({ children }) => {
-  console.log("authProvider");
-  const [dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
 
@@ -126,7 +125,7 @@ const AuthProvider = ({ children }) => {
     callback();
   };
   return (
-    <AuthContext.Provider value={{ login, register, logout }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

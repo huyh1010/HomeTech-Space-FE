@@ -30,6 +30,25 @@ const SUCCESS = {
   darker: "#08660D",
   contrastText: "#FFF",
 };
+const PROCESS = {
+  main: "#74b9ff",
+  contrastText: "#00a8ff",
+};
+
+const PREPARE = {
+  main: "#a29bfe",
+  contrastText: "#6c5ce7",
+};
+
+const SHIPPED = {
+  main: "#fd79a8",
+  contrastText: "#e84393",
+};
+
+const ACCEPT = {
+  main: "#55efc4",
+  contrastText: "#00cec9",
+};
 
 const TERTIARY = {
   main: "#ffeaa7",
@@ -78,6 +97,10 @@ function ThemeProvider({ children }) {
       secondary: SECONDARY,
       tertiary: TERTIARY,
       success: SUCCESS,
+      accept: ACCEPT,
+      process: PROCESS,
+      prepare: PREPARE,
+      shipped: SHIPPED,
       dark: DARK,
       red: RED,
       text: {

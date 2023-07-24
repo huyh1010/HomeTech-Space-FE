@@ -29,13 +29,11 @@ function ProductDetailPage() {
     setIndex(index);
   };
   return (
-    <Container>
+    <Container sx={{ mt: 8 }}>
       <Card
         sx={{
           borderRadius: 2,
           backgroundColor: "white",
-
-          mt: 10,
         }}
       >
         {product && (

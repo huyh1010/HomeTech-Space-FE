@@ -27,12 +27,17 @@ import PaidIcon from "@mui/icons-material/Paid";
 import { fCurrency } from "../utils/numberFormat";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { getSingleOrder } from "../features/order/orderSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import OrderStatus from "../features/order/OrderStatus";
+import OrderPayment from "../features/order/OrderPayment";
 
-function PurchaseOrder() {
+function OrderDetailPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { orderId, order } = useSelector((state) => state?.orders);
+  const { order } = useSelector((state) => state?.orders);
+  const { id } = useParams();
 
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
@@ -44,24 +49,37 @@ function PurchaseOrder() {
     total = total + tax_fees + shipping_fees;
     return total;
   };
+  const getStatus = (order) => {
+    return {
+      status: <OrderStatus order={order} />,
+      paymentMethod: <OrderPayment order={order} />,
+    };
+  };
+  const { status, paymentMethod } = getStatus(order);
 
   useEffect(() => {
-    if (orderId) {
-      dispatch(getSingleOrder({ id: orderId }));
-    }
-  }, [dispatch, orderId]);
+    dispatch(getSingleOrder({ id: id }));
+  }, [dispatch, id]);
 
   return (
     <Container sx={{ mt: 4 }}>
       <Box>
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          Thank you for your order
+        <Typography variant="h3">
+          Thank you for your order{" "}
+          <CheckCircleOutlineIcon style={{ fontSize: 40, color: "green" }} />{" "}
         </Typography>
-        <Box sx={{ display: "flex", mb: 1 }}>
+
+        <Box
+          sx={{
+            display: { xs: "block", sm: "flex", md: "flex", lg: "flex" },
+            mb: 1,
+            mt: 2,
+          }}
+        >
           <Typography variant="h6" sx={{ fontWeight: "bold", mr: 1 }}>
             Order Id: #{order?._id}
           </Typography>
-          <Chip label={order?.status} color="tertiary" />
+          {status}
         </Box>
         <Typography variant="body1" sx={{ color: "text.tertiary" }}>
           {new Date(order?.createdAt).toString()}
@@ -102,10 +120,7 @@ function PurchaseOrder() {
           </IconButton>
           <CardContent>
             <Typography sx={{ fontWeight: "bold" }}>
-              Payment Method:{" "}
-              <Box>
-                <Typography>{order?.payment_method}</Typography>
-              </Box>
+              Payment Method: <Box>{paymentMethod}</Box>
             </Typography>
           </CardContent>
         </Box>
@@ -240,6 +255,7 @@ function PurchaseOrder() {
                 p: 5,
               }}
               endIcon={<ArrowOutwardIcon />}
+              onClick={() => navigate("/")}
             >
               Continue Shopping
             </Button>
@@ -250,4 +266,4 @@ function PurchaseOrder() {
   );
 }
 
-export default PurchaseOrder;
+export default OrderDetailPage;
