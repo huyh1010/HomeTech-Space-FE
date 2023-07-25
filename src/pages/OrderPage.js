@@ -21,6 +21,7 @@ import OrderPayment from "../features/order/OrderPayment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { fCurrency } from "../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
+import OrderCancelStatus from "../features/order/OrderCancelStatus";
 
 const tableColumnsTitle = [
   { id: "order_id", label: "Order ID", minWidth: 170 },
@@ -29,13 +30,13 @@ const tableColumnsTitle = [
   { id: "payment_method", label: "Payment Method", minWidth: 170 },
   { id: "total", label: "Total", minWidth: 170 },
   { id: "orderDetail", minWidth: 170 },
+  { id: "cancelOrder", minWidth: 170 },
 ];
 
 function OrderPage() {
   const { user } = useAuth();
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
-  // const limit = 2;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function OrderPage() {
     return {
       status: <OrderStatus order={order} />,
       paymentMethod: <OrderPayment order={order} />,
+      cancel: <OrderCancelStatus order={order} />,
     };
   };
   const handleChangePage = (event, newPage) => {
@@ -88,7 +90,7 @@ function OrderPage() {
             </TableHead>
             <TableBody>
               {orders?.map((order) => {
-                const { status, paymentMethod } = getStatus(order);
+                const { status, paymentMethod, cancel } = getStatus(order);
                 let total = order.orderItems.reduce(
                   (acc, item) => acc + item.quantity * item.price,
                   0
@@ -120,6 +122,7 @@ function OrderPage() {
                         View
                       </Button>
                     </TableCell>
+                    <TableCell>{cancel}</TableCell>
                   </TableRow>
                 );
               })}

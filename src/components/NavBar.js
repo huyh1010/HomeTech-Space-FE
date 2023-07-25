@@ -78,25 +78,16 @@ function NavBar() {
       >
         Profile
       </MenuItem>
-      {user?.role === "admin" ? (
-        <MenuItem
-          onClick={handleClose}
-          component={RouterLink}
-          to="/dashboard"
-          sx={{ mx: 1 }}
-        >
-          Dashboard
-        </MenuItem>
-      ) : (
-        <MenuItem
-          onClick={handleClose}
-          component={RouterLink}
-          to="/order"
-          sx={{ mx: 1 }}
-        >
-          My Order
-        </MenuItem>
-      )}
+
+      <MenuItem
+        onClick={handleClose}
+        component={RouterLink}
+        to="/order"
+        sx={{ mx: 1 }}
+      >
+        My Order
+      </MenuItem>
+
       <Divider sx={{ borderStyle: "dashed" }} />
       <MenuItem onClick={handleLogout} sx={{ mx: 1 }}>
         Logout

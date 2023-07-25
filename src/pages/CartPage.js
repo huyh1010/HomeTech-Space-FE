@@ -13,20 +13,18 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   decrementQuantity,
   incrementQuantity,
   removeItem,
-  updateCart,
 } from "../features/cart/cartSlice";
 import { fCurrency } from "../utils/numberFormat";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 
 function CartPage() {
   const dispatch = useDispatch();

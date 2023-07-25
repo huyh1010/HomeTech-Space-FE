@@ -16,12 +16,21 @@ import BundlePage from "../pages/BundlePage";
 import OrderDetailPage from "../pages/OrderDetailPage";
 import OrderPage from "../pages/OrderPage";
 import BundleDetailPage from "../pages/BundleDetailPage";
+import AdminPage from "../pages/AdminPage";
 
 function Router() {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
+        <Route
+          path="/admin"
+          element={
+            <AuthRequire>
+              <AdminPage />
+            </AuthRequire>
+          }
+        />
         <Route path="/product" element={<ProductPage />} />
         <Route
           path="/product/category/:id"
@@ -29,7 +38,14 @@ function Router() {
         />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/order" element={<OrderPage />} />
-        <Route path="/account" element={<AccountPage />} />
+        <Route
+          path="/account"
+          element={
+            <AuthRequire>
+              <AccountPage />
+            </AuthRequire>
+          }
+        />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/bundle" element={<BundlePage />} />
         <Route path="/bundle/:id" element={<BundleDetailPage />} />

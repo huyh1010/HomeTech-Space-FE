@@ -8,7 +8,7 @@ import {
   logOutUser,
 } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { duration } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const initialState = {
   isInitialized: false,
@@ -55,6 +55,8 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const initialize = async () => {
@@ -110,7 +112,15 @@ const AuthProvider = ({ children }) => {
     });
     const { user, accessToken, userCart } = res.data;
 
-    dispatchFunction(logInUser(userCart.cart));
+    if (user.role === "user") {
+      dispatchFunction(logInUser(userCart.cart));
+    }
+    if (user.role === "admin") {
+      navigate("/admin");
+    } else {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
 
     setSession(accessToken, user);
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
@@ -121,6 +131,7 @@ const AuthProvider = ({ children }) => {
     setSession(null);
 
     dispatch({ type: LOGOUT });
+
     dispatchFunction(logOutUser());
     callback();
   };

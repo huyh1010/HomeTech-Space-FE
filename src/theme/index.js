@@ -67,6 +67,7 @@ const DARK = {
 
 const RED = {
   main: "#FF0000",
+  contrastText: "#FFF",
 };
 
 const GREY = {
@@ -109,7 +110,12 @@ function ThemeProvider({ children }) {
         tertiary: GREY[600],
         disabled: GREY[500],
       },
-      background: { paper: "#fff", default: "#fff", neutral: GREY[200] },
+      background: {
+        paper: "#fff",
+        default: "#fff",
+        neutral: GREY[200],
+        positive: "#3366FF",
+      },
       action: {
         active: GREY[600],
         hover: GREY[500_8],

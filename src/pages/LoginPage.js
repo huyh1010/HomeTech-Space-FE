@@ -28,8 +28,6 @@ const loginSchema = yup.object({
   password: yup.string().required("Password is required"),
 });
 function LoginPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const auth = useAuth();
   const methods = useForm({
     defaultValues,
@@ -45,12 +43,9 @@ function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = async (data) => {
-    const from = location.state?.from?.pathname || "/";
     let { email, password } = data;
     try {
-      await auth.login({ email, password }, () => {
-        navigate(from, { replace: true });
-      });
+      await auth.login({ email, password });
     } catch (error) {
       reset();
       setError("responseError", error);

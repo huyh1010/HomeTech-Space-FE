@@ -286,7 +286,6 @@ export const cartSlice = createSlice({
       }
     },
     logInUser: (state, action) => {
-      console.log(action.payload);
       state.cart = action.payload;
       state.cartItemCount = action.payload.length;
       localStorage.setItem("cart", JSON.stringify(action.payload));

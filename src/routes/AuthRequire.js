@@ -4,7 +4,8 @@ import useAuth from "../hooks/useAuth";
 import LoadingScreen from "../components/LoadingScreen";
 
 function AuthRequire({ children }) {
-  const { isAuthenticated, isInitialized } = useAuth();
+  const { isAuthenticated, isInitialized, user } = useAuth();
+  console.log(user);
   const location = useLocation();
   if (!isInitialized) {
     return <LoadingScreen />;
@@ -12,6 +13,10 @@ function AuthRequire({ children }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+  // if (isAuthenticated && user.role === "admin") {
+  //   return <Navigate to="/admin" />;
+  // }
+
   return children;
 }
 

@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { fCurrency } from "../utils/numberFormat";
+import { addToCart } from "../features/cart/cartSlice";
 
 function ProductDetailPage() {
   const params = useParams();
@@ -22,6 +23,10 @@ function ProductDetailPage() {
   const { product } = useSelector((state) => state.products.product);
   const [index, setIndex] = useState(0);
 
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
+
   useEffect(() => {
     dispatch(getSingleProduct({ id: productId }));
   }, [dispatch, productId]);
@@ -29,7 +34,7 @@ function ProductDetailPage() {
     setIndex(index);
   };
   return (
-    <Container sx={{ mt: 8 }}>
+    <Container sx={{ mt: 10 }}>
       <Card
         sx={{
           borderRadius: 2,
@@ -114,6 +119,7 @@ function ProductDetailPage() {
                         margin: "auto",
                         borderRadius: 14,
                       }}
+                      onClick={() => handleAddToCart(product)}
                     >
                       Add to Cart
                     </Button>
