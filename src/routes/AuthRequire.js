@@ -4,8 +4,8 @@ import useAuth from "../hooks/useAuth";
 import LoadingScreen from "../components/LoadingScreen";
 
 function AuthRequire({ children }) {
-  const { isAuthenticated, isInitialized, user } = useAuth();
-  console.log(user);
+  const { isAuthenticated, isInitialized } = useAuth();
+
   const location = useLocation();
   if (!isInitialized) {
     return <LoadingScreen />;

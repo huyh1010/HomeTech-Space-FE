@@ -1,15 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 function AdminPage() {
-  return (
-    <>
-      <Box>
-        <Typography>Hello</Typography>
-      </Box>
-      <Typography>hello</Typography>
-    </>
-  );
+  return <Typography>hello</Typography>;
 }
 
 export default AdminPage;

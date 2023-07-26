@@ -17,20 +17,55 @@ import OrderDetailPage from "../pages/OrderDetailPage";
 import OrderPage from "../pages/OrderPage";
 import BundleDetailPage from "../pages/BundleDetailPage";
 import AdminPage from "../pages/AdminPage";
+import useAuth from "../hooks/useAuth";
+import AdminDashboard from "../pages/AdminDashboard";
+import AdminProducts from "../pages/AdminProducts";
+import AdminOrders from "../pages/AdminOrders";
 
 function Router() {
+  const { user } = useAuth();
+
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<HomePage />} />
-        <Route
-          path="/admin"
-          element={
-            <AuthRequire>
-              <AdminPage />
-            </AuthRequire>
-          }
-        />
+        {user && user.role === "admin" ? (
+          <Route
+            path="/admin"
+            element={
+              <AuthRequire>
+                <AdminPage />
+              </AuthRequire>
+            }
+          >
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AuthRequire>
+                  <AdminDashboard />
+                </AuthRequire>
+              }
+            />
+            <Route
+              path="/admin/products"
+              element={
+                <AuthRequire>
+                  <AdminProducts />
+                </AuthRequire>
+              }
+            />
+            <Route
+              path="/admin/orders"
+              element={
+                <AuthRequire>
+                  <AdminOrders />
+                </AuthRequire>
+              }
+            />
+          </Route>
+        ) : (
+          <Route index element={<HomePage />} />
+        )}
+
         <Route path="/product" element={<ProductPage />} />
         <Route
           path="/product/category/:id"
