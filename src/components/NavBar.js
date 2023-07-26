@@ -96,7 +96,13 @@ function NavBar() {
   );
   return (
     <Box>
-      <AppBar sx={{ height: "70px", justifyContent: "center" }}>
+      <AppBar
+        sx={{
+          height: "70px",
+          justifyContent: "center",
+          background: "background",
+        }}
+      >
         <Container>
           <Toolbar variant="dense" sx={{ justifyContent: "space-around" }}>
             <Stack direction="row" alignItems="center">

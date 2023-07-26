@@ -4,17 +4,9 @@ import {
   createTheme,
   alpha,
 } from "@mui/material";
+import customizeComponents from "./customizations";
 // import customizeComponents from "./customizations";
-
 const PRIMARY = {
-  lighter: "#C8FACD",
-  light: "#5BE584",
-  main: "#FFFF",
-  dark: "#007B55",
-  darker: "#005249",
-  contrastText: "#FFF",
-};
-const SECONDARY = {
   lighter: "#D6E4FF",
   light: "#84A9FF",
   main: "#3366FF",
@@ -22,6 +14,16 @@ const SECONDARY = {
   darker: "#091A7A",
   contrastText: "#FFF",
 };
+
+const SECONDARY = {
+  lighter: "#C8FACD",
+  light: "#5BE584",
+  main: "#00AB55",
+  dark: "#007B55",
+  darker: "#005249",
+  contrastText: "#FFF",
+};
+
 const SUCCESS = {
   lighter: "#E9FCD4",
   light: "#AAF27F",
@@ -134,7 +136,7 @@ function ThemeProvider({ children }) {
   };
 
   const theme = createTheme(themeOptions);
-  // theme.components = customizeComponents(theme);
+  theme.components = customizeComponents(theme);
   return (
     <MUIThemeProvider theme={theme}>
       <CssBaseline />

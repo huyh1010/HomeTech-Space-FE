@@ -1,9 +1,10 @@
+import { Typography } from "@mui/material";
 import React from "react";
 
 function AdminDashboard() {
   return (
     <div>
-      <h1>AdminDashboard</h1>
+      <Typography>ADMIN Dashboard</Typography>
     </div>
   );
 }

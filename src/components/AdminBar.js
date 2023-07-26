@@ -33,7 +33,7 @@ const menuItems = [
     id: 1,
     label: "Dashboard",
     icon: <DashboardIcon />,
-    link: "/admin/dashboard",
+    link: "/admin",
   },
   {
     id: 2,
@@ -139,9 +139,8 @@ export default function AdminBar() {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+    <>
+      <AppBar position="static" open={open} sx={{ background: "background" }}>
         <Toolbar>
           <IconButton
             color="dark"
@@ -153,7 +152,7 @@ export default function AdminBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" color="text.primary">
-            Persistent drawer
+            Welcome back {user.name}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton>
@@ -188,12 +187,8 @@ export default function AdminBar() {
         <Divider />
         <List>
           {menuItems.map((item) => (
-            <ListItem
-              key={item.id}
-              disablePadding
-              onClick={() => navigate(item.link)}
-            >
-              <ListItemButton>
+            <ListItem key={item.id} disablePadding>
+              <ListItemButton onClick={() => navigate(item.link)}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
               </ListItemButton>
@@ -201,6 +196,6 @@ export default function AdminBar() {
           ))}
         </List>
       </Drawer>
-    </Box>
+    </>
   );
 }

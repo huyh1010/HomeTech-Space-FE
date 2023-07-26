@@ -1,10 +1,11 @@
+import { Container, Typography } from "@mui/material";
 import React from "react";
 
 function AdminOrders() {
   return (
-    <div>
-      <h1>AdminOrders</h1>
-    </div>
+    <Container sx={{ mt: 4 }}>
+      <Typography>Hello</Typography>
+    </Container>
   );
 }
 
