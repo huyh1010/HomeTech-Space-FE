@@ -88,8 +88,9 @@ function ProductDetailPage() {
                   </Box>
                   <Stack style={{ display: "flex" }}>
                     <Typography sx={{ fontWeight: 600 }}>Features:</Typography>
-                    {product.features.map((feature) => (
+                    {product.features.map((feature, index) => (
                       <Chip
+                        key={index}
                         label={feature}
                         variant="outlined"
                         sx={{ my: 1 }}

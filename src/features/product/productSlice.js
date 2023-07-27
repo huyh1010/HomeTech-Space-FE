@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
+import { CloudinaryUpload } from "../../utils/cloudinary";
+import { toast } from "react-toastify";
 
 export const getProducts = createAsyncThunk(
   "products/GetProducts",
@@ -32,6 +34,53 @@ export const getSingleProduct = createAsyncThunk(
     try {
       let url = `/products/${id}`;
       const res = await apiService.get(url);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async (
+    {
+      id,
+      brand,
+      category,
+      description,
+      dimension_size,
+      features,
+      name,
+      poster_path,
+      price,
+      weight_kg,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const data = {
+        brand,
+        category,
+        description,
+        dimension_size,
+        features,
+        name,
+        price,
+        weight_kg,
+      };
+      const posterPath = await CloudinaryUpload(poster_path);
+      data.poster_path = posterPath;
+      let url = `/products/${id}`;
+      const res = await apiService.put(url, data);
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -89,6 +138,10 @@ export const categorySlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(updateProduct.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(deleteProduct.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -102,6 +155,10 @@ export const categorySlice = createSlice({
     builder.addCase(getSingleProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.product = action.payload;
+    });
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      toast.success("Product updated");
     });
     builder.addCase(deleteProduct.fulfilled, (state, action) => {
       state.loading = false;
@@ -129,6 +186,16 @@ export const categorySlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.error = action.error.message;
+      }
+    });
+    builder.addCase(updateProduct.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+        toast.error(action.payload.message);
+      } else {
+        state.error = action.error.message;
+        toast.error(action.error.message);
       }
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {

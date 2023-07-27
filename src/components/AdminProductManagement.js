@@ -83,7 +83,9 @@ function AdminProductManagement() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Button>Create Product</Button>
+        <Button onClick={() => navigate("/admin/products/create")}>
+          Create Product
+        </Button>
       </Box>
       <TableContainer sx={{ mt: 4 }}>
         <Table>

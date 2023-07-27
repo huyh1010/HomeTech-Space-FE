@@ -155,9 +155,9 @@ export default function AdminBar() {
             Welcome back {user.name}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton>
+          <IconButton onClick={handleProfileMenuOpen}>
             {" "}
-            <AccountCircleIcon color="dark" onClick={handleProfileMenuOpen} />
+            <AccountCircleIcon color="dark" />
           </IconButton>
           {renderMenu}
         </Toolbar>

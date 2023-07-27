@@ -22,6 +22,7 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AdminProducts from "../pages/AdminProducts";
 import AdminOrders from "../pages/AdminOrders";
 import AdminEditProduct from "../pages/AdminEditProduct";
+import AdminCreateProduct from "../pages/AdminCreateProduct";
 
 function Router() {
   const { user } = useAuth();
@@ -45,6 +46,10 @@ function Router() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/products/edit" element={<AdminEditProduct />} />
+          <Route
+            path="/admin/products/create"
+            element={<AdminCreateProduct />}
+          />
           <Route path="/admin/orders" element={<AdminOrders />} />
         </Route>
       ) : (

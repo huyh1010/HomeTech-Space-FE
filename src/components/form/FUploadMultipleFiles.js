@@ -1,8 +1,9 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { FormHelperText } from "@mui/material";
-import UploadSingleFile from "../UploadSingleFile";
 
-function FUploadImage({ name, ...other }) {
+import UploadMultipleFiles from "../UploadMultipleFiles";
+
+function FUploadMultipleFiles({ name, ...other }) {
   const { control } = useFormContext();
   return (
     <Controller
@@ -11,7 +12,7 @@ function FUploadImage({ name, ...other }) {
       render={({ field, fieldState: { error } }) => {
         const checkError = !!error && !field.value;
         return (
-          <UploadSingleFile
+          <UploadMultipleFiles
             accept="image/*"
             file={field.value}
             error={checkError}
@@ -30,4 +31,4 @@ function FUploadImage({ name, ...other }) {
   );
 }
 
-export default FUploadImage;
+export default FUploadMultipleFiles;
