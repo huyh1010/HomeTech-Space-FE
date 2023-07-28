@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
-import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
 
 export const createOrder = createAsyncThunk(
   "products/GetProducts",
@@ -18,6 +19,29 @@ export const createOrder = createAsyncThunk(
       };
       await timeout();
 
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
+export const getOrders = createAsyncThunk(
+  "orders/getOrders",
+  async ({ page, limit, name, status }, { rejectWithValue }) => {
+    try {
+      let url = `/orders?page=${page}&limit=${limit}`;
+      if (name) url += `&name=${name}`;
+      if (status) url += `&status=${status}`;
+      const res = await apiService.get(url);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
       return res.data;
     } catch (error) {
       rejectWithValue(error);
@@ -88,6 +112,27 @@ export const getUserOrder = createAsyncThunk(
   }
 );
 
+export const updateOrder = createAsyncThunk(
+  "/orders/updateOrder",
+  async ({ status, payment_status, id }, { rejectWithValue }) => {
+    try {
+      let url = `/orders/${id}`;
+      const res = await apiService.put(url, { status, payment_status });
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
 const initialState = {
   orders: [],
   order: [],
@@ -106,6 +151,10 @@ export const orderSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(getOrders.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(getSingleOrder.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -118,11 +167,22 @@ export const orderSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(updateOrder.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
 
     builder.addCase(createOrder.fulfilled, (state, action) => {
       state.loading = false;
       const { orderId } = action.payload;
       state.orderId = orderId;
+    });
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      state.loading = false;
+      const { orders, totalPages, count } = action.payload;
+      state.orders = orders;
+      state.totalPages = totalPages;
+      state.count = count;
     });
     builder.addCase(getSingleOrder.fulfilled, (state, action) => {
       state.loading = false;
@@ -140,12 +200,29 @@ export const orderSlice = createSlice({
     builder.addCase(cancelOrder.fulfilled, (state, action) => {
       state.loading = false;
       const { _id, status } = action.payload;
-      // state.orders[_id].status = status;
+
       let order = state.orders.find((order) => order._id === _id);
       order.status = status;
     });
+    builder.addCase(updateOrder.fulfilled, (state, action) => {
+      state.loading = false;
+      const { status, payment_status } = action.payload;
+
+      let order = state.order;
+      order.status = status;
+      order.payment_status = payment_status;
+      toast.success("Order updated");
+    });
 
     builder.addCase(createOrder.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+      } else {
+        state.error = action.error.message;
+      }
+    });
+    builder.addCase(getOrders.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.error = action.payload.message;
@@ -175,6 +252,16 @@ export const orderSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.error = action.error.message;
+      }
+    });
+    builder.addCase(updateOrder.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+        toast.error(action.payload.message);
+      } else {
+        state.error = action.error.message;
+        toast.error(action.error.message);
       }
     });
   },

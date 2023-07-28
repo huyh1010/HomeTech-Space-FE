@@ -23,6 +23,7 @@ import AdminProducts from "../pages/AdminProducts";
 import AdminOrders from "../pages/AdminOrders";
 import AdminEditProduct from "../pages/AdminEditProduct";
 import AdminCreateProduct from "../pages/AdminCreateProduct";
+import AdminEditOrder from "../pages/AdminEditOrder";
 
 function Router() {
   const { user } = useAuth();
@@ -51,6 +52,7 @@ function Router() {
             element={<AdminCreateProduct />}
           />
           <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/orders/:id" element={<AdminEditOrder />} />
         </Route>
       ) : (
         <Route path="/" element={<MainLayout />}>

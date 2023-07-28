@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrder } from "../features/order/orderSlice";
 import {
+  Alert,
   Button,
   Container,
   Paper,
@@ -22,6 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { fCurrency } from "../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
 import OrderCancelStatus from "../features/order/OrderCancelStatus";
+import LoadingScreen from "../components/LoadingScreen";
 
 const tableColumnsTitle = [
   { id: "order_id", label: "Order ID", minWidth: 170 },
@@ -41,7 +43,9 @@ function OrderPage() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { orders, count } = useSelector((state) => state?.orders);
+  const { orders, count, error, loading } = useSelector(
+    (state) => state?.orders
+  );
 
   const getStatus = (order) => {
     return {
@@ -88,44 +92,55 @@ function OrderPage() {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {orders?.map((order) => {
-                const { status, paymentMethod, cancel } = getStatus(order);
-                let total = order.orderItems.reduce(
-                  (acc, item) => acc + item.quantity * item.price,
-                  0
-                );
+            <TableBody sx={{ position: "relative" }}>
+              {loading ? (
+                <LoadingScreen />
+              ) : (
+                <>
+                  {orders ? (
+                    orders?.map((order) => {
+                      const { status, paymentMethod, cancel } =
+                        getStatus(order);
+                      let total = order.orderItems.reduce(
+                        (acc, item) => acc + item.quantity * item.price,
+                        0
+                      );
 
-                total = total + shipping_fees + tax_fees;
-                return (
-                  <TableRow key={order._id}>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      {order._id}
-                    </TableCell>
-                    <TableCell>
-                      {" "}
-                      {new Date(order.createdAt).toString()}
-                    </TableCell>
-                    <TableCell>{status}</TableCell>
-                    <TableCell>{paymentMethod}</TableCell>
-                    <TableCell>{fCurrency(total)}</TableCell>
-                    <TableCell>
-                      <Button
-                        onClick={() => navigate(`/order/${order._id}`)}
-                        size="small"
-                        variant="contained"
-                        style={{
-                          backgroundColor: "black",
-                        }}
-                        endIcon={<VisibilityIcon />}
-                      >
-                        View
-                      </Button>
-                    </TableCell>
-                    <TableCell>{cancel}</TableCell>
-                  </TableRow>
-                );
-              })}
+                      total = total + shipping_fees + tax_fees;
+                      return (
+                        <TableRow key={order._id}>
+                          <TableCell sx={{ fontWeight: "bold" }}>
+                            {order._id}
+                          </TableCell>
+                          <TableCell>
+                            {" "}
+                            {new Date(order.createdAt).toString()}
+                          </TableCell>
+                          <TableCell>{status}</TableCell>
+                          <TableCell>{paymentMethod}</TableCell>
+                          <TableCell>{fCurrency(total)}</TableCell>
+                          <TableCell>
+                            <Button
+                              onClick={() => navigate(`/order/${order._id}`)}
+                              size="small"
+                              variant="contained"
+                              style={{
+                                backgroundColor: "black",
+                              }}
+                              endIcon={<VisibilityIcon />}
+                            >
+                              View
+                            </Button>
+                          </TableCell>
+                          <TableCell>{cancel}</TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <Alert severity="error">{error}</Alert>
+                  )}
+                </>
+              )}
             </TableBody>
             <TableFooter>
               <TableRow>

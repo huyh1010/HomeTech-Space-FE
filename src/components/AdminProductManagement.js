@@ -74,7 +74,7 @@ function AdminProductManagement() {
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
-            placeholder="Search"
+            placeholder="Search product name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />

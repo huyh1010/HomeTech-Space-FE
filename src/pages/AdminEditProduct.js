@@ -88,8 +88,7 @@ function AdminEditProduct() {
     data.price = Number(data.price);
     data.weight_kg = Number(data.weight_kg);
 
-    // dispatch(updateProduct({ id: id, ...data }));
-    console.log(data);
+    dispatch(updateProduct({ id: id, ...data }));
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
