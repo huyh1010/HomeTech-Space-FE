@@ -157,7 +157,7 @@ function AdminProductManagement() {
                     size="small"
                     endIcon={<EditIcon />}
                     onClick={() =>
-                      navigate("/admin/products/edit", { state: product })
+                      navigate(`/admin/products/edit/${product._id}`)
                     }
                   >
                     Edit

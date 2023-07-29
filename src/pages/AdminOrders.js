@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   FormControl,
+  Grid,
   IconButton,
   InputBase,
   InputLabel,
@@ -33,6 +34,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import OrderStatusFilter from "../features/order/OrderStatusFilter";
+import OrderPaymentStatusFilter from "../features/order/OrderPaymentStatusFilter";
+import OrderPaymentMethodFilter from "../features/order/OrderPaymentMethodFilter";
+import ClearIcon from "@mui/icons-material/Clear";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { LoadingButton } from "@mui/lab";
 
 const tableColumnsTitle = [
   { id: "order_id", label: "Order ID", minWidth: 170 },
@@ -49,6 +56,9 @@ const tableColumnsTitle = [
 function AdminOrders() {
   const [name, setName] = useState("");
   const [orderStatus, setOrderStatus] = useState("");
+  const [orderPaymentStatus, setOrderPaymentStatus] = useState("");
+  const [orderPaymentMethod, setOrderPaymentMethod] = useState("");
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   let shipping_fees = 4.99;
@@ -88,168 +98,221 @@ function AdminOrders() {
         limit: rowsPerPage,
         name: name,
         status: orderStatus,
+        payment_status: orderPaymentStatus,
+        payment_method: orderPaymentMethod,
       })
     );
     // eslint-disable-next-line
   }, [dispatch, page, rowsPerPage]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
+
     setOrderStatus(e.target[0].value);
+    setOrderPaymentStatus(e.target[2].value);
+    setOrderPaymentMethod(e.target[4].value);
     dispatch(
-      getOrders({ page: page + 1, limit: rowsPerPage, status: orderStatus })
+      getOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+        status: orderStatus,
+        payment_status: orderPaymentStatus,
+        payment_method: orderPaymentMethod,
+      })
+    );
+  };
+  const handleClear = () => {
+    setOrderStatus("");
+    setOrderPaymentStatus("");
+    setOrderPaymentMethod("");
+
+    dispatch(
+      getOrders({
+        page: page + 1,
+        limit: rowsPerPage,
+      })
     );
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Container sx={{ mt: 4 }}>
-        <Box sx={{ display: "flex" }}>
-          <Paper
-            component="form"
-            onSubmit={handleSearch}
+      <Container sx={{ mt: 10 }}>
+        <Paper sx={{ p: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+              Orders
+            </Typography>
+            <ShoppingCartIcon style={{ fontSize: 50 }} />
+          </Box>
+          <Box
             sx={{
-              p: "2px 4px",
-              display: "flex",
+              display: { xs: "block", sm: "block", md: "block", lg: "flex" },
+              justifyContent: {
+                xs: "none",
+                sm: "none",
+                md: "none",
+                lg: "space-between",
+              },
               alignItems: "center",
-              width: 400,
             }}
           >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-label">Status</InputLabel>
-            <Select
-              value={orderStatus}
-              onChange={(e) => setOrderStatus(e.target.value)}
-              label="Status"
+            <Paper
+              component="form"
+              onSubmit={handleSearch}
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: { xs: 250, sm: 400, md: 400, lg: 400 },
+                height: 50,
+              }}
             >
-              <MenuItem value="" disabled>
-                Select status
-              </MenuItem>
-              <MenuItem value="pending">Pending </MenuItem>
-              <MenuItem value="accepted">Accepted</MenuItem>
-              <MenuItem value="order processed">Processing</MenuItem>
-              <MenuItem value="preparing for shipment">
-                Preparing Your Order
-              </MenuItem>
-              <MenuItem value="shipped">On Your Way</MenuItem>
-              <MenuItem value="delivered">Delivered</MenuItem>
-            </Select>
-          </FormControl>
-          <Box>
-            <Button
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>{" "}
+            <Box sx={{ mt: { xs: 1, sm: 1, md: 1, lg: 0 } }}>
+              <OrderStatusFilter
+                orderStatus={orderStatus}
+                setOrderStatus={setOrderStatus}
+              />
+              <OrderPaymentStatusFilter
+                orderPaymentStatus={orderPaymentStatus}
+                setOrderPaymentStatus={setOrderPaymentStatus}
+              />
+              <OrderPaymentMethodFilter
+                orderPaymentMethod={orderPaymentMethod}
+                setOrderPaymentMethod={setOrderPaymentMethod}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: { xs: "block", sm: "block", md: "block", lg: "flex" },
+              justifyContent: { xs: "none", sm: "none", md: "none", lg: "end" },
+              p: 1,
+            }}
+          >
+            <LoadingButton
               size="small"
               type="submit"
               variant="contained"
               endIcon={<FilterAltIcon />}
+              sx={{ mr: 1 }}
             >
               Filter
+            </LoadingButton>
+            <Button
+              size="small"
+              variant="contained"
+              endIcon={<ClearIcon />}
+              onClick={handleClear}
+            >
+              Clear
             </Button>
           </Box>
-        </Box>
-        <TableContainer sx={{ mt: 4 }}>
-          <Table>
-            <TableHead>
-              <TableRow style={{ backgroundColor: "#74b9ff" }}>
-                {tableColumnsTitle.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    style={{
-                      minWidth: column.minWidth,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
 
-            <TableBody sx={{ position: "relative" }}>
-              {loading ? (
-                <LoadingScreen />
-              ) : (
-                <>
-                  {orders ? (
-                    orders?.map((order) => {
-                      const { status, paymentMethod, paymentStatus } =
-                        getStatus(order);
-                      let total = order.orderItems.reduce(
-                        (acc, item) => acc + item.quantity * item.price,
-                        0
-                      );
+          <TableContainer sx={{ mt: 4 }}>
+            <Table>
+              <TableHead>
+                <TableRow style={{ backgroundColor: "#74b9ff" }}>
+                  {tableColumnsTitle.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      style={{
+                        minWidth: column.minWidth,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
 
-                      total = total + shipping_fees + tax_fees;
-                      return (
-                        <TableRow key={order._id}>
-                          <TableCell sx={{ fontWeight: "bold" }}>
-                            {order._id}
-                          </TableCell>
-                          <TableCell>{order.name}</TableCell>
-                          <TableCell>
-                            {order.shipping_address}, district {order.district},{" "}
-                            {order.city}
-                          </TableCell>
-                          <TableCell>
-                            {" "}
-                            {new Date(order.createdAt).toString()}
-                          </TableCell>
-                          <TableCell>{fCurrency(total)}</TableCell>
-                          <TableCell>{status}</TableCell>
-                          <TableCell>{paymentMethod}</TableCell>
-                          <TableCell>{paymentStatus}</TableCell>
-                          <TableCell>
-                            {order.status !== "canceled" ? (
-                              <Button
-                                style={{
-                                  backgroundColor: "black",
-                                  color: "white",
-                                }}
-                                size="small"
-                                endIcon={<EditIcon />}
-                                onClick={() =>
-                                  navigate(`/admin/orders/${order._id}`)
-                                }
-                              >
-                                Edit
-                              </Button>
-                            ) : null}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  ) : (
-                    <Alert severity="error">{error}</Alert>
-                  )}
-                </>
-              )}
-            </TableBody>
+              <TableBody sx={{ position: "relative" }}>
+                {loading ? (
+                  <LoadingScreen />
+                ) : (
+                  <>
+                    {orders ? (
+                      orders?.map((order) => {
+                        const { status, paymentMethod, paymentStatus } =
+                          getStatus(order);
+                        let total = order.orderItems.reduce(
+                          (acc, item) => acc + item.quantity * item.price,
+                          0
+                        );
 
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  page={page}
-                  count={count}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  rowsPerPage={rowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+                        total = total + shipping_fees + tax_fees;
+                        return (
+                          <TableRow key={order._id}>
+                            <TableCell sx={{ fontWeight: "bold" }}>
+                              {order._id}
+                            </TableCell>
+                            <TableCell>{order.name}</TableCell>
+                            <TableCell>
+                              {order.shipping_address}, district{" "}
+                              {order.district}, {order.city}
+                            </TableCell>
+                            <TableCell>
+                              {" "}
+                              {new Date(order.createdAt).toString()}
+                            </TableCell>
+                            <TableCell>{fCurrency(total)}</TableCell>
+                            <TableCell>{status}</TableCell>
+                            <TableCell>{paymentMethod}</TableCell>
+                            <TableCell>{paymentStatus}</TableCell>
+                            <TableCell>
+                              {order.status !== "canceled" ? (
+                                <Button
+                                  style={{
+                                    backgroundColor: "black",
+                                    color: "white",
+                                  }}
+                                  size="small"
+                                  endIcon={<EditIcon />}
+                                  onClick={() =>
+                                    navigate(`/admin/orders/edit/${order._id}`)
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              ) : null}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <Alert severity="error">{error}</Alert>
+                    )}
+                  </>
+                )}
+              </TableBody>
+
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    page={page}
+                    count={count}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    rowsPerPage={rowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Container>
     </form>
   );

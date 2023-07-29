@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useCallback, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import {
   FTextField,
   FUploadImage,
@@ -13,30 +13,38 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { fData } from "../utils/numberFormat";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProduct } from "../features/product/productSlice";
+import {
+  getSingleProduct,
+  updateProduct,
+} from "../features/product/productSlice";
 
 const UpdateProductSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
 function AdminEditProduct() {
-  const { state } = useLocation();
-  const id = state?._id;
+  const params = useParams();
+  const productId = params.id;
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state?.products);
-  console.log(state.imageUrl);
+  const { product } = useSelector((state) => state.products.product);
+
   const defaultValues = {
-    name: state?.name || "",
-    price: state?.price || "",
-    category: state?.category || "",
-    brand: state?.brand || "",
-    dimension_size: state?.dimension_size || "",
-    weight_kg: state?.weight_kg || "",
-    description: state?.description || "",
-    poster_path: state?.poster_path || "",
+    name: product.name || "",
+    price: product?.price || "",
+    category: product?.category || "",
+    brand: product?.brand || "",
+    dimension_size: product?.dimension_size || "",
+    weight_kg: product?.weight_kg || "",
+    description: product?.description || "",
+    poster_path: product?.poster_path || "",
     imageUrl: "",
-    features: state?.features || "",
+    features: product?.features || "",
   };
+
+  useEffect(() => {
+    dispatch(getSingleProduct({ id: productId }));
+  }, [dispatch, productId]);
 
   const methods = useForm({
     defaultValues,
@@ -68,27 +76,28 @@ function AdminEditProduct() {
   const handleDropFiles = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
-
+      console.log(acceptedFiles);
       if (file) {
+        console.log(file);
         setValue(
           "imageUrl",
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
         );
-        state.imageUrl.push(URL.createObjectURL(file));
-        console.log(state.imageUrl);
       }
     },
-    [setValue, state.imageUrl]
+    [setValue]
   );
 
   const onSubmit = async (data) => {
     data.features = String(data.features).split(",");
     data.price = Number(data.price);
     data.weight_kg = Number(data.weight_kg);
+    data.imageUrl = product.imageUrl;
+    console.log(data.imageUrl);
 
-    dispatch(updateProduct({ id: id, ...data }));
+    // dispatch(updateProduct({ id: product._id, ...data }));
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -168,7 +177,7 @@ function AdminEditProduct() {
                   label="Product Description"
                 />
                 <Box>
-                  {state?.imageUrl?.map((image, index) => (
+                  {product?.imageUrl?.map((image, index) => (
                     <img
                       key={index}
                       src={image}

@@ -23,7 +23,7 @@ import useAuth from "../hooks/useAuth";
 import { Menu, MenuItem } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import InventoryIcon from "@mui/icons-material/Inventory";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpeakerIcon from "@mui/icons-material/Speaker";
 
 const drawerWidth = 240;
@@ -44,7 +44,7 @@ const menuItems = [
   {
     id: 3,
     label: "Orders",
-    icon: <InventoryIcon />,
+    icon: <ShoppingCartIcon />,
     link: "/admin/orders",
   },
 ];

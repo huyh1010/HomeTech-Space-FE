@@ -28,11 +28,17 @@ export const createOrder = createAsyncThunk(
 
 export const getOrders = createAsyncThunk(
   "orders/getOrders",
-  async ({ page, limit, name, status }, { rejectWithValue }) => {
+  async (
+    { page, limit, name, status, payment_status, payment_method },
+
+    { rejectWithValue }
+  ) => {
     try {
       let url = `/orders?page=${page}&limit=${limit}`;
       if (name) url += `&name=${name}`;
       if (status) url += `&status=${status}`;
+      if (payment_status) url += `&payment_status=${payment_status}`;
+      if (payment_method) url += `&payment_method=${payment_method}`;
       const res = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {

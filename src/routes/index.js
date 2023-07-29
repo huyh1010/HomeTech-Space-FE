@@ -46,13 +46,16 @@ function Router() {
         >
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/products/edit" element={<AdminEditProduct />} />
+          <Route
+            path="/admin/products/edit/:id"
+            element={<AdminEditProduct />}
+          />
           <Route
             path="/admin/products/create"
             element={<AdminCreateProduct />}
           />
           <Route path="/admin/orders" element={<AdminOrders />} />
-          <Route path="/admin/orders/:id" element={<AdminEditOrder />} />
+          <Route path="/admin/orders/edit/:id" element={<AdminEditOrder />} />
         </Route>
       ) : (
         <Route path="/" element={<MainLayout />}>
