@@ -33,7 +33,7 @@ function UploadMultipleFiles({
     isDragReject,
     fileRejections,
   } = useDropzone({ multiple: false, ...other });
-
+  console.log(file);
   return (
     <Box sx={{ width: "100%", ...sx }}>
       <DropZoneStyle
@@ -67,27 +67,6 @@ function UploadMultipleFiles({
             Drop or Select Image
           </Typography>
         </Stack>
-
-        {file &&
-          file.map((image) => (
-            <Box
-              sx={{
-                top: 8,
-                left: 8,
-                borderRadius: 1,
-                position: "absolute",
-                width: "calc(100% - 16px)",
-                height: "calc(100% - 16px)",
-                overflow: "hidden",
-                "& img": { objectFit: "fill", width: 1, height: 1 },
-              }}
-            >
-              <img
-                src={isString(image) ? image : image.preview}
-                alt="file-preview"
-              />
-            </Box>
-          ))}
       </DropZoneStyle>
 
       {fileRejections.length > 0 && (

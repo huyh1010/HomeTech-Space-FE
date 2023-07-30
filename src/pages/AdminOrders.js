@@ -3,15 +3,9 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  Grid,
   IconButton,
   InputBase,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -85,12 +79,6 @@ function AdminOrders() {
     };
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setName(e.target[0].value);
-    dispatch(getOrders({ page: page + 1, limit: rowsPerPage, name: name }));
-  };
-
   useEffect(() => {
     dispatch(
       getOrders({
@@ -107,14 +95,15 @@ function AdminOrders() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    setOrderStatus(e.target[0].value);
-    setOrderPaymentStatus(e.target[2].value);
-    setOrderPaymentMethod(e.target[4].value);
+    setName(e.target[0].value);
+    setOrderStatus(e.target[2].value);
+    setOrderPaymentStatus(e.target[4].value);
+    setOrderPaymentMethod(e.target[6].value);
     dispatch(
       getOrders({
         page: page + 1,
         limit: rowsPerPage,
+        name: name,
         status: orderStatus,
         payment_status: orderPaymentStatus,
         payment_method: orderPaymentMethod,
@@ -122,6 +111,7 @@ function AdminOrders() {
     );
   };
   const handleClear = () => {
+    setName("");
     setOrderStatus("");
     setOrderPaymentStatus("");
     setOrderPaymentMethod("");
@@ -157,8 +147,6 @@ function AdminOrders() {
             }}
           >
             <Paper
-              component="form"
-              onSubmit={handleSearch}
               sx={{
                 p: "2px 4px",
                 display: "flex",

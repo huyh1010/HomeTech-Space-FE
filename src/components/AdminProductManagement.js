@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -24,6 +25,7 @@ import { fCurrency } from "../utils/numberFormat";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "./LoadingScreen";
 
 const tableColumnsTitle = [
   { id: "product_id", label: "Product ID", minWidth: 170 },
@@ -42,7 +44,7 @@ function AdminProductManagement() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { products } = useSelector((state) => state?.products?.products);
-  const { count } = useSelector((state) => state?.products);
+  const { count, loading, error } = useSelector((state) => state?.products);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(e.target[0].value);
@@ -104,67 +106,84 @@ function AdminProductManagement() {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {products?.map((product) => (
-              <TableRow key={product._id}>
-                <TableCell sx={{ fontWeight: "bold" }}>{product._id}</TableCell>
-                <TableCell
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
+          <TableBody sx={{ position: "relative" }}>
+            {loading ? (
+              <LoadingScreen />
+            ) : (
+              <>
+                {products ? (
+                  products?.map((product) => (
+                    <TableRow key={product._id}>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        {product._id}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
 
-                    cursor: "pointer",
-                  }}
-                >
-                  <Avatar
-                    src={product.poster_path}
-                    sx={{ mr: 2, width: 50, height: 50 }}
-                    alt={product.name}
-                  />
-                  <Typography
-                    variant="body1"
-                    sx={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                  >
-                    {product.name}
-                  </Typography>
-                </TableCell>
-                <TableCell>{fCurrency(product.price)}</TableCell>
-                <TableCell>
-                  <Chip label={product.category} color="secondary" />
-                </TableCell>
-                <TableCell>
-                  <Chip label={product.brand} color="primary" />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                    }}
-                    size="small"
-                    endIcon={<DeleteIcon />}
-                    onClick={() => dispatch(deleteProduct({ id: product._id }))}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    style={{
-                      backgroundColor: "black",
-                      color: "white",
-                    }}
-                    size="small"
-                    endIcon={<EditIcon />}
-                    onClick={() =>
-                      navigate(`/admin/products/edit/${product._id}`)
-                    }
-                  >
-                    Edit
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Avatar
+                          src={product.poster_path}
+                          sx={{ mr: 2, width: 50, height: 50 }}
+                          alt={product.name}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {product.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{fCurrency(product.price)}</TableCell>
+                      <TableCell>
+                        <Chip label={product.category} color="secondary" />
+                      </TableCell>
+                      <TableCell>
+                        <Chip label={product.brand} color="primary" />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          style={{
+                            backgroundColor: "red",
+                            color: "white",
+                          }}
+                          size="small"
+                          endIcon={<DeleteIcon />}
+                          onClick={() =>
+                            dispatch(deleteProduct({ id: product._id }))
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          style={{
+                            backgroundColor: "black",
+                            color: "white",
+                          }}
+                          size="small"
+                          endIcon={<EditIcon />}
+                          onClick={() =>
+                            navigate(`/admin/products/edit/${product._id}`)
+                          }
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <Alert severity="error">{error}</Alert>
+                )}
+              </>
+            )}
           </TableBody>
           <TableFooter>
             <TableRow>
