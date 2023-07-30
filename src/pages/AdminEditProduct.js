@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import {
-  FTextField,
-  FUploadImage,
-  FUploadMultipleFiles,
-  FormProvider,
-} from "../components/form";
+import { useParams } from "react-router-dom";
+import { FTextField, FUploadImage, FormProvider } from "../components/form";
 import { LoadingButton } from "@mui/lab";
 import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,10 +12,12 @@ import {
   getSingleProduct,
   updateProduct,
 } from "../features/product/productSlice";
-import Dropzone, { useDropzone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import styled from "@emotion/styled";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import LoadingScreen from "../components/LoadingScreen";
+import axios from "axios";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
 
 const UpdateProductSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -74,10 +71,11 @@ function AdminEditProduct(props) {
   const params = useParams();
   const productId = params.id;
   const dispatch = useDispatch();
+  const [secureUrls] = useState([]);
   const { loading, error } = useSelector((state) => state?.products);
   const { product } = useSelector((state) => state?.products?.product);
 
-  const [files, setFiles] = useState([]);
+  let [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -112,7 +110,7 @@ function AdminEditProduct(props) {
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, []);
+  }, [files]);
 
   const defaultValues = {
     name: product?.name || "",
@@ -123,6 +121,7 @@ function AdminEditProduct(props) {
     weight_kg: product?.weight_kg || "",
     description: product?.description || "",
     poster_path: product?.poster_path || "",
+    imageUrl: "",
     features: product?.features || "",
   };
 
@@ -137,9 +136,14 @@ function AdminEditProduct(props) {
 
   const {
     handleSubmit,
+    reset,
     setValue,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (product) reset(product);
+  }, [product, reset]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -161,13 +165,33 @@ function AdminEditProduct(props) {
     data.features = String(data.features).split(",");
     data.price = Number(data.price);
     data.weight_kg = Number(data.weight_kg);
-    data.imageUrl = files;
+
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i]);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const imageURL = res.data.secure_url;
+      secureUrls.push(imageURL);
+    }
+
+    data.imageUrl = secureUrls;
 
     dispatch(updateProduct({ id: product._id, ...data }));
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Container sx={{ mt: 8 }}>
+      <Container sx={{ mt: 8, position: "relative" }}>
         {loading ? (
           <LoadingScreen />
         ) : (

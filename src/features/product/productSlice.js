@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { CloudinaryUpload } from "../../utils/cloudinary";
 import { toast } from "react-toastify";
-import { CloudinaryUploadFiles } from "../../utils/cloudinaryMultipleFiles";
 
 export const getProducts = createAsyncThunk(
   "products/GetProducts",
@@ -78,13 +77,11 @@ export const updateProduct = createAsyncThunk(
         name,
         price,
         weight_kg,
+        imageUrl,
       };
 
       const posterPath = await CloudinaryUpload(poster_path);
       data.poster_path = posterPath;
-      const images = await CloudinaryUploadFiles(imageUrl);
-      data.imageUrl = images;
-      console.log(data.imageUrl);
       let url = `/products/${id}`;
       const res = await apiService.put(url, data);
       const timeout = () => {
