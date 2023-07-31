@@ -3,6 +3,55 @@ import apiService from "../../app/apiService";
 import { CloudinaryUpload } from "../../utils/cloudinary";
 import { toast } from "react-toastify";
 
+export const createProduct = createAsyncThunk(
+  "products/createProduct",
+  async (
+    {
+      brand,
+      category,
+      description,
+      dimension_size,
+      features,
+      name,
+      poster_path,
+      price,
+      weight_kg,
+      imageUrl,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const data = {
+        brand,
+        category,
+        description,
+        dimension_size,
+        features,
+        name,
+        price,
+        weight_kg,
+        imageUrl,
+      };
+
+      const posterPath = await CloudinaryUpload(poster_path);
+      data.poster_path = posterPath;
+      let url = `/products`;
+      const res = await apiService.post(url, data);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
 export const getProducts = createAsyncThunk(
   "products/GetProducts",
   async ({ page, name, category, limit, price }, { rejectWithValue }) => {
@@ -133,6 +182,10 @@ export const categorySlice = createSlice({
   name: "products",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(createProduct.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(getProducts.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -148,6 +201,11 @@ export const categorySlice = createSlice({
     builder.addCase(deleteProduct.pending, (state) => {
       state.loading = true;
       state.error = "";
+    });
+    builder.addCase(createProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      state.products = action.payload;
+      toast.success("Product created");
     });
 
     builder.addCase(getProducts.fulfilled, (state, action) => {
@@ -173,6 +231,16 @@ export const categorySlice = createSlice({
         (product) => product._id !== id
       );
       state.count = count;
+    });
+    builder.addCase(createProduct.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+        toast.error(action.payload.message);
+      } else {
+        state.error = action.error.message;
+        toast.error(action.error.message);
+      }
     });
 
     builder.addCase(getProducts.rejected, (state, action) => {

@@ -45,33 +45,40 @@ function AdminProductManagement() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { products } = useSelector((state) => state?.products?.products);
   const { count, loading, error } = useSelector((state) => state?.products);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target[0].value);
-  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 5));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   useEffect(() => {
-    dispatch(getProducts({ page: page + 1, limit: rowsPerPage }));
+    dispatch(getProducts({ page: page + 1, limit: rowsPerPage, name: name }));
+    // eslint-disable-next-line
   }, [dispatch, page, rowsPerPage]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setName(e.target[0].value);
+    dispatch(getProducts({ page: page + 1, limit: rowsPerPage, name: name }));
+  };
   return (
-    <>
-      <Box sx={{ display: "flex" }}>
+    <form onSubmit={handleSubmit}>
+      <Box
+        sx={{
+          display: { xs: "block", sm: "block", md: "flex", lg: "flex" },
+          justifyContent: "space-between",
+        }}
+      >
         <Paper
-          component="form"
-          onSubmit={handleSubmit}
           sx={{
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
-            width: 400,
+            width: { xs: 250, sm: 400, md: 400, lg: 400 },
           }}
         >
           <InputBase
@@ -85,7 +92,10 @@ function AdminProductManagement() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Button onClick={() => navigate("/admin/products/create")}>
+        <Button
+          onClick={() => navigate("/admin/products/create")}
+          sx={{ backgroundColor: "primary.light" }}
+        >
           Create Product
         </Button>
       </Box>
@@ -142,7 +152,10 @@ function AdminProductManagement() {
                       </TableCell>
                       <TableCell>{fCurrency(product.price)}</TableCell>
                       <TableCell>
-                        <Chip label={product.category} color="secondary" />
+                        <Chip
+                          label={product?.category?.name}
+                          color="secondary"
+                        />
                       </TableCell>
                       <TableCell>
                         <Chip label={product.brand} color="primary" />
@@ -199,7 +212,7 @@ function AdminProductManagement() {
           </TableFooter>
         </Table>
       </TableContainer>
-    </>
+    </form>
   );
 }
 

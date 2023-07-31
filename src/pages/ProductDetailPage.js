@@ -20,7 +20,7 @@ function ProductDetailPage() {
   const params = useParams();
   const productId = params.id;
   const dispatch = useDispatch();
-  const { product } = useSelector((state) => state.products.product);
+  const { product } = useSelector((state) => state?.products?.product);
   const [index, setIndex] = useState(0);
 
   const handleAddToCart = (product) => {
@@ -49,13 +49,13 @@ function ProductDetailPage() {
                 <Stack>
                   {" "}
                   <img
-                    src={product.imageUrl[index]}
+                    src={product?.imageUrl[index]}
                     alt={product.name}
                     style={{ height: "300px", borderRadius: 4 }}
                   />
                 </Stack>
                 <Box>
-                  {product.imageUrl.map((image, index) => (
+                  {product?.imageUrl?.map((image, index) => (
                     <img
                       key={index}
                       src={image}

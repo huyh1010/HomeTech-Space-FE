@@ -178,7 +178,7 @@ function NavBar() {
               {renderMenu}
               <IconButton onClick={() => navigate("/cart")}>
                 {" "}
-                <Badge badgeContent={cartItemCount} color="secondary">
+                <Badge badgeContent={cartItemCount} color="primary">
                   <ShoppingCartIcon color="dark" />
                 </Badge>
               </IconButton>

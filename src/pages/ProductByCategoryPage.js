@@ -12,68 +12,63 @@ import React, { useEffect, useState } from "react";
 import LoadingScreen from "../components/LoadingScreen";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductsByCategory } from "../features/category/categorySlice";
 import ProductCard from "../features/product/ProductCard";
+import { getProducts } from "../features/product/productSlice";
 
 function ProductByCategoryPage() {
-  const { loading, error, totalProductsinCategory } = useSelector(
-    (state) => state?.categories
-  );
-  const products = useSelector(
-    (state) => state?.categories?.productsByCategory?.category?.products
-  );
-  const { coverImgUrl } = useSelector(
-    (state) => state?.categories?.productsByCategory?.category || {}
-  );
-
-  const [page, setPage] = useState(1);
-  const productsPerPage = totalProductsinCategory;
-
-  const params = useParams();
-  const categoryId = params;
+  const { id } = useParams();
+  const category_id = id;
+  console.log(id);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const limit = 12;
+
+  const { products, totalPages } = useSelector(
+    (state) => state?.products?.products
+  );
+  console.log(products);
+  const { loading, error } = useSelector((state) => state.products);
 
   useEffect(() => {
-    try {
-      dispatch(getProductsByCategory(categoryId));
-    } catch (error) {
-      console.log(error);
-    }
-  }, [dispatch, categoryId]);
+    dispatch(getProducts({ page: page, limit: limit, category: category_id }));
+  }, [dispatch, page, limit, category_id]);
 
   return (
     <Container sx={{ mt: 4 }}>
-      {coverImgUrl && (
-        <Card>
-          <CardMedia component={"img"} image={coverImgUrl} />
-        </Card>
-      )}
       <Box sx={{ position: "relative", height: 1 }}>
         {loading ? (
           <LoadingScreen />
         ) : (
           <>
-            {error ? (
-              <Alert severity="error">{error}</Alert>
+            {products ? (
+              <>
+                <Card>
+                  <CardMedia
+                    component={"img"}
+                    image={products[0].category.coverImgUrl}
+                  />
+                </Card>
+                <Grid container spacing={2} mt={1}>
+                  {products?.map((product, index) => (
+                    <Grid key={product._id} item xs={12} sm={6} md={4} lg={4}>
+                      <ProductCard product={product} />
+                    </Grid>
+                  ))}
+                </Grid>
+                <Stack sx={{ alignItems: "center", mt: 2 }}>
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={(e, page) => setPage(page)}
+                  />
+                </Stack>
+              </>
             ) : (
-              <Grid container spacing={2} mt={1}>
-                {products?.map((product, index) => (
-                  <Grid key={product._id} item xs={12} sm={6} md={4} lg={4}>
-                    <ProductCard product={product} />
-                  </Grid>
-                ))}
-              </Grid>
+              <Alert severity="error">{error}</Alert>
             )}
           </>
         )}
       </Box>
-      <Stack sx={{ alignItems: "center", mt: 2 }}>
-        <Pagination
-          count={productsPerPage}
-          page={page}
-          onChange={(e, page) => setPage(page)}
-        />
-      </Stack>
     </Container>
   );
 }

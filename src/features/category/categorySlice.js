@@ -22,30 +22,8 @@ export const getCategories = createAsyncThunk(
   }
 );
 
-export const getProductsByCategory = createAsyncThunk(
-  "categories/getProductsByCategory",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      let url = `/categories/${id}`;
-      const res = await apiService.get(url);
-      const timeout = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("ok");
-          }, 1000);
-        });
-      };
-      await timeout();
-      return res.data;
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
 const initialState = {
   categories: [],
-  totalProductsinCategory: 0,
-  productsByCategory: [],
   loading: false,
   error: null,
 };
@@ -58,29 +36,13 @@ export const categorySlice = createSlice({
       state.loading = true;
       state.error = "";
     });
-    builder.addCase(getProductsByCategory.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
+
     builder.addCase(getCategories.fulfilled, (state, action) => {
       state.loading = false;
       state.categories = action.payload;
     });
-    builder.addCase(getProductsByCategory.fulfilled, (state, action) => {
-      state.loading = false;
 
-      state.productsByCategory = action.payload;
-      state.totalProductsinCategory = action.payload.category.products.length;
-    });
     builder.addCase(getCategories.rejected, (state, action) => {
-      state.loading = false;
-      if (action.payload) {
-        state.error = action.payload.message;
-      } else {
-        state.error = action.error.message;
-      }
-    });
-    builder.addCase(getProductsByCategory.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.error = action.payload.message;

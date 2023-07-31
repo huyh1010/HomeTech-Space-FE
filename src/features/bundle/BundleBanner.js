@@ -1,7 +1,9 @@
 import { Card, CardMedia, Container, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function BundleBanner() {
+  const navigate = useNavigate();
   const cardMediaSX = {
     transition: "transform 0.5s all ease-in-out",
     "&:hover": {
@@ -20,6 +22,7 @@ function BundleBanner() {
           image="https://blog.smartify.in/wp-content/uploads/2020/12/Smart-home-devices.jpg"
           title="bundle"
           sx={cardMediaSX}
+          onClick={() => navigate("/bundle")}
         />
       </Card>
     </Container>

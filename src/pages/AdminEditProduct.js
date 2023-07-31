@@ -2,7 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FTextField, FUploadImage, FormProvider } from "../components/form";
 import { LoadingButton } from "@mui/lab";
-import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  InputLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -18,6 +27,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import LoadingScreen from "../components/LoadingScreen";
 import axios from "axios";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
+import AdminProductCategory from "../features/category/AdminProductCategory";
 
 const UpdateProductSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -121,7 +131,7 @@ function AdminEditProduct(props) {
     weight_kg: product?.weight_kg || "",
     description: product?.description || "",
     poster_path: product?.poster_path || "",
-    imageUrl: "",
+    imageUrl: product?.imageUrl || "",
     features: product?.features || "",
   };
 
@@ -136,6 +146,7 @@ function AdminEditProduct(props) {
 
   const {
     handleSubmit,
+    register,
     reset,
     setValue,
     formState: { isSubmitting },
@@ -184,8 +195,9 @@ function AdminEditProduct(props) {
       const imageURL = res.data.secure_url;
       secureUrls.push(imageURL);
     }
-
-    data.imageUrl = secureUrls;
+    if (secureUrls.length) {
+      data.imageUrl = secureUrls;
+    }
 
     dispatch(updateProduct({ id: product._id, ...data }));
   };
@@ -198,6 +210,10 @@ function AdminEditProduct(props) {
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
               <Card sx={{ py: 10, px: 3, textAlign: "center" }}>
+                <Typography variant="h4" sx={{ mb: 1 }}>
+                  Product Cover
+                </Typography>
+                <Divider sx={{ mb: 1 }} />
                 <FUploadImage
                   name="poster_path"
                   accept="image/*"
@@ -241,16 +257,7 @@ function AdminEditProduct(props) {
                     label="Price"
                     helperText="Input Number"
                   />
-                  <FTextField
-                    name="category"
-                    label="Category"
-                    helperText="Please input one of these available categories: speaker,
-                    plugs and outlets,
-                    security cameras and systems,
-                    lighting,
-                    alarm clock,
-                    or scale."
-                  />
+                  <AdminProductCategory register={register} />
                   <FTextField name="brand" label="brand" />
                   <FTextField name="dimension_size" label="Size" />
                   <FTextField
@@ -270,8 +277,12 @@ function AdminEditProduct(props) {
                     label="Product Description"
                   />
                   <section className="container">
+                    <Typography variant="body1" sx={{ mb: 1 }}>
+                      Product Side Images
+                    </Typography>
+                    <Divider sx={{ mb: 1 }} />
                     <DropZoneStyle {...getRootProps()}>
-                      <input {...getInputProps()} />
+                      <input {...getInputProps()} {...register("imageUrl")} />
 
                       <Stack
                         direction="column"
