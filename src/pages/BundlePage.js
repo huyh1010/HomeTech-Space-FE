@@ -18,7 +18,7 @@ import BundleCard from "../features/bundle/BundleCard";
 function BundlePage() {
   const bannerImg =
     "https://static1.pocketnowimages.com/wordpress/wp-content/uploads/2023/05/best-smart-home-devices-li.jpg";
-  const [name, setName] = useState("");
+  const [name] = useState("");
   const [page, setPage] = useState(1);
   const limit = 12;
   const dispatch = useDispatch();

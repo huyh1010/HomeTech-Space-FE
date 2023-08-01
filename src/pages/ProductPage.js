@@ -32,7 +32,7 @@ function ProductPage() {
 
   useEffect(() => {
     dispatch(getProducts({ name, page, limit }));
-  }, [dispatch, name, page, limit]);
+  }, [name, page, limit]);
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
@@ -57,20 +57,22 @@ function ProductPage() {
           ) : (
             <>
               {products ? (
-                <ProductList products={products} />
+                <>
+                  <ProductList products={products} />
+                  <Stack sx={{ alignItems: "center", mt: 2 }}>
+                    <Pagination
+                      count={totalPages}
+                      page={page}
+                      onChange={(e, page) => setPage(page)}
+                    />
+                  </Stack>
+                </>
               ) : (
                 <Alert severity="error">{error}</Alert>
               )}
             </>
           )}
         </Box>
-        <Stack sx={{ alignItems: "center", mt: 2 }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(e, page) => setPage(page)}
-          />
-        </Stack>
       </Stack>
     </Container>
   );

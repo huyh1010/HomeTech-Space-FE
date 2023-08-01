@@ -23,8 +23,13 @@ function AdminProducts() {
   };
   return (
     <Container sx={{ mt: 10 }}>
-      <Paper sx={{ p: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Paper sx={{ p: 3, backgroundColor: "primary.lighter" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="h3" sx={{ fontWeight: "bold" }}>
             Products
           </Typography>

@@ -1,32 +1,31 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { FTextField, FUploadImage, FormProvider } from "../components/form";
+import { getSingleBundle, updateBundle } from "../features/bundle/bundleSlice";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import styled from "@emotion/styled";
+import { useDropzone } from "react-dropzone";
+import { FTextField, FUploadImage, FormProvider } from "../components/form";
 import {
   Box,
   Card,
   Container,
   Divider,
   Grid,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { fData } from "../utils/numberFormat";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getSingleProduct,
-  updateProduct,
-} from "../features/product/productSlice";
-import { useDropzone } from "react-dropzone";
-import styled from "@emotion/styled";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import LoadingScreen from "../components/LoadingScreen";
+import { fData } from "../utils/numberFormat";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AdminBundleList from "../features/bundle/AdminBundleList";
+import { getProducts } from "../features/product/productSlice";
 import axios from "axios";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
-import AdminProductCategory from "../features/category/AdminProductCategory";
 
 const UpdateProductSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -76,14 +75,14 @@ const img = {
   height: "100%",
 };
 
-function AdminEditProduct(props) {
-  const params = useParams();
-  const productId = params.id;
+function AdminEditBundle() {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const [secureUrls] = useState([]);
-  const { loading } = useSelector((state) => state?.products);
-  const { product } = useSelector((state) => state?.products?.product);
+  const [productList, setProductList] = useState([]);
+  const { bundle, loading } = useSelector((state) => state?.bundles);
+  const { products } = useSelector((state) => state?.products?.products);
 
+  const [secureUrls] = useState([]);
   let [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -122,22 +121,13 @@ function AdminEditProduct(props) {
   }, [files]);
 
   const defaultValues = {
-    name: product?.name || "",
-    price: product?.price || "",
-    category: product?.category || "",
-    brand: product?.brand || "",
-    dimension_size: product?.dimension_size || "",
-    weight_kg: product?.weight_kg || "",
-    description: product?.description || "",
-    poster_path: product?.poster_path || "",
-    imageUrl: product?.imageUrl || "",
-    features: product?.features || "",
+    name: bundle?.name || "",
+    price: bundle?.price || "",
+    products: bundle?.products || "",
+    description: bundle?.description || "",
+    poster_path: bundle?.poster_path || "",
+    imageUrl: bundle?.brand || "",
   };
-
-  useEffect(() => {
-    dispatch(getSingleProduct({ id: productId }));
-  }, [dispatch, productId]);
-
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(UpdateProductSchema),
@@ -150,10 +140,6 @@ function AdminEditProduct(props) {
     setValue,
     formState: { isSubmitting },
   } = methods;
-
-  useEffect(() => {
-    if (product) reset(product);
-  }, [product, reset]);
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -171,11 +157,25 @@ function AdminEditProduct(props) {
     [setValue]
   );
 
-  const onSubmit = async (data) => {
-    data.features = String(data.features).split(",");
-    data.price = Number(data.price);
-    data.weight_kg = Number(data.weight_kg);
+  useEffect(() => {
+    dispatch(getSingleBundle({ id: id }));
+  }, [dispatch, id]);
 
+  useEffect(() => {
+    if (bundle) reset(bundle);
+  }, [bundle, reset]);
+
+  useEffect(() => {
+    dispatch(getProducts({}));
+    // eslint-disable-next-line
+  }, [dispatch]);
+
+  const onSubmit = async (data) => {
+    data.price = Number(data.price);
+    if (productList.length) {
+      const product_id = productList.map((product) => product._id);
+      data.products = product_id;
+    }
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -198,7 +198,7 @@ function AdminEditProduct(props) {
       data.imageUrl = secureUrls;
     }
 
-    dispatch(updateProduct({ id: product._id, ...data }));
+    dispatch(updateBundle({ id: bundle._id, ...data }));
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -210,7 +210,7 @@ function AdminEditProduct(props) {
             <Grid item xs={12} md={4}>
               <Card sx={{ py: 10, px: 3, textAlign: "center" }}>
                 <Typography variant="h4" sx={{ mb: 1 }}>
-                  Product Cover
+                  Product Bundle Cover
                 </Typography>
                 <Divider sx={{ mb: 1 }} />
                 <FUploadImage
@@ -256,16 +256,12 @@ function AdminEditProduct(props) {
                     label="Price"
                     helperText="Input Number"
                   />
-                  <AdminProductCategory register={register} />
-                  <FTextField name="brand" label="brand" />
-                  <FTextField name="dimension_size" label="Size" />
-                  <FTextField
-                    name="weight_kg"
-                    label="weight"
-                    helperText="Input Number"
+                  <AdminBundleList
+                    products={products}
+                    productList={productList}
+                    setProductList={setProductList}
+                    bundle={bundle}
                   />
-
-                  <FTextField name="features" label="features" />
                 </Box>
 
                 <Stack spacing={3} sx={{ mt: 3 }}>
@@ -277,7 +273,7 @@ function AdminEditProduct(props) {
                   />
                   <section className="container">
                     <Typography variant="body1" sx={{ mb: 1 }}>
-                      Product Side Images
+                      Product Bundle Side Images
                     </Typography>
                     <Divider sx={{ mb: 1 }} />
                     <DropZoneStyle {...getRootProps()}>
@@ -322,4 +318,4 @@ function AdminEditProduct(props) {
   );
 }
 
-export default AdminEditProduct;
+export default AdminEditBundle;

@@ -127,7 +127,7 @@ function AdminOrders() {
   return (
     <form onSubmit={handleSubmit}>
       <Container sx={{ mt: 10 }}>
-        <Paper sx={{ p: 3 }}>
+        <Paper sx={{ p: 3, backgroundColor: "secondary.lighter" }}>
           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Typography variant="h3" sx={{ fontWeight: "bold" }}>
               Orders
@@ -242,7 +242,10 @@ function AdminOrders() {
 
                         total = total + shipping_fees + tax_fees;
                         return (
-                          <TableRow key={order._id}>
+                          <TableRow
+                            key={order._id}
+                            sx={{ backgroundColor: "white" }}
+                          >
                             <TableCell sx={{ fontWeight: "bold" }}>
                               {order._id}
                             </TableCell>

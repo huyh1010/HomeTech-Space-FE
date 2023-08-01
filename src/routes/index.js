@@ -24,6 +24,8 @@ import AdminOrders from "../pages/AdminOrders";
 import AdminEditProduct from "../pages/AdminEditProduct";
 import AdminCreateProduct from "../pages/AdminCreateProduct";
 import AdminEditOrder from "../pages/AdminEditOrder";
+import AdminBundle from "../pages/AdminBundle";
+import AdminEditBundle from "../pages/AdminEditBundle";
 
 function Router() {
   const { user } = useAuth();
@@ -54,6 +56,8 @@ function Router() {
             path="/admin/products/create"
             element={<AdminCreateProduct />}
           />
+          <Route path="/admin/bundles" element={<AdminBundle />} />
+          <Route path="/admin/bundles/edit/:id" element={<AdminEditBundle />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/orders/edit/:id" element={<AdminEditOrder />} />
         </Route>

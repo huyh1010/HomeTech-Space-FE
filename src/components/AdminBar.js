@@ -16,8 +16,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
+import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuth from "../hooks/useAuth";
 import { Menu, MenuItem } from "@mui/material";
@@ -43,6 +43,12 @@ const menuItems = [
   },
   {
     id: 3,
+    label: "Product Bundles",
+    icon: <InventoryIcon />,
+    link: "/admin/bundles",
+  },
+  {
+    id: 4,
     label: "Orders",
     icon: <ShoppingCartIcon />,
     link: "/admin/orders",

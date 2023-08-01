@@ -53,7 +53,8 @@ const ACCEPT = {
 };
 
 const TERTIARY = {
-  main: "#ffeaa7",
+  light: "#ffeaa7",
+  main: "#f6e58d",
   dark: "#fdcb6e",
   darker: "#f1c40f",
   contrastText: "#f39c12",

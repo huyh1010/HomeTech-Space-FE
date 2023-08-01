@@ -56,6 +56,8 @@ export const getProducts = createAsyncThunk(
   "products/GetProducts",
   async ({ page, name, category, limit, price }, { rejectWithValue }) => {
     try {
+      console.log(page);
+      console.log(limit);
       let url = `/products?page=${page}&limit=${limit}`;
       if (name) url += `&name=${name}`;
       if (category) url += `&category=${category}`;

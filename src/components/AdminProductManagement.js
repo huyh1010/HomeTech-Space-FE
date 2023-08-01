@@ -33,8 +33,8 @@ const tableColumnsTitle = [
   { id: "price", label: "Price", minWidth: 170 },
   { id: "category", label: "Category", minWidth: 170 },
   { id: "brand", label: "Brand", minWidth: 170 },
-  { id: "update", minWidth: 170 },
   { id: "delete", minWidth: 170 },
+  { id: "update", minWidth: 170 },
 ];
 
 function AdminProductManagement() {
@@ -123,7 +123,10 @@ function AdminProductManagement() {
               <>
                 {products ? (
                   products?.map((product) => (
-                    <TableRow key={product._id}>
+                    <TableRow
+                      key={product._id}
+                      sx={{ backgroundColor: "white" }}
+                    >
                       <TableCell sx={{ fontWeight: "bold" }}>
                         {product._id}
                       </TableCell>
