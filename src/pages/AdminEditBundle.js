@@ -15,7 +15,6 @@ import {
   Container,
   Divider,
   Grid,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -27,7 +26,7 @@ import { getProducts } from "../features/product/productSlice";
 import axios from "axios";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
 
-const UpdateProductSchema = yup.object().shape({
+const UpdateBundleSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
@@ -130,7 +129,7 @@ function AdminEditBundle() {
   };
   const methods = useForm({
     defaultValues,
-    resolver: yupResolver(UpdateProductSchema),
+    resolver: yupResolver(UpdateBundleSchema),
   });
 
   const {

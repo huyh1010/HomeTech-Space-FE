@@ -99,7 +99,10 @@ function AdminBundle() {
                 <SearchIcon />
               </IconButton>
             </Paper>
-            <Button sx={{ backgroundColor: "primary.light" }}>
+            <Button
+              sx={{ backgroundColor: "primary.light", color: "white" }}
+              onClick={() => navigate("/admin/bundles/create")}
+            >
               Create Product
             </Button>
           </Box>

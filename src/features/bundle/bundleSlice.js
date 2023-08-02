@@ -3,6 +3,40 @@ import apiService from "../../app/apiService";
 import { CloudinaryUpload } from "../../utils/cloudinary";
 import { toast } from "react-toastify";
 
+export const createBundle = createAsyncThunk(
+  "bundles/createBundle",
+  async (
+    { name, products, description, poster_path, price, imageUrl },
+    { rejectWithValue }
+  ) => {
+    try {
+      const data = {
+        name,
+        products,
+        description,
+        price,
+        imageUrl,
+      };
+
+      const posterPath = await CloudinaryUpload(poster_path);
+      data.poster_path = posterPath;
+      let url = `/bundles`;
+      const res = await apiService.post(url, data);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
 export const getBundles = createAsyncThunk(
   "bundles/getBundles",
   async ({ page, limit, name }, { rejectWithValue }) => {
@@ -95,6 +129,10 @@ export const bundleSlice = createSlice({
   name: "bundles",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(createBundle.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(getBundles.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -107,6 +145,11 @@ export const bundleSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(createBundle.fulfilled, (state, action) => {
+      state.loading = false;
+      state.bundles = action.payload;
+      toast.success("Bundle created");
+    });
     builder.addCase(getBundles.fulfilled, (state, action) => {
       state.loading = false;
       state.bundles = action.payload;
@@ -118,6 +161,16 @@ export const bundleSlice = createSlice({
     builder.addCase(updateBundle.fulfilled, (state, action) => {
       state.loading = false;
       toast.success("Product updated");
+    });
+    builder.addCase(createBundle.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+        toast.error(action.payload.message);
+      } else {
+        state.error = action.error.message;
+        toast.error(action.error.message);
+      }
     });
 
     builder.addCase(getBundles.rejected, (state, action) => {

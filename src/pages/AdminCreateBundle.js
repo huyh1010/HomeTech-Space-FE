@@ -1,4 +1,12 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import styled from "@emotion/styled";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { getProducts } from "../features/product/productSlice";
+import { useDropzone } from "react-dropzone";
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Card,
@@ -8,35 +16,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import * as yup from "yup";
 import { FTextField, FUploadImage, FormProvider } from "../components/form";
 import { fData } from "../utils/numberFormat";
-import { LoadingButton } from "@mui/lab";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import styled from "@emotion/styled";
-import { useDropzone } from "react-dropzone";
-import AdminProductCategory from "../features/category/AdminProductCategory";
+import AdminBundleList from "../features/bundle/AdminBundleList";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
 import axios from "axios";
-import { createProduct } from "../features/product/productSlice";
+import { createBundle } from "../features/bundle/bundleSlice";
 
-const defaultValues = {
-  name: "",
-  price: "",
-  category: "",
-  brand: "",
-  dimension_size: "",
-  weight_kg: "",
-  description: "",
-  poster_path: "",
-  imageUrl: "",
-  features: "",
-};
-
-const CreateProductSchema = yup.object().shape({
+const CreateBundleSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
@@ -84,12 +72,14 @@ const img = {
   height: "100%",
 };
 
-function AdminCreateProduct() {
+function AdminCreateBundle() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.products);
+  const [productList, setProductList] = useState([]);
 
-  let [files, setFiles] = useState([]);
+  const { products } = useSelector((state) => state?.products?.products);
+
   const [secureUrls] = useState([]);
+  let [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -121,20 +111,28 @@ function AdminCreateProduct() {
     </div>
   ));
 
-  // useEffect(() => {
-  //   // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-  //   return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  // }, [files]);
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [files]);
 
+  const defaultValues = {
+    name: "",
+    price: "",
+    products: "",
+    description: "",
+    poster_path: "",
+    imageUrl: "",
+  };
   const methods = useForm({
     defaultValues,
-    resolver: yupResolver(CreateProductSchema),
+    resolver: yupResolver(CreateBundleSchema),
   });
 
   const {
     handleSubmit,
-    setValue,
     register,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
@@ -155,9 +153,11 @@ function AdminCreateProduct() {
   );
 
   const onSubmit = async (data) => {
-    data.features = String(data.features).split(",");
     data.price = Number(data.price);
-    data.weight_kg = Number(data.weight_kg);
+    if (productList.length) {
+      const product_id = productList.map((product) => product._id);
+      data.products = product_id;
+    }
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -176,18 +176,25 @@ function AdminCreateProduct() {
       const imageURL = res.data.secure_url;
       secureUrls.push(imageURL);
     }
+    if (secureUrls.length) {
+      data.imageUrl = secureUrls;
+    }
 
-    data.imageUrl = secureUrls;
-    dispatch(createProduct({ ...data }));
+    dispatch(createBundle({ ...data }));
   };
+
+  useEffect(() => {
+    dispatch(getProducts({}));
+    // eslint-disable-next-line
+  }, [dispatch]);
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Container sx={{ mt: 8 }}>
+      <Container sx={{ mt: 8, position: "relative" }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Card sx={{ py: 10, px: 3, textAlign: "center" }}>
               <Typography variant="h4" sx={{ mb: 1 }}>
-                Product Cover
+                Product Bundle Cover
               </Typography>
               <Divider sx={{ mb: 1 }} />
               <FUploadImage
@@ -233,16 +240,11 @@ function AdminCreateProduct() {
                   label="Price"
                   helperText="Input Number"
                 />
-                <AdminProductCategory register={register} />
-                <FTextField name="brand" label="brand" />
-                <FTextField name="dimension_size" label="Size" />
-                <FTextField
-                  name="weight_kg"
-                  label="weight"
-                  helperText="Input Number"
+                <AdminBundleList
+                  products={products}
+                  productList={productList}
+                  setProductList={setProductList}
                 />
-
-                <FTextField name="features" label="features" />
               </Box>
 
               <Stack spacing={3} sx={{ mt: 3 }}>
@@ -254,11 +256,11 @@ function AdminCreateProduct() {
                 />
                 <section className="container">
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    Product Side Images
+                    Product Bundle Side Images
                   </Typography>
                   <Divider sx={{ mb: 1 }} />
                   <DropZoneStyle {...getRootProps()}>
-                    <input {...getInputProps()} />
+                    <input {...getInputProps()} {...register("imageUrl")} />
 
                     <Stack
                       direction="column"
@@ -284,10 +286,10 @@ function AdminCreateProduct() {
                 <LoadingButton
                   type="submit"
                   variant="contained"
-                  loading={isSubmitting || loading}
+                  loading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  Create Product
+                  Save Changes
                 </LoadingButton>
               </Stack>
             </Card>
@@ -298,4 +300,4 @@ function AdminCreateProduct() {
   );
 }
 
-export default AdminCreateProduct;
+export default AdminCreateBundle;

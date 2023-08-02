@@ -18,27 +18,25 @@ const defaultValues = {
 function ProductPage() {
   const [name, setName] = useState("");
   const [page, setPage] = useState(1);
-  const limit = 12;
+  let limit = 12;
 
   const dispatch = useDispatch();
-  const { products, totalPages } = useSelector(
-    (state) => state?.products?.products
+  const { products } = useSelector((state) => state?.products?.products);
+  const { loading, error, totalPages } = useSelector(
+    (state) => state?.products
   );
-  const { loading, error } = useSelector((state) => state.products);
 
   const methods = useForm({
     defaultValues,
   });
 
   useEffect(() => {
-    dispatch(getProducts({ name, page, limit }));
-  }, [name, page, limit]);
+    dispatch(getProducts({ page, limit, name }));
+  }, [dispatch, limit, name, page]);
 
   return (
     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
-      <Stack>
-        <ProductFilter />
-      </Stack>
+      <Stack>{/* <ProductFilter /> */}</Stack>
       <Stack sx={{ flexGrow: 1, justifyContent: "center" }}>
         <FormProvider methods={methods}>
           <Stack
@@ -48,7 +46,7 @@ function ProductPage() {
             justifyContent="space-between"
             mb={2}
           >
-            <ProductSearch name={name} setName={setName} />
+            {/* <ProductSearch name={name} setName={setName} /> */}
           </Stack>
         </FormProvider>
         <Box sx={{ position: "relative", height: 1 }}>
@@ -63,7 +61,7 @@ function ProductPage() {
                     <Pagination
                       count={totalPages}
                       page={page}
-                      onChange={(e, page) => setPage(page)}
+                      onChange={(e, value) => setPage(value)}
                     />
                   </Stack>
                 </>

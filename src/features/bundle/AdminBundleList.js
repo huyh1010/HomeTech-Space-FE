@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../product/productSlice";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import {
+  Avatar,
   Box,
-  Button,
-  Checkbox,
   Chip,
   FormControl,
   InputLabel,
-  ListItemText,
   MenuItem,
   Paper,
   Select,
+  Typography,
 } from "@mui/material";
+import { fCurrency } from "../../utils/numberFormat";
 
 function AdminBundleList({ productList, setProductList, products, bundle }) {
   const handleChange = (event) => {
@@ -21,8 +19,6 @@ function AdminBundleList({ productList, setProductList, products, bundle }) {
     } = event;
 
     setProductList(value);
-
-    // setProductList(typeof value === "string" ? value.split(",") : value);
   };
 
   return (
@@ -58,11 +54,35 @@ function AdminBundleList({ productList, setProductList, products, bundle }) {
       {productList.length ? (
         <Box>
           {productList?.map((product) => (
-            <Paper>{product.name}</Paper>
+            <Paper sx={{ p: 2, mb: 1, border: "1px solid black" }}>
+              <Typography>{product.name}</Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
+                  src={product.poster_path}
+                  sx={{ mr: 2, width: 50, height: 50 }}
+                  alt={product.name}
+                />
+                <Typography>{fCurrency(product.price)}</Typography>
+              </Box>
+            </Paper>
           ))}{" "}
         </Box>
       ) : (
-        <Box>{bundle?.products?.map((product) => product.name)} </Box>
+        <Box>
+          {bundle?.products?.map((product) => (
+            <Paper sx={{ p: 2, mb: 1, border: "1px solid black" }}>
+              <Typography>{product.name}</Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
+                  src={product.poster_path}
+                  sx={{ mr: 2, width: 50, height: 50 }}
+                  alt={product.name}
+                />
+                <Typography>{fCurrency(product.price)}</Typography>
+              </Box>
+            </Paper>
+          ))}{" "}
+        </Box>
       )}
     </>
   );

@@ -94,7 +94,7 @@ function AdminProductManagement() {
         </Paper>
         <Button
           onClick={() => navigate("/admin/products/create")}
-          sx={{ backgroundColor: "primary.light" }}
+          sx={{ backgroundColor: "primary.light", color: "white" }}
         >
           Create Product
         </Button>

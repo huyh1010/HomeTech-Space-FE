@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { CloudinaryUpload } from "../../utils/cloudinary";
 import { toast } from "react-toastify";
+import { PRODUCT_PER_PAGE } from "../../app/config";
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",
@@ -175,12 +176,13 @@ const initialState = {
   newProducts: [],
   products: [],
   product: [],
+  totalPages: 0,
   count: 0,
   loading: false,
   error: null,
 };
 
-export const categorySlice = createSlice({
+export const productSlice = createSlice({
   name: "products",
   initialState,
   extraReducers: (builder) => {
@@ -212,8 +214,10 @@ export const categorySlice = createSlice({
 
     builder.addCase(getProducts.fulfilled, (state, action) => {
       state.loading = false;
+
       state.products = action.payload;
       state.count = action.payload.count;
+      state.totalPages = action.payload.totalPages;
     });
     builder.addCase(getSingleProduct.fulfilled, (state, action) => {
       state.loading = false;
@@ -282,5 +286,5 @@ export const categorySlice = createSlice({
   },
 });
 
-const { reducer } = categorySlice;
+const { reducer } = productSlice;
 export default reducer;
