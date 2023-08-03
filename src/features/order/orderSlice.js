@@ -39,6 +39,7 @@ export const getOrders = createAsyncThunk(
       if (status) url += `&status=${status}`;
       if (payment_status) url += `&payment_status=${payment_status}`;
       if (payment_method) url += `&payment_method=${payment_method}`;
+
       const res = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {
@@ -205,10 +206,13 @@ export const orderSlice = createSlice({
     });
     builder.addCase(cancelOrder.fulfilled, (state, action) => {
       state.loading = false;
-      const { _id, status } = action.payload;
+      const { order, count } = action.payload;
+      const id = order._id;
+      const filteredOrder = state.orders.filter((order) => order._id !== id);
+      state.orders = filteredOrder;
+      state.count = count;
 
-      let order = state.orders.find((order) => order._id === _id);
-      order.status = status;
+      toast.success("Order canceled");
     });
     builder.addCase(updateOrder.fulfilled, (state, action) => {
       state.loading = false;

@@ -57,11 +57,14 @@ function OrderCancelStatus({ order }) {
           <DialogActions sx={{ margin: "auto" }}>
             <Button
               onClick={() => handleCancel(order._id)}
-              style={{ backgroundColor: "#3366FF" }}
+              style={{ backgroundColor: "#3366FF", color: "white" }}
             >
               Confirm
             </Button>
-            <Button onClick={handleClose} style={{ backgroundColor: "red" }}>
+            <Button
+              onClick={handleClose}
+              style={{ backgroundColor: "red", color: "white" }}
+            >
               Cancel
             </Button>
           </DialogActions>

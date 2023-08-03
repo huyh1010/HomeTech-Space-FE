@@ -7,6 +7,11 @@ import {
   Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   InputBase,
   Paper,
   Table,
@@ -43,8 +48,17 @@ function AdminProductManagement() {
   const [name, setName] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [open, setOpen] = React.useState(false);
   const { products } = useSelector((state) => state?.products?.products);
   const { count, loading, error } = useSelector((state) => state?.products);
+
+  const handleClickOpen = (id) => {
+    setOpen(id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,7 +72,7 @@ function AdminProductManagement() {
   useEffect(() => {
     dispatch(getProducts({ page: page + 1, limit: rowsPerPage, name: name }));
     // eslint-disable-next-line
-  }, [dispatch, page, rowsPerPage]);
+  }, [dispatch, page]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -171,12 +185,38 @@ function AdminProductManagement() {
                           }}
                           size="small"
                           endIcon={<DeleteIcon />}
-                          onClick={() =>
-                            dispatch(deleteProduct({ id: product._id }))
-                          }
+                          onClick={() => handleClickOpen(product._id)}
                         >
                           Delete
                         </Button>
+                        <Dialog
+                          open={open === product._id}
+                          onClose={handleClose}
+                        >
+                          <DialogTitle>{"Delete Product?"}</DialogTitle>
+                          <DialogContent>
+                            <DialogContentText>
+                              This will delete the current product and the
+                              action cannot be undone. If you wish to proceed
+                              press "Confirm". If you wish to to cancel press
+                              "Cancel".
+                            </DialogContentText>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button
+                              onClick={() =>
+                                dispatch(
+                                  deleteProduct({ id: product._id })
+                                ).then(handleClose())
+                              }
+                            >
+                              Confirm
+                            </Button>
+                            <Button onClick={handleClose} autoFocus>
+                              Cancel
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
                       </TableCell>
                       <TableCell>
                         <Button

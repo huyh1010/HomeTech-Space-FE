@@ -19,7 +19,6 @@ function OrderStatusFilter({ orderStatus, setOrderStatus }) {
         <MenuItem value="preparing for shipment">Preparing Your Order</MenuItem>
         <MenuItem value="shipped">On Your Way</MenuItem>
         <MenuItem value="delivered">Delivered</MenuItem>
-        <MenuItem value="canceled">Canceled</MenuItem>
       </Select>
     </FormControl>
   );

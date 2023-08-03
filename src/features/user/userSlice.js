@@ -3,9 +3,10 @@ import apiService from "../../app/apiService";
 
 export const getUsers = createAsyncThunk(
   "users/getUsers",
-  async ({ page, limit }, { rejectWithValue }) => {
+  async ({ page, limit, name }, { rejectWithValue }) => {
     try {
       let url = `/users?page=${page}&limit=${limit}`;
+      if (name) url += `&name=${name}`;
       const res = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {

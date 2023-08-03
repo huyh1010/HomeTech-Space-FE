@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   InputBase,
   Paper,
@@ -20,7 +25,7 @@ import React, { useEffect, useState } from "react";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SearchIcon from "@mui/icons-material/Search";
 import LoadingScreen from "../components/LoadingScreen";
-import { getBundles } from "../features/bundle/bundleSlice";
+import { deleteBundle, getBundles } from "../features/bundle/bundleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import { fCurrency } from "../utils/numberFormat";
@@ -43,9 +48,18 @@ function AdminBundle() {
   const [name, setName] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [open, setOpen] = React.useState(false);
 
   const { bundles, count } = useSelector((state) => state?.bundles?.bundles);
   const { loading, error } = useSelector((state) => state?.bundles);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -157,9 +171,35 @@ function AdminBundle() {
                                 }}
                                 size="small"
                                 endIcon={<DeleteIcon />}
+                                onClick={handleClickOpen}
                               >
                                 Delete
                               </Button>
+                              <Dialog open={open} onClose={handleClose}>
+                                <DialogTitle>{"Delete Bundle?"}</DialogTitle>
+                                <DialogContent>
+                                  <DialogContentText>
+                                    This will delete the current bundle and the
+                                    action cannot be undone. If you wish to
+                                    proceed press "Confirm". If you wish to to
+                                    cancel press "Cancel".
+                                  </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button
+                                    onClick={() =>
+                                      dispatch(
+                                        deleteBundle({ id: bundle._id })
+                                      ).then(handleClose())
+                                    }
+                                  >
+                                    Confirm
+                                  </Button>
+                                  <Button onClick={handleClose} autoFocus>
+                                    Cancel
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
                             </TableCell>
 
                             <TableCell>

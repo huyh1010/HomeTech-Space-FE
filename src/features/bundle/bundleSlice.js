@@ -116,6 +116,27 @@ export const updateBundle = createAsyncThunk(
   }
 );
 
+export const deleteBundle = createAsyncThunk(
+  "products/deleteBundle",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      let url = `/bundles/${id}`;
+      const res = await apiService.delete(url);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
 const initialState = {
   bundles: [],
   bundle: [],
@@ -145,6 +166,10 @@ export const bundleSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
+    builder.addCase(deleteBundle.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
     builder.addCase(createBundle.fulfilled, (state, action) => {
       state.loading = false;
       state.bundles = action.payload;
@@ -161,6 +186,18 @@ export const bundleSlice = createSlice({
     builder.addCase(updateBundle.fulfilled, (state, action) => {
       state.loading = false;
       toast.success("Product updated");
+    });
+    builder.addCase(deleteBundle.fulfilled, (state, action) => {
+      state.loading = false;
+
+      const { bundle, count } = action.payload;
+      const id = bundle._id;
+
+      state.bundles.bundles = state.bundles.bundles.filter(
+        (product) => product._id !== id
+      );
+      state.count = count;
+      toast.success("Bundle deleted");
     });
     builder.addCase(createBundle.rejected, (state, action) => {
       state.loading = false;
@@ -190,6 +227,16 @@ export const bundleSlice = createSlice({
       }
     });
     builder.addCase(updateBundle.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+        toast.error(action.payload.message);
+      } else {
+        state.error = action.error.message;
+        toast.error(action.error.message);
+      }
+    });
+    builder.addCase(deleteBundle.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.error = action.payload.message;

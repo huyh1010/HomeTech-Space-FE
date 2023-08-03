@@ -73,7 +73,7 @@ function AdminProductList() {
                     </Grid>
                   ))}
                 </Grid>
-                <Stack sx={{ alignItems: "center", mt: 2 }}>
+                <Stack sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
                   <Pagination
                     count={totalPages}
                     page={page}

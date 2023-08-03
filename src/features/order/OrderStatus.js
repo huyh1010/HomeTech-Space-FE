@@ -23,9 +23,6 @@ function OrderStatus({ order }) {
   if (order.status === "delivered") {
     return <Chip label="Delivered" color="success" />;
   }
-  if (order.status === "canceled") {
-    return <Chip label="Canceled" color="red" />;
-  }
 }
 
 export default OrderStatus;
