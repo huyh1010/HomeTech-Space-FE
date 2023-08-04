@@ -41,11 +41,11 @@ function OrderInfo() {
     ],
   });
   const [orderSalesLast30DaysData] = useState({
-    labels: orderLast30Days.map((order) => order.dateDMY),
+    labels: orderLast30Days?.map((order) => order.dateDMY),
     datasets: [
       {
         label: "Orders Last 30 Days",
-        data: orderLast30Days.map((order) => order.count),
+        data: orderLast30Days?.map((order) => order.count),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(255, 159, 64, 0.2)",

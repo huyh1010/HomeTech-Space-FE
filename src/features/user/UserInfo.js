@@ -99,7 +99,7 @@ function UserInfo() {
         <Grid item xs={12} sm={12} lg={6}>
           <Paper sx={{ p: 3, backgroundColor: "purple.light" }}>
             <Typography variant="h6" sx={{ mb: 1, color: "white" }}>
-              Users
+              User List
             </Typography>
             <Divider sx={{ backgroundColor: "white" }} />
             <Box sx={{ mt: 1, mb: 1 }}>

@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   IconButton,
   InputBase,
   Paper,
@@ -77,7 +78,7 @@ function AdminBundle() {
   useEffect(() => {
     dispatch(getBundles({ page: page + 1, limit: rowsPerPage, name }));
     // eslint-disable-next-line
-  }, [dispatch, page, rowsPerPage]);
+  }, [dispatch, page]);
   return (
     <form onSubmit={handleSubmit}>
       <Container sx={{ mt: 10 }}>
@@ -117,7 +118,7 @@ function AdminBundle() {
               sx={{ backgroundColor: "primary.light", color: "white" }}
               onClick={() => navigate("/admin/bundles/create")}
             >
-              Create Product
+              Create Bundle
             </Button>
           </Box>
 
@@ -176,26 +177,55 @@ function AdminBundle() {
                                 Delete
                               </Button>
                               <Dialog open={open} onClose={handleClose}>
-                                <DialogTitle>{"Delete Bundle?"}</DialogTitle>
+                                <DialogTitle
+                                  sx={{
+                                    textAlign: "center",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {"Delete Bundle?"}
+                                </DialogTitle>
+                                <Divider />
                                 <DialogContent>
                                   <DialogContentText>
-                                    This will delete the current bundle and the
-                                    action cannot be undone. If you wish to
-                                    proceed press "Confirm". If you wish to to
-                                    cancel press "Cancel".
+                                    Are you sure you'd like to delete this
+                                    bundle? The removal of a bundle cannot be
+                                    undone. If you wish to delete this bundle,
+                                    click "Confirm". If you do not wish to
+                                    delete this bundle, click the "Cancel"
+                                    button.
                                   </DialogContentText>
                                 </DialogContent>
-                                <DialogActions>
+                                <DialogActions sx={{ margin: "auto" }}>
                                   <Button
+                                    style={{
+                                      backgroundColor: "#3366FF",
+                                      color: "white",
+                                    }}
                                     onClick={() =>
                                       dispatch(
                                         deleteBundle({ id: bundle._id })
-                                      ).then(handleClose())
+                                      ).then(
+                                        dispatch(
+                                          getBundles({
+                                            page: page + 1,
+                                            limit: rowsPerPage,
+                                          })
+                                        ),
+                                        handleClose()
+                                      )
                                     }
                                   >
                                     Confirm
                                   </Button>
-                                  <Button onClick={handleClose} autoFocus>
+                                  <Button
+                                    style={{
+                                      backgroundColor: "red",
+                                      color: "white",
+                                    }}
+                                    onClick={handleClose}
+                                    autoFocus
+                                  >
                                     Cancel
                                   </Button>
                                 </DialogActions>

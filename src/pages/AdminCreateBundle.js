@@ -75,9 +75,8 @@ const img = {
 function AdminCreateBundle() {
   const dispatch = useDispatch();
   const [productList, setProductList] = useState([]);
-
   const { products } = useSelector((state) => state?.products?.products);
-
+  const [imageUrlLocal, setImageUrlLocal] = useState([]);
   const [secureUrls] = useState([]);
   let [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
@@ -92,29 +91,19 @@ function AdminCreateBundle() {
           })
         )
       );
+      setImageUrlLocal(acceptedFiles.map((file) => URL.createObjectURL(file)));
     },
   });
 
-  const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img
-          src={file.preview}
-          style={img}
-          alt="img"
-          // Revoke data uri after image is loaded
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </div>
-    </div>
-  ));
-
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [files]);
+  const thumbs = imageUrlLocal.length
+    ? imageUrlLocal?.map((file, index) => (
+        <div style={thumb} key={index}>
+          <div style={thumbInner}>
+            <img src={file} style={img} alt="img" />
+          </div>
+        </div>
+      ))
+    : null;
 
   const defaultValues = {
     name: "",
@@ -259,6 +248,7 @@ function AdminCreateBundle() {
                     Product Bundle Side Images
                   </Typography>
                   <Divider sx={{ mb: 1 }} />
+                  <aside style={thumbsContainer}>{thumbs}</aside>
                   <DropZoneStyle {...getRootProps()}>
                     <input {...getInputProps()} {...register("imageUrl")} />
 
@@ -280,7 +270,6 @@ function AdminCreateBundle() {
                       </Typography>
                     </Stack>
                   </DropZoneStyle>
-                  <aside style={thumbsContainer}>{thumbs}</aside>
                 </section>
 
                 <LoadingButton

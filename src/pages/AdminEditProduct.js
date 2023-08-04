@@ -101,28 +101,22 @@ function AdminEditProduct() {
       setImageUrlLocal(acceptedFiles.map((file) => URL.createObjectURL(file)));
     },
   });
-  console.log(imageUrlLocal);
 
-  const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img
-          src={file.preview}
-          style={img}
-          alt="img"
-          // Revoke data uri after image is loaded
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </div>
-    </div>
-  ));
-
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [files]);
+  const thumbs = imageUrlLocal.length
+    ? imageUrlLocal?.map((file, index) => (
+        <div style={thumb} key={index}>
+          <div style={thumbInner}>
+            <img src={file} style={img} alt="img" />
+          </div>
+        </div>
+      ))
+    : product?.imageUrl?.map((file, index) => (
+        <div style={thumb} key={index}>
+          <div style={thumbInner}>
+            <img src={file} style={img} alt="img" />
+          </div>
+        </div>
+      ));
 
   const defaultValues = {
     name: product?.name || "",
@@ -284,23 +278,8 @@ function AdminEditProduct() {
                       Product Side Images
                     </Typography>
                     <Divider sx={{ mb: 1 }} />
-                    <Box>
-                      {imageUrlLocal.length
-                        ? imageUrlLocal.map((image) => (
-                            <img
-                              src={image}
-                              alt={"product"}
-                              style={{ height: "100px" }}
-                            />
-                          ))
-                        : product?.imageUrl?.map((image) => (
-                            <img
-                              src={image}
-                              alt={"product"}
-                              style={{ height: "100px" }}
-                            />
-                          ))}
-                    </Box>
+
+                    <aside style={thumbsContainer}>{thumbs}</aside>
                     <DropZoneStyle {...getRootProps()}>
                       <input {...getInputProps()} {...register("imageUrl")} />
 
@@ -322,7 +301,6 @@ function AdminEditProduct() {
                         </Typography>
                       </Stack>
                     </DropZoneStyle>
-                    {/* <aside style={thumbsContainer}>{thumbs}</aside> */}
                   </section>
 
                   <LoadingButton

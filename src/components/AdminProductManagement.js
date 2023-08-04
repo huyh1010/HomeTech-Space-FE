@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   InputBase,
   Paper,
   Table,
@@ -193,17 +194,27 @@ function AdminProductManagement() {
                           open={open === product._id}
                           onClose={handleClose}
                         >
-                          <DialogTitle>{"Delete Product?"}</DialogTitle>
+                          <DialogTitle
+                            sx={{ textAlign: "center", fontWeight: "bold" }}
+                          >
+                            {"Delete Product?"}
+                          </DialogTitle>
+                          <Divider />
                           <DialogContent>
                             <DialogContentText>
-                              This will delete the current product and the
-                              action cannot be undone. If you wish to proceed
-                              press "Confirm". If you wish to to cancel press
-                              "Cancel".
+                              Are you sure you'd like to delete this product?
+                              The removal of a product cannot be undone. If you
+                              wish to delete this product, click "Confirm". If
+                              you do not wish to delete this order, click the
+                              "Cancel" button.
                             </DialogContentText>
                           </DialogContent>
-                          <DialogActions>
+                          <DialogActions sx={{ margin: "auto" }}>
                             <Button
+                              style={{
+                                backgroundColor: "#3366FF",
+                                color: "white",
+                              }}
                               onClick={() =>
                                 dispatch(
                                   deleteProduct({ id: product._id })
@@ -220,7 +231,11 @@ function AdminProductManagement() {
                             >
                               Confirm
                             </Button>
-                            <Button onClick={handleClose} autoFocus>
+                            <Button
+                              style={{ backgroundColor: "red", color: "white" }}
+                              onClick={handleClose}
+                              autoFocus
+                            >
                               Cancel
                             </Button>
                           </DialogActions>

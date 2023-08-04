@@ -25,12 +25,12 @@ import {
   Typography,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import OrderStatus from "../features/order/OrderStatus";
 import OrderPayment from "../features/order/OrderPayment";
 import OrderPaymentStatus from "../features/order/OrderPaymentStatus";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getSingleOrder, updateOrder } from "../features/order/orderSlice";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -45,14 +45,6 @@ function AdminEditOrder() {
   const { loading, order, error } = useSelector((state) => state?.orders);
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
-  const totalPrice = () => {
-    let total = 0;
-    order?.orderItems?.map(
-      (item) => (total = total + item.quantity * item.price)
-    );
-    total = total + tax_fees + shipping_fees;
-    return total;
-  };
 
   const methods = useForm({
     defaultValues: {
@@ -343,7 +335,7 @@ function AdminEditOrder() {
                                   align="right"
                                   sx={{ fontWeight: "bold" }}
                                 >
-                                  {fCurrency(totalPrice())}
+                                  {fCurrency(order.totalPrice)}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
