@@ -37,8 +37,7 @@ const tableColumnsTitle = [
 
 function OrderPage() {
   const { user } = useAuth();
-  let shipping_fees = 4.99;
-  let tax_fees = 1.99;
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
@@ -101,12 +100,7 @@ function OrderPage() {
                     orders?.map((order) => {
                       const { status, paymentMethod, cancel } =
                         getStatus(order);
-                      let total = order.orderItems.reduce(
-                        (acc, item) => acc + item.quantity * item.price,
-                        0
-                      );
 
-                      total = total + shipping_fees + tax_fees;
                       return (
                         <TableRow key={order._id}>
                           <TableCell sx={{ fontWeight: "bold" }}>
@@ -118,7 +112,7 @@ function OrderPage() {
                           </TableCell>
                           <TableCell>{status}</TableCell>
                           <TableCell>{paymentMethod}</TableCell>
-                          <TableCell>{fCurrency(total)}</TableCell>
+                          <TableCell>{fCurrency(order.totalPrice)}</TableCell>
                           <TableCell>
                             <Button
                               onClick={() => navigate(`/order/${order._id}`)}

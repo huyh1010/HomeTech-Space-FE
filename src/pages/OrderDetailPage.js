@@ -44,14 +44,6 @@ function OrderDetailPage() {
 
   let shipping_fees = 4.99;
   let tax_fees = 1.99;
-  const totalPrice = () => {
-    let total = 0;
-    order?.orderItems?.map(
-      (item) => (total = total + item.quantity * item.price)
-    );
-    total = total + tax_fees + shipping_fees;
-    return total;
-  };
   const getStatus = (order) => {
     return {
       status: <OrderStatus order={order} />,
@@ -251,7 +243,7 @@ function OrderDetailPage() {
                                 align="right"
                                 sx={{ fontWeight: "bold" }}
                               >
-                                {fCurrency(totalPrice())}
+                                {fCurrency(order.totalPrice)}
                               </TableCell>
                             </TableRow>
                           </TableBody>

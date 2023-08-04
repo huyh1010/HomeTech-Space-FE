@@ -55,8 +55,7 @@ function AdminOrders() {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  let shipping_fees = 4.99;
-  let tax_fees = 1.99;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { orders, count, loading, error } = useSelector(
@@ -99,6 +98,7 @@ function AdminOrders() {
     setOrderStatus(e.target[2].value);
     setOrderPaymentStatus(e.target[4].value);
     setOrderPaymentMethod(e.target[6].value);
+
     dispatch(
       getOrders({
         page: page + 1,
@@ -235,12 +235,7 @@ function AdminOrders() {
                       orders?.map((order) => {
                         const { status, paymentMethod, paymentStatus } =
                           getStatus(order);
-                        let total = order.orderItems.reduce(
-                          (acc, item) => acc + item.quantity * item.price,
-                          0
-                        );
 
-                        total = total + shipping_fees + tax_fees;
                         return (
                           <TableRow
                             key={order._id}
@@ -258,7 +253,7 @@ function AdminOrders() {
                               {" "}
                               {new Date(order.createdAt).toString()}
                             </TableCell>
-                            <TableCell>{fCurrency(total)}</TableCell>
+                            <TableCell>{fCurrency(order.totalPrice)}</TableCell>
                             <TableCell>{status}</TableCell>
                             <TableCell>{paymentMethod}</TableCell>
                             <TableCell>{paymentStatus}</TableCell>

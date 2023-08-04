@@ -18,7 +18,6 @@ import { getProducts } from "../features/product/productSlice";
 function ProductByCategoryPage() {
   const { id } = useParams();
   const category_id = id;
-  console.log(id);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const limit = 12;

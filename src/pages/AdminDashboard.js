@@ -9,13 +9,17 @@ import { getOrders } from "../features/order/orderSlice";
 function AdminDashboard() {
   const dispatch = useDispatch();
   const { orders, count } = useSelector((state) => state?.orders);
-  console.log(orders);
+  const totalRevenue = orders?.reduce(
+    (total, order) => order.totalPrice + total,
+    0
+  );
+
   useEffect(() => {
     dispatch(getOrders({}));
   }, [dispatch]);
   return (
     <Container sx={{ mt: 8 }}>
-      <AdminInfoCard orders={orders} count={count} />
+      <AdminInfoCard count={count} totalRevenue={totalRevenue} />
       <UserInfo />
       <OrderInfo orders={orders} count={count} />
     </Container>

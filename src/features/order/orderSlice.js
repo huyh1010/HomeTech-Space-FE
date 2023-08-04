@@ -5,11 +5,16 @@ import { toast } from "react-toastify";
 
 export const createOrder = createAsyncThunk(
   "products/GetProducts",
-  async ({ customer_info, cart, user_id }, { rejectWithValue }) => {
+  async ({ customer_info, cart, user_id, totalPrice }, { rejectWithValue }) => {
     try {
       let url = `/orders`;
 
-      const res = await apiService.post(url, { customer_info, cart, user_id });
+      const res = await apiService.post(url, {
+        customer_info,
+        cart,
+        user_id,
+        totalPrice,
+      });
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -39,6 +44,32 @@ export const getOrders = createAsyncThunk(
       if (status) url += `&status=${status}`;
       if (payment_status) url += `&payment_status=${payment_status}`;
       if (payment_method) url += `&payment_method=${payment_method}`;
+
+      const res = await apiService.get(url);
+      const timeout = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve("ok");
+          }, 1000);
+        });
+      };
+      await timeout();
+      return res.data;
+    } catch (error) {
+      rejectWithValue(error);
+    }
+  }
+);
+
+export const getOrderSales = createAsyncThunk(
+  "orders/getOrderSales",
+  async (
+    _,
+
+    { rejectWithValue }
+  ) => {
+    try {
+      let url = "/orders/sales";
 
       const res = await apiService.get(url);
       const timeout = () => {
@@ -144,6 +175,8 @@ const initialState = {
   orders: [],
   order: [],
   orderId: null,
+  orderLast7Days: [],
+  orderLast30Days: [],
   totalPages: 0,
   count: 0,
   loading: false,
@@ -159,6 +192,10 @@ export const orderSlice = createSlice({
       state.error = "";
     });
     builder.addCase(getOrders.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(getOrderSales.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
@@ -190,6 +227,12 @@ export const orderSlice = createSlice({
       state.orders = orders;
       state.totalPages = totalPages;
       state.count = count;
+    });
+    builder.addCase(getOrderSales.fulfilled, (state, action) => {
+      state.loading = false;
+      const { order_last_7_days, order_last_30_days } = action.payload;
+      state.orderLast7Days = order_last_7_days;
+      state.orderLast30Days = order_last_30_days;
     });
     builder.addCase(getSingleOrder.fulfilled, (state, action) => {
       state.loading = false;
@@ -233,6 +276,14 @@ export const orderSlice = createSlice({
       }
     });
     builder.addCase(getOrders.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.error = action.payload.message;
+      } else {
+        state.error = action.error.message;
+      }
+    });
+    builder.addCase(getOrderSales.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
         state.error = action.payload.message;

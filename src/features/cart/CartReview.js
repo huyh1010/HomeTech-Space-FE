@@ -2,21 +2,7 @@ import { Avatar, Box, Card, Divider, Stack, Typography } from "@mui/material";
 import React from "react";
 import { fCurrency } from "../../utils/numberFormat";
 
-function CartReview({ cart }) {
-  let shipping_fees = 4.99;
-  let tax_fees = 1.99;
-  const subTotal = () => {
-    let total = 0;
-
-    cart?.map((item) => (total = total + item.quantity * item.price));
-    return total;
-  };
-  const totalPrice = () => {
-    let total = 0;
-    cart?.map((item) => (total = total + item.quantity * item.price));
-    total = total + tax_fees + shipping_fees;
-    return total;
-  };
+function CartReview({ cart, subTotal, totalPrice, shipping_fees, tax_fees }) {
   return (
     <Card sx={{ p: 3 }}>
       <Typography variant="h4" sx={{ mb: 2, textAlign: "center" }}>

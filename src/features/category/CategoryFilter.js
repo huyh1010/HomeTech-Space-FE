@@ -8,30 +8,30 @@ import React, { useEffect } from "react";
 import { getProducts } from "../product/productSlice";
 import { useDispatch } from "react-redux";
 
-function CategoryFilter({ categoryFilters, category, setCategory }) {
+function CategoryFilter({ register, categoryFilters }) {
   const dispatch = useDispatch();
 
-  const handleChange = async (e) => {
-    try {
-      setCategory(e.target.value);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    dispatch(getProducts({ category: category }));
-  }, [dispatch, category]);
+  // const handleChange = async (e) => {
+  //   try {
+  //     setCategory(e.target.value);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   dispatch(getProducts({ category: category }));
+  // }, [dispatch, category]);
 
   return (
     <FormControl>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"
-        onChange={handleChange}
       >
         {categoryFilters.map((filter) => (
           <FormControlLabel
             value={filter}
+            {...register("category")}
             control={
               <Radio
                 sx={{
@@ -39,6 +39,7 @@ function CategoryFilter({ categoryFilters, category, setCategory }) {
                     color: "black",
                   },
                 }}
+                onClick={(e) => console.log(e.target.value)}
               />
             }
             label={filter}

@@ -32,6 +32,51 @@ const SUCCESS = {
   darker: "#08660D",
   contrastText: "#FFF",
 };
+
+const PINK = {
+  lighter: "#DDA0DD",
+  light: "#EE82EE",
+  main: "#DA70D6",
+  dark: "#FF00FF",
+  darker: "#FF00FF",
+  contrastText: "#FFF",
+};
+
+const RED = {
+  lighter: "#FFA07A",
+  light: "#DC143C",
+  main: "#FF0000",
+  dark: "#B22222",
+  darker: "#8B0000",
+  contrastText: "#FFF",
+};
+
+const YELLOW = {
+  lighter: "#FFFFE0",
+  light: "#FFFACD",
+  main: "#FFFF00",
+  dark: "#FFD700",
+  darker: "#FFA500",
+  contrastText: "#FFF",
+};
+
+const BLUE = {
+  lighter: "#ADD8E6",
+  light: "#87CEFA",
+  main: "#00FFFF",
+  dark: "#00BFFF",
+  darker: "#0000CD",
+  contrastText: "#FFF",
+};
+
+const PURPLE = {
+  lighter: "#EE82EE",
+  light: "#9370DB",
+  main: "#8A2BE2",
+  dark: "#9400D3",
+  darker: "#4B0082",
+  contrastText: "#FFF",
+};
 const PROCESS = {
   main: "#74b9ff",
   contrastText: "#00a8ff",
@@ -68,11 +113,6 @@ const DARK = {
   contrastText: "#FFF",
 };
 
-const RED = {
-  main: "#FF0000",
-  contrastText: "#FFF",
-};
-
 const GREY = {
   0: "#FFFFFF",
   100: "#F9FAFB",
@@ -100,6 +140,10 @@ function ThemeProvider({ children }) {
       primary: PRIMARY,
       secondary: SECONDARY,
       tertiary: TERTIARY,
+      pink: PINK,
+      yellow: YELLOW,
+      blue: BLUE,
+      purple: PURPLE,
       success: SUCCESS,
       accept: ACCEPT,
       process: PROCESS,

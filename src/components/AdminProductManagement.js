@@ -207,7 +207,15 @@ function AdminProductManagement() {
                               onClick={() =>
                                 dispatch(
                                   deleteProduct({ id: product._id })
-                                ).then(handleClose())
+                                ).then(
+                                  dispatch(
+                                    getProducts({
+                                      page: page + 1,
+                                      limit: rowsPerPage,
+                                    })
+                                  ),
+                                  handleClose()
+                                )
                               }
                             >
                               Confirm
@@ -241,6 +249,7 @@ function AdminProductManagement() {
               </>
             )}
           </TableBody>
+
           <TableFooter>
             <TableRow>
               <TablePagination

@@ -21,15 +21,13 @@ export const priceFilters = [
   { value: "between_25_75", label: "Between $25 - $75" },
   { value: "above_75", label: "Above $75" },
 ];
-function ProductFilter() {
-  const [category, setCategory] = useState(null);
-  const [price, setPrice] = useState(null);
+function ProductFilter({ register }) {
   const dispatch = useDispatch();
-  const handleReset = () => {
-    setCategory(null);
-    setPrice(null);
-    dispatch(getProducts({ category, price }));
-  };
+  // const handleReset = () => {
+  //   setCategory(null);
+  //   setPrice(null);
+  //   dispatch(getProducts({ category, price }));
+  // };
 
   return (
     <Stack spacing={3} sx={{ p: 3, width: 250 }}>
@@ -40,9 +38,8 @@ function ProductFilter() {
           </Typography>
           <Divider />
           <CategoryFilter
+            register={register}
             categoryFilters={categoryFilters}
-            category={category}
-            setCategory={setCategory}
           />
         </Stack>
       </Card>
@@ -52,11 +49,7 @@ function ProductFilter() {
             Price
           </Typography>
           <Divider />
-          <ProductPriceFilter
-            priceFilters={priceFilters}
-            price={price}
-            setPrice={setPrice}
-          />
+          {/* <ProductPriceFilter /> */}
         </Stack>
       </Card>
       <Box>
@@ -66,7 +59,6 @@ function ProductFilter() {
           color="inherit"
           variant="outlined"
           startIcon={<ClearAllIcon />}
-          onClick={handleReset}
         >
           Clear All
         </Button>

@@ -73,13 +73,13 @@ function AdminProductList() {
                     </Grid>
                   ))}
                 </Grid>
-                <Stack sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                   <Pagination
                     count={totalPages}
                     page={page}
                     onChange={(e, page) => setPage(page)}
                   />
-                </Stack>
+                </Box>
               </>
             ) : (
               <Alert severity="error">{error}</Alert>

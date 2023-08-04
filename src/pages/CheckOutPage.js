@@ -25,6 +25,21 @@ function CheckOutPage() {
   const { user } = useAuth();
   const { cart } = useSelector((state) => state?.carts);
 
+  let shipping_fees = 4.99;
+  let tax_fees = 1.99;
+  const subTotal = () => {
+    let total = 0;
+
+    cart?.map((item) => (total = total + item.quantity * item.price));
+    return total;
+  };
+  const totalPrice = () => {
+    let total = 0;
+    cart?.map((item) => (total = total + item.quantity * item.price));
+    total = total + tax_fees + shipping_fees;
+    return total;
+  };
+
   const methods = useForm({
     defaultValues: {
       name: "",
@@ -47,12 +62,12 @@ function CheckOutPage() {
   useEffect(() => {
     dispatch(getProductFromCart());
   }, [dispatch]);
-  const onSubmit = async (data, cart, user) => {
+  const onSubmit = async (data, cart, user, totalPrice) => {
     const user_id = user._id;
     const customer_info = data;
     try {
       const orderResult = await dispatch(
-        createOrder({ customer_info, cart, user_id })
+        createOrder({ customer_info, cart, user_id, totalPrice })
       );
       if (createOrder.fulfilled.match(orderResult)) {
         const order_id = orderResult.payload.orderId;
@@ -68,7 +83,9 @@ function CheckOutPage() {
     <Container sx={{ mt: 4 }}>
       <FormProvider
         methods={methods}
-        onSubmit={handleSubmit((data) => onSubmit(data, cart, user))}
+        onSubmit={handleSubmit((data) =>
+          onSubmit(data, cart, user, totalPrice())
+        )}
       >
         <Grid container spacing={2}>
           <Grid item xs={12} lg={8}>
@@ -145,7 +162,13 @@ function CheckOutPage() {
             </Box>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <CartReview cart={cart} />
+            <CartReview
+              cart={cart}
+              totalPrice={totalPrice}
+              subTotal={subTotal}
+              shipping_fees={shipping_fees}
+              tax_fees={tax_fees}
+            />
           </Grid>
         </Grid>
       </FormProvider>

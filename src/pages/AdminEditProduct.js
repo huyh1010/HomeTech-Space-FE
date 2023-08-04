@@ -76,11 +76,12 @@ const img = {
   height: "100%",
 };
 
-function AdminEditProduct(props) {
+function AdminEditProduct() {
   const params = useParams();
   const productId = params.id;
   const dispatch = useDispatch();
   const [secureUrls] = useState([]);
+  const [imageUrlLocal, setImageUrlLocal] = useState([]);
   const { loading } = useSelector((state) => state?.products);
   const { product } = useSelector((state) => state?.products?.product);
 
@@ -97,8 +98,10 @@ function AdminEditProduct(props) {
           })
         )
       );
+      setImageUrlLocal(acceptedFiles.map((file) => URL.createObjectURL(file)));
     },
   });
+  console.log(imageUrlLocal);
 
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
@@ -275,11 +278,29 @@ function AdminEditProduct(props) {
                     name="description"
                     label="Product Description"
                   />
+
                   <section className="container">
                     <Typography variant="body1" sx={{ mb: 1 }}>
                       Product Side Images
                     </Typography>
                     <Divider sx={{ mb: 1 }} />
+                    <Box>
+                      {imageUrlLocal.length
+                        ? imageUrlLocal.map((image) => (
+                            <img
+                              src={image}
+                              alt={"product"}
+                              style={{ height: "100px" }}
+                            />
+                          ))
+                        : product?.imageUrl?.map((image) => (
+                            <img
+                              src={image}
+                              alt={"product"}
+                              style={{ height: "100px" }}
+                            />
+                          ))}
+                    </Box>
                     <DropZoneStyle {...getRootProps()}>
                       <input {...getInputProps()} {...register("imageUrl")} />
 
@@ -301,7 +322,7 @@ function AdminEditProduct(props) {
                         </Typography>
                       </Stack>
                     </DropZoneStyle>
-                    <aside style={thumbsContainer}>{thumbs}</aside>
+                    {/* <aside style={thumbsContainer}>{thumbs}</aside> */}
                   </section>
 
                   <LoadingButton
