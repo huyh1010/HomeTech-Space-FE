@@ -5,6 +5,7 @@ import { getProducts } from "../features/product/productSlice";
 import {
   Alert,
   Box,
+  Button,
   Card,
   Container,
   FormControl,
@@ -23,6 +24,8 @@ import ProductList from "../features/product/ProductList";
 import { getOrders } from "../features/order/orderSlice";
 import { getCategories } from "../features/category/categorySlice";
 
+import ClearAllIcon from "@mui/icons-material/ClearAll";
+
 const categories = [
   { name: "speaker", id: "6486d09be1550f8114613723" },
   { name: "plugs and outlets", id: "6486d209e99975428ea5740b" },
@@ -31,10 +34,18 @@ const categories = [
   { name: "alarm clock", id: "6486d30be99975428ea5741f" },
   { name: "scale", id: "6486d345e99975428ea57425" },
 ];
+
+const priceFilters = [
+  { value: "below_25", label: "Below $25" },
+  { value: "between_25_75", label: "Between $25 - $75" },
+  { value: "above_75", label: "Above $75" },
+];
+
 function ProductPage() {
   const [name, setName] = useState("");
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("");
 
   let limit = 5;
 
@@ -43,14 +54,17 @@ function ProductPage() {
   const { loading, error, totalPages } = useSelector(
     (state) => state?.products
   );
-
-  const handleFilterCategory = (value) => {
+  const handleFilter = (value) => {
     setCategory(value);
-    dispatch(getProducts({ page, limit, category: category }));
+    setPage(1);
   };
+  const handleReset = () => {
+    setCategory("");
+    setPage(1);
+  };
+
   useEffect(() => {
-    dispatch(getProducts({ page, limit, name, category: category }));
-    // eslint-disable-next-line
+    dispatch(getProducts({ page, limit, category: category }));
   }, [dispatch, limit, name, page, category]);
 
   return (
@@ -65,7 +79,7 @@ function ProductPage() {
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
                   value={category}
-                  onChange={(e) => handleFilterCategory(e.target.value)}
+                  onChange={(e, value) => handleFilter(value)}
                 >
                   {categories.map((category) => (
                     <FormControlLabel
@@ -77,6 +91,35 @@ function ProductPage() {
                 </RadioGroup>
               </FormControl>
             </Card>
+            <Card sx={{ p: 3 }}>
+              <FormControl>
+                <FormLabel>Price</FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="controlled-radio-buttons-group"
+                  value={price}
+                >
+                  {priceFilters.map((price) => (
+                    <FormControlLabel
+                      value={price.value}
+                      control={<Radio />}
+                      label={price.label}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Card>
+            <Box>
+              <Button
+                size="large"
+                color="inherit"
+                variant="outlined"
+                onClick={handleReset}
+                startIcon={<ClearAllIcon />}
+              >
+                Clear All
+              </Button>
+            </Box>
           </Stack>
         </Stack>
         <Stack sx={{ flexGrow: 1, justifyContent: "center" }}>

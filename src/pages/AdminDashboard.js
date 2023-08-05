@@ -13,6 +13,8 @@ function AdminDashboard() {
     (total, order) => order.totalPrice + total,
     0
   );
+  orders.map((order) => console.log(order.totalPrice));
+  console.log(orders);
 
   useEffect(() => {
     dispatch(getOrders({}));

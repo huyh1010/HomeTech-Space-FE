@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderSales } from "./orderSlice";
 import { Divider, Grid, Paper, Typography } from "@mui/material";
 import BarChart from "../../components/BarChart";
-import { useState } from "react";
+
 import LineChart from "../../components/LineChart";
 
 function OrderInfo() {
@@ -12,7 +12,7 @@ function OrderInfo() {
     (state) => state?.orders
   );
 
-  const [orderSalesLast7DaysData] = useState({
+  const orderSalesLast7DaysData = {
     labels: orderLast7Days?.map((order) => order.dateDMY),
     datasets: [
       {
@@ -39,8 +39,9 @@ function OrderInfo() {
         borderWidth: 1,
       },
     ],
-  });
-  const [orderSalesLast30DaysData] = useState({
+  };
+
+  const orderSalesLast30DaysData = {
     labels: orderLast30Days?.map((order) => order.dateDMY),
     datasets: [
       {
@@ -67,7 +68,7 @@ function OrderInfo() {
         borderWidth: 1,
       },
     ],
-  });
+  };
 
   useEffect(() => {
     dispatch(getOrderSales());
@@ -82,7 +83,11 @@ function OrderInfo() {
             Order Sales in Last 7 Days
           </Typography>
           <Divider sx={{ my: 1 }} />
-          <BarChart chartData={orderSalesLast7DaysData} />
+          {orderSalesLast7DaysData.datasets ? (
+            <BarChart chartData={orderSalesLast7DaysData} />
+          ) : (
+            ""
+          )}
         </Paper>
       </Grid>
       <Grid item xs={12} sm={12} lg={6}>
@@ -92,7 +97,11 @@ function OrderInfo() {
             Order Sales in Last 30 Days
           </Typography>
           <Divider sx={{ my: 1 }} />
-          <LineChart chartData={orderSalesLast30DaysData} />
+          {orderSalesLast30DaysData.datasets ? (
+            <LineChart chartData={orderSalesLast30DaysData} />
+          ) : (
+            ""
+          )}
         </Paper>
       </Grid>
     </Grid>

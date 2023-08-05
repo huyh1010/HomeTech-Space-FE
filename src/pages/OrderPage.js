@@ -46,11 +46,18 @@ function OrderPage() {
     (state) => state?.orders
   );
 
-  const getStatus = (order) => {
+  const getStatus = (order, page, rowsPerPage, user) => {
     return {
       status: <OrderStatus order={order} />,
       paymentMethod: <OrderPayment order={order} />,
-      cancel: <OrderCancelStatus order={order} />,
+      cancel: (
+        <OrderCancelStatus
+          order={order}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          user={user}
+        />
+      ),
     };
   };
   const handleChangePage = (event, newPage) => {
@@ -72,7 +79,7 @@ function OrderPage() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Typography variant="h3">Orders</Typography>
+      <Typography variant="h3">Your Orders</Typography>
       <Paper sx={{ width: "100%", mt: 2 }}>
         <TableContainer>
           <Table>
@@ -98,8 +105,12 @@ function OrderPage() {
                 <>
                   {orders ? (
                     orders?.map((order) => {
-                      const { status, paymentMethod, cancel } =
-                        getStatus(order);
+                      const { status, paymentMethod, cancel } = getStatus(
+                        order,
+                        page,
+                        rowsPerPage,
+                        user
+                      );
 
                       return (
                         <TableRow key={order._id}>

@@ -40,7 +40,7 @@ function UserInfo() {
   const { totalUsers, users } = useSelector((state) => state?.users?.users);
   const { userData } = useSelector((state) => state?.users);
 
-  const [userRegisteredLast7Days] = useState({
+  const userRegisteredLast7Days = {
     labels: userData?.map((user) => user.dateDMY),
 
     datasets: [
@@ -72,7 +72,7 @@ function UserInfo() {
         borderWidth: 1,
       },
     ],
-  });
+  };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -195,7 +195,11 @@ function UserInfo() {
               User Registered in Last 7 Days
             </Typography>
             <Divider sx={{ my: 1 }} />
-            <PieChart chartData={userRegisteredLast7Days} />
+            {userRegisteredLast7Days.datasets ? (
+              <PieChart chartData={userRegisteredLast7Days} />
+            ) : (
+              ""
+            )}
           </Paper>
         </Grid>
       </Grid>

@@ -10,9 +10,9 @@ import {
 import React from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useDispatch } from "react-redux";
-import { cancelOrder } from "./orderSlice";
+import { cancelOrder, getUserOrder } from "./orderSlice";
 
-function OrderCancelStatus({ order }) {
+function OrderCancelStatus({ order, page, rowsPerPage, user }) {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -24,7 +24,16 @@ function OrderCancelStatus({ order }) {
   };
 
   const handleCancel = (orderId) => {
-    dispatch(cancelOrder({ id: orderId })).then(() => handleClose());
+    dispatch(cancelOrder({ id: orderId })).then(
+      dispatch(
+        getUserOrder({
+          user_id: user._id,
+          page: page + 1,
+          limit: rowsPerPage,
+        })
+      ),
+      handleClose()
+    );
   };
   if (!order) return null;
   if (order.status === "pending") {
