@@ -7,13 +7,13 @@ import AboutUs from "../components/AboutUs";
 
 function HomePage() {
   return (
-    <>
+    <div>
       <HomeBanner />
       <CategoriesBanner />
       <BundleBanner />
       <NewProductList />
       <AboutUs />
-    </>
+    </div>
   );
 }
 
