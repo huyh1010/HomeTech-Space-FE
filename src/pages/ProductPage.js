@@ -11,18 +11,19 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  IconButton,
+  InputAdornment,
+  InputBase,
   Pagination,
+  Paper,
   Radio,
   RadioGroup,
   Stack,
+  TextField,
 } from "@mui/material";
-import { FormProvider } from "../components/form";
-import ProductFilter from "../features/product/ProductFilter";
-import ProductSearch from "../features/product/ProductSearch";
 import LoadingScreen from "../components/LoadingScreen";
 import ProductList from "../features/product/ProductList";
-import { getOrders } from "../features/order/orderSlice";
-import { getCategories } from "../features/category/categorySlice";
+import SearchIcon from "@mui/icons-material/Search";
 
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
@@ -54,21 +55,44 @@ function ProductPage() {
   const { loading, error, totalPages } = useSelector(
     (state) => state?.products
   );
-  const handleFilter = (value) => {
+  const handleFilterCategory = (value) => {
     setCategory(value);
+
+    setPage(1);
+  };
+
+  const handleFilterPrice = (value) => {
+    setPrice(value);
+    setPage(1);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setName(e.target[10].value);
+    dispatch(
+      getProducts({
+        page,
+        limit,
+        name,
+      })
+    );
     setPage(1);
   };
   const handleReset = () => {
     setCategory("");
+    setPrice("");
     setPage(1);
   };
 
   useEffect(() => {
-    dispatch(getProducts({ page, limit, category: category }));
-  }, [dispatch, limit, name, page, category]);
+    dispatch(
+      getProducts({ page, limit, category: category, price: price, name: name })
+    );
+    //eslint-disable-next-line
+  }, [dispatch, limit, page, category, price]);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
         <Stack>
           <Stack spacing={3} sx={{ p: 3, width: 250 }}>
@@ -79,7 +103,7 @@ function ProductPage() {
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
                   value={category}
-                  onChange={(e, value) => handleFilter(value)}
+                  onChange={(e, value) => handleFilterCategory(value)}
                 >
                   {categories.map((category) => (
                     <FormControlLabel
@@ -98,6 +122,7 @@ function ProductPage() {
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
                   value={price}
+                  onChange={(e, value) => handleFilterPrice(value)}
                 >
                   {priceFilters.map((price) => (
                     <FormControlLabel
@@ -130,7 +155,26 @@ function ProductPage() {
             justifyContent="space-between"
             mb={2}
           >
-            {/* <ProductSearch name={name} setName={setName} /> */}
+            <Paper
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: { xs: 250, sm: 400, md: 400, lg: 400 },
+                height: 50,
+              }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>{" "}
           </Stack>
 
           <Box sx={{ position: "relative", height: 1 }}>
