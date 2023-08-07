@@ -16,7 +16,11 @@ function AdminProductCategory({ register }) {
       <InputLabel>Category</InputLabel>
       <Select label="Category" {...register("category")}>
         {categories?.map((category) => (
-          <MenuItem key={category._id} value={category._id}>
+          <MenuItem
+            sx={{ color: "black", backgroundColor: "white" }}
+            key={category._id}
+            value={category._id}
+          >
             {category.name}
           </MenuItem>
         ))}

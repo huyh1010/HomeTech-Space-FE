@@ -21,10 +21,13 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuth from "../hooks/useAuth";
 import { Menu, MenuItem } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SpeakerIcon from "@mui/icons-material/Speaker";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { ColorModeContext } from "../theme";
 
 const drawerWidth = 240;
 
@@ -87,6 +90,7 @@ export default function AdminBar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const colorMode = React.useContext(ColorModeContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -129,16 +133,16 @@ export default function AdminBar() {
       onClose={handleClose}
     >
       <Box sx={{ my: 1.5, px: 2.5 }}>
-        <Typography variant="subtitle2" noWrap>
+        <Typography variant="subtitle2" noWrap sx={{ color: "black" }}>
           {user?.name && `Welcome ${user.name}!`}
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        <Typography variant="body2" sx={{ color: "black" }}>
           {user?.email}
         </Typography>
       </Box>
       <Divider sx={{ borderStyle: "dashed" }} />
 
-      <MenuItem onClick={handleLogout} sx={{ mx: 1 }}>
+      <MenuItem onClick={handleLogout} sx={{ mx: 1, color: "black" }}>
         Logout
       </MenuItem>
     </Menu>
@@ -146,7 +150,11 @@ export default function AdminBar() {
 
   return (
     <>
-      <AppBar position="static" open={open} sx={{ background: "background" }}>
+      <AppBar
+        position="static"
+        open={open}
+        sx={{ backgroundColor: "background.main" }}
+      >
         <Toolbar>
           <IconButton
             color="dark"
@@ -166,6 +174,17 @@ export default function AdminBar() {
             <AccountCircleIcon color="dark" />
           </IconButton>
           {renderMenu}
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={colorMode.toggleColorMode}
+            color="inherit"
+          >
+            {theme.palette.mode === "dark" ? (
+              <Brightness7Icon color="dark" />
+            ) : (
+              <Brightness4Icon color="dark" />
+            )}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -195,7 +214,7 @@ export default function AdminBar() {
           {menuItems.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton onClick={() => navigate(item.link)}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon sx={{ color: "black" }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
               </ListItemButton>
             </ListItem>

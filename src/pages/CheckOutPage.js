@@ -151,6 +151,7 @@ function CheckOutPage() {
               <LoadingButton
                 sx={{
                   backgroundColor: "dark.darker",
+                  color: "white",
                   mt: 2,
                   "&.MuiButton-root:hover": { backgroundColor: "dark.main" },
                 }}

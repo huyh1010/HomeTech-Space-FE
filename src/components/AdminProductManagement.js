@@ -24,6 +24,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, getProducts } from "../features/product/productSlice";
@@ -36,6 +37,7 @@ import LoadingScreen from "./LoadingScreen";
 const tableColumnsTitle = [
   { id: "product_id", label: "Product ID", minWidth: 170 },
   { id: "name", label: "Name", minWidth: 170 },
+  { id: "picture", label: "Picture", minWidth: 170 },
   { id: "price", label: "Price", minWidth: 170 },
   { id: "category", label: "Category", minWidth: 170 },
   { id: "brand", label: "Brand", minWidth: 170 },
@@ -46,6 +48,7 @@ const tableColumnsTitle = [
 function AdminProductManagement() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
   const [name, setName] = useState();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -94,10 +97,11 @@ function AdminProductManagement() {
             display: "flex",
             alignItems: "center",
             width: { xs: 250, sm: 400, md: 400, lg: 400 },
+            backgroundColor: "white",
           }}
         >
           <InputBase
-            sx={{ ml: 1, flex: 1 }}
+            sx={{ ml: 1, flex: 1, color: "black" }}
             placeholder="Search product name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -140,33 +144,22 @@ function AdminProductManagement() {
                   products?.map((product) => (
                     <TableRow
                       key={product._id}
-                      sx={{ backgroundColor: "white" }}
+                      sx={{
+                        backgroundColor:
+                          theme.palette.mode === "dark" && "	royalblue",
+                      }}
                     >
                       <TableCell sx={{ fontWeight: "bold" }}>
                         {product._id}
                       </TableCell>
-                      <TableCell
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-
-                          cursor: "pointer",
-                        }}
-                      >
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>
+                        {" "}
                         <Avatar
                           src={product.poster_path}
                           sx={{ mr: 2, width: 50, height: 50 }}
                           alt={product.name}
                         />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {product.name}
-                        </Typography>
                       </TableCell>
                       <TableCell>{fCurrency(product.price)}</TableCell>
                       <TableCell>
@@ -268,6 +261,7 @@ function AdminProductManagement() {
           <TableFooter>
             <TableRow>
               <TablePagination
+                sx={{ color: theme.palette.mode === "dark" && "black" }}
                 rowsPerPageOptions={[5, 10, 25]}
                 page={page}
                 count={count}

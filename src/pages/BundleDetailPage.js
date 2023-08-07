@@ -37,7 +37,7 @@ function BundleDetailPage() {
       <Card
         sx={{
           borderRadius: 2,
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
         }}
       >
         {bundle && (
@@ -109,6 +109,7 @@ function BundleDetailPage() {
                       size="large"
                       style={{
                         backgroundColor: "black",
+                        color: "white",
                         margin: "auto",
                         borderRadius: 14,
                       }}

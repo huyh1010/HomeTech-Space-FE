@@ -1,7 +1,7 @@
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import {
@@ -35,6 +35,7 @@ const registerSchema = yup.object().shape({
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = useAuth();
   const methods = useForm({
     defaultValues,
@@ -52,10 +53,12 @@ function RegisterPage() {
     React.useState(false);
 
   const onSubmit = async (data) => {
+    const from = location.state?.from?.pathname || "/";
     let { name, email, password } = data;
+
     try {
       await auth.register({ name, email, password }, () => {
-        navigate("/");
+        navigate(from, { replace: true });
       });
     } catch (error) {
       reset();

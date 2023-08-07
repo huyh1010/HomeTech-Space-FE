@@ -6,8 +6,8 @@ import {
   CardMedia,
   Grid,
   Pagination,
-  Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import LoadingScreen from "./LoadingScreen";
 function AdminProductList() {
   const [page, setPage] = useState(1);
   const limit = 12;
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { products, totalPages } = useSelector(
     (state) => state?.products?.products
@@ -43,13 +44,19 @@ function AdminProductList() {
                         sx={{
                           height: "300px",
                           cursor: "pointer",
+                          backgroundColor:
+                            theme.palette.mode === "dark" && "black",
                         }}
                       >
                         <CardMedia
                           component={"img"}
                           image={product.poster_path}
                           title={product.name}
-                          sx={{ height: "50%", objectFit: "contain" }}
+                          sx={{
+                            height: "60%",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
                         />
                         <CardContent>
                           <Typography

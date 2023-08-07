@@ -45,7 +45,11 @@ function AdminBundleList({ productList, setProductList, products, bundle }) {
           )}
         >
           {products?.map((product) => (
-            <MenuItem key={product._id} value={product}>
+            <MenuItem
+              sx={{ color: "black", backgroundColor: "white" }}
+              key={product._id}
+              value={product}
+            >
               {product.name}
             </MenuItem>
           ))}

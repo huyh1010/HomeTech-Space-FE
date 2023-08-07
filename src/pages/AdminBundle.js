@@ -1,5 +1,6 @@
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Container,
@@ -21,6 +22,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -36,6 +38,7 @@ import { useNavigate } from "react-router-dom";
 const tableColumnsTitle = [
   { id: "bundle_id", label: "Bundle ID", minWidth: 170 },
   { id: "name", label: "Name", minWidth: 170 },
+  { id: "picture", label: "Picture", minWidth: 170 },
   { id: "price", label: "Price", minWidth: 170 },
   { id: "products", label: "Products", minWidth: 170 },
 
@@ -50,6 +53,7 @@ function AdminBundle() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   const { bundles, count } = useSelector((state) => state?.bundles?.bundles);
   const { loading, error } = useSelector((state) => state?.bundles);
@@ -101,10 +105,11 @@ function AdminBundle() {
                 display: "flex",
                 alignItems: "center",
                 width: { xs: 250, sm: 400, md: 400, lg: 400 },
+                backgroundColor: "white",
               }}
             >
               <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flex: 1, color: "black" }}
                 placeholder="Search bundle name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -150,12 +155,22 @@ function AdminBundle() {
                         return (
                           <TableRow
                             key={bundle._id}
-                            sx={{ backgroundColor: "white" }}
+                            sx={{
+                              backgroundColor:
+                                theme.palette.mode === "dark" && "tan",
+                            }}
                           >
                             <TableCell sx={{ fontWeight: "bold" }}>
                               {bundle._id}
                             </TableCell>
                             <TableCell>{bundle.name}</TableCell>
+                            <TableCell>
+                              <Avatar
+                                src={bundle.poster_path}
+                                sx={{ mr: 2, width: 50, height: 50 }}
+                                alt={bundle.name}
+                              />
+                            </TableCell>
                             <TableCell>{fCurrency(bundle.price)}</TableCell>
                             <TableCell>
                               {" "}
@@ -260,6 +275,7 @@ function AdminBundle() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
+                    sx={{ color: theme.palette.mode === "dark" && "black" }}
                     rowsPerPageOptions={[5, 10, 25]}
                     page={page}
                     count={count}

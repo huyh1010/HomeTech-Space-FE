@@ -119,18 +119,17 @@ function AdminEditOrder() {
                               order.status === "delivered" ? true : false
                             }
                           >
-                            <MenuItem value="" disabled>
-                              Select status
-                            </MenuItem>
                             <MenuItem
                               disabled={
                                 order.status === "shipped" ? true : false
                               }
+                              sx={{ color: "black", backgroundColor: "white" }}
                               value="pending"
                             >
                               Pending{" "}
                             </MenuItem>
                             <MenuItem
+                              sx={{ color: "black", backgroundColor: "white" }}
                               disabled={
                                 order.status === "shipped" ? true : false
                               }
@@ -139,6 +138,7 @@ function AdminEditOrder() {
                               Accepted
                             </MenuItem>
                             <MenuItem
+                              sx={{ color: "black", backgroundColor: "white" }}
                               disabled={
                                 order.status === "shipped" ? true : false
                               }
@@ -147,6 +147,7 @@ function AdminEditOrder() {
                               Processing
                             </MenuItem>
                             <MenuItem
+                              sx={{ color: "black", backgroundColor: "white" }}
                               disabled={
                                 order.status === "shipped" ? true : false
                               }
@@ -154,8 +155,18 @@ function AdminEditOrder() {
                             >
                               Preparing Your Order
                             </MenuItem>
-                            <MenuItem value="shipped">On Your Way</MenuItem>
-                            <MenuItem value="delivered">Delivered</MenuItem>
+                            <MenuItem
+                              sx={{ color: "black", backgroundColor: "white" }}
+                              value="shipped"
+                            >
+                              On Your Way
+                            </MenuItem>
+                            <MenuItem
+                              sx={{ color: "black", backgroundColor: "white" }}
+                              value="delivered"
+                            >
+                              Delivered
+                            </MenuItem>
                           </Select>
                         </FormControl>
                       </Box>
@@ -222,7 +233,12 @@ function AdminEditOrder() {
                           Payment Status:{" "}
                           <Box sx={{ display: "flex", alignItems: "center" }}>
                             {paymentStatus}{" "}
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <FormControl
+                              sx={{
+                                m: 1,
+                                minWidth: 120,
+                              }}
+                            >
                               <InputLabel id="demo-simple-select-label">
                                 Status
                               </InputLabel>
@@ -232,11 +248,24 @@ function AdminEditOrder() {
                                 autoWidth
                                 sx={{ textC: "red" }}
                               >
-                                <MenuItem value="" disabled>
-                                  Select status
+                                <MenuItem
+                                  sx={{
+                                    color: "black",
+                                    backgroundColor: "white",
+                                  }}
+                                  value="paid"
+                                >
+                                  Paid
                                 </MenuItem>
-                                <MenuItem value="paid">Paid</MenuItem>
-                                <MenuItem value="unpaid">Unpaid</MenuItem>
+                                <MenuItem
+                                  sx={{
+                                    color: "black",
+                                    backgroundColor: "white",
+                                  }}
+                                  value="unpaid"
+                                >
+                                  Unpaid
+                                </MenuItem>
                               </Select>
                             </FormControl>
                           </Box>

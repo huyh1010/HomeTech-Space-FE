@@ -208,7 +208,6 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      console.log(action.payload);
       const checkCart = JSON.parse(localStorage.getItem("cart"));
       if (!checkCart) window.localStorage.setItem("cart", JSON.stringify([]));
       let cartOnLocal = JSON.parse(localStorage.getItem("cart"));

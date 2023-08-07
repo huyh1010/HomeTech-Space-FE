@@ -6,18 +6,31 @@ function OrderPaymentStatusFilter({
   setOrderPaymentStatus,
 }) {
   return (
-    <FormControl sx={{ mr: 1, minWidth: 180 }}>
-      <InputLabel>Payment Status</InputLabel>
+    <FormControl sx={{ mr: 1, minWidth: 180, color: "black" }}>
+      <InputLabel sx={{ color: "black" }}>Payment Status</InputLabel>
       <Select
         label="Payment Status"
         value={orderPaymentStatus}
         onChange={(e) => setOrderPaymentStatus(e.target.value)}
+        sx={{
+          color: "black",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "black",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "black",
+          },
+        }}
       >
-        <MenuItem value="" disabled>
+        <MenuItem sx={{ color: "black" }} value="" disabled>
           Select status
         </MenuItem>
-        <MenuItem value="paid">Paid </MenuItem>
-        <MenuItem value="unpaid">Unpaid</MenuItem>
+        <MenuItem sx={{ color: "black" }} value="paid">
+          Paid{" "}
+        </MenuItem>
+        <MenuItem sx={{ color: "black" }} value="unpaid">
+          Unpaid
+        </MenuItem>
       </Select>
     </FormControl>
   );

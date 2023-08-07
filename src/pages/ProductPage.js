@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Container,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -98,7 +99,10 @@ function ProductPage() {
           <Stack spacing={3} sx={{ p: 3, width: 250 }}>
             <Card sx={{ p: 3 }}>
               <FormControl>
-                <FormLabel>Category</FormLabel>
+                <FormLabel sx={{ fontSize: "20px", fontWeight: 600, mb: 1 }}>
+                  Category
+                </FormLabel>
+                <Divider />
                 <RadioGroup
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"
@@ -117,7 +121,10 @@ function ProductPage() {
             </Card>
             <Card sx={{ p: 3 }}>
               <FormControl>
-                <FormLabel>Price</FormLabel>
+                <FormLabel sx={{ fontSize: "20px", fontWeight: 600, mb: 1 }}>
+                  Price
+                </FormLabel>
+                <Divider />
                 <RadioGroup
                   aria-labelledby="demo-controlled-radio-buttons-group"
                   name="controlled-radio-buttons-group"

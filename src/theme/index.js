@@ -5,6 +5,8 @@ import {
   alpha,
 } from "@mui/material";
 import customizeComponents from "./customizations";
+import React, { useState } from "react";
+import { deepOrange, grey } from "@mui/material/colors";
 // import customizeComponents from "./customizations";
 const PRIMARY = {
   lighter: "#D6E4FF",
@@ -133,60 +135,116 @@ const GREY = {
   500_56: alpha("#919EAB", 0.56),
   500_80: alpha("#919EAB", 0.8),
 };
-
+export const ColorModeContext = React.createContext({
+  toggleColorMode: () => {},
+});
 function ThemeProvider({ children }) {
+  const [mode, setMode] = useState("light");
+  const colorMode = React.useMemo(
+    () => ({
+      // The dark mode switch would invoke this method
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
+    }),
+    []
+  );
   const themeOptions = {
     palette: {
-      primary: PRIMARY,
-      secondary: SECONDARY,
-      tertiary: TERTIARY,
-      pink: PINK,
-      yellow: YELLOW,
-      blue: BLUE,
-      purple: PURPLE,
-      success: SUCCESS,
-      accept: ACCEPT,
-      process: PROCESS,
-      prepare: PREPARE,
-      shipped: SHIPPED,
-      dark: DARK,
-      red: RED,
-      text: {
-        primary: GREY[900],
-        secondary: "#231f1e",
-        tertiary: GREY[600],
-        disabled: GREY[500],
-      },
-      background: {
-        paper: "#fff",
-        default: "#fff",
-        neutral: GREY[200],
-        positive: "#3366FF",
-      },
-      action: {
-        active: GREY[600],
-        hover: GREY[500_8],
-        selected: GREY[500_16],
-        disabled: GREY[500_80],
-        disabledBackground: GREY[500_24],
-        focus: GREY[500_24],
-        hoverOpacity: 0.08,
-        disabledOpacity: 0.48,
-      },
+      mode,
+      ...(mode === "light"
+        ? {
+            // palette values for light mode
+            primary: PRIMARY,
+            secondary: SECONDARY,
+            tertiary: TERTIARY,
+            pink: PINK,
+            yellow: YELLOW,
+            blue: BLUE,
+            purple: PURPLE,
+            success: SUCCESS,
+            accept: ACCEPT,
+            process: PROCESS,
+            prepare: PREPARE,
+            shipped: SHIPPED,
+            dark: DARK,
+            red: RED,
+            text: {
+              primary: GREY[900],
+              secondary: "#231f1e",
+              tertiary: GREY[600],
+              disabled: GREY[500],
+            },
+            background: {
+              default: "#74b9ff",
+              paper: "#ffff",
+            },
+            action: {
+              active: GREY[600],
+              hover: GREY[500_8],
+              selected: GREY[500_16],
+              disabled: GREY[500_80],
+              disabledBackground: GREY[500_24],
+              focus: GREY[500_24],
+              hoverOpacity: 0.08,
+              disabledOpacity: 0.48,
+            },
+            typography: {
+              allVariants: { fontFamily: ["Rubik", "sans-serif"].join(",") },
+            },
+            shape: { borderRadius: 8 },
+          }
+        : {
+            // palette values for dark mode
+            primary: PRIMARY,
+            secondary: SECONDARY,
+            tertiary: TERTIARY,
+            pink: PINK,
+            yellow: YELLOW,
+            blue: BLUE,
+            purple: PURPLE,
+            success: SUCCESS,
+            accept: ACCEPT,
+            process: PROCESS,
+            prepare: PREPARE,
+            shipped: SHIPPED,
+            dark: DARK,
+            red: RED,
+            background: {
+              default: "black",
+              paper: "#6a89cc",
+            },
+            text: {
+              primary: "#fff",
+              secondary: "#fff",
+            },
+            action: {
+              active: GREY[600],
+              hover: GREY[500_8],
+              selected: GREY[500_16],
+              disabled: GREY[500_80],
+              disabledBackground: GREY[500_24],
+              focus: GREY[500_24],
+              hoverOpacity: 0.08,
+              disabledOpacity: 0.48,
+            },
+            typography: {
+              allVariants: { fontFamily: ["Rubik", "sans-serif"].join(",") },
+            },
+            shape: { borderRadius: 8 },
+          }),
     },
-    typography: {
-      allVariants: { fontFamily: ["Rubik", "sans-serif"].join(",") },
-    },
-    shape: { borderRadius: 8 },
   };
 
   const theme = createTheme(themeOptions);
   theme.components = customizeComponents(theme);
   return (
-    <MUIThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </MUIThemeProvider>
+    <ColorModeContext.Provider value={colorMode}>
+      <MUIThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </MUIThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 

@@ -23,7 +23,7 @@ function HomeBanner() {
   return (
     <Container
       sx={{
-        my: 2,
+        my: 4,
         justifyContent: "center",
         alignItems: "center",
       }}

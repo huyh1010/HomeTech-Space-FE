@@ -16,6 +16,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,6 +37,7 @@ function UserInfo() {
   const [page, setPage] = useState(0);
   const [name, setName] = useState("");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const theme = useTheme();
 
   const { totalUsers, users } = useSelector((state) => state?.users?.users);
   const { userData } = useSelector((state) => state?.users);
@@ -141,7 +143,11 @@ function UserInfo() {
                   {users?.map((user) => (
                     <TableRow
                       key={user._id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        backgroundColor:
+                          theme.palette.mode === "dark" && "plum",
+                      }}
                     >
                       <TableCell component="th" scope="row">
                         {user._id}
@@ -189,8 +195,8 @@ function UserInfo() {
               {totalUsers} Total Users Registered
             </Typography>
           </Paper>
-          <Paper sx={{ p: 3 }}>
-            <Typography sx={{ fontWeight: "bold" }}>
+          <Paper sx={{ p: 3, backgroundColor: "#fff" }}>
+            <Typography sx={{ fontWeight: "bold", color: "black" }}>
               {" "}
               User Registered in Last 7 Days
             </Typography>

@@ -22,7 +22,7 @@ function BundleCard({ bundle }) {
   return (
     <Card
       sx={{
-        height: "300px",
+        height: "350px",
         cursor: "pointer",
       }}
     >
@@ -30,7 +30,7 @@ function BundleCard({ bundle }) {
         component={"img"}
         image={bundle.poster_path}
         title={bundle.name}
-        sx={{ height: "50%", objectFit: "contain" }}
+        sx={{ height: "60%", objectFit: "cover", width: "100%" }}
         onClick={() => navigate(`/bundle/${bundle._id}`)}
       />
       <CardContent>

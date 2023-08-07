@@ -14,22 +14,16 @@ function NewProductCard({ product }) {
   return (
     <Card
       sx={{
-        height: "300px",
+        height: "350px",
         cursor: "pointer",
         position: "relative",
       }}
     >
-      <NewReleasesIcon
-        color="red"
-        fontSize="large"
-        sx={{ position: "absolute", right: 10, top: 10 }}
-      />
-
       <CardMedia
         component={"img"}
         image={product.poster_path}
         title={product.name}
-        sx={{ height: "50%", objectFit: "contain" }}
+        sx={{ height: "60%", objectFit: "cover", width: "100%" }}
       />
       <CardContent>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
@@ -50,6 +44,7 @@ function NewProductCard({ product }) {
         <Button
           style={{
             backgroundColor: "black",
+            color: "white",
             margin: "auto",
             borderRadius: 14,
           }}

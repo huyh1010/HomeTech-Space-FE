@@ -18,7 +18,7 @@ function AboutUs() {
     >
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={12} md={6}>
-          <Card sx={{ backgroundColor: "#F4F6F8" }}>
+          <Card sx={{ backgroundColor: "background.main" }}>
             <CardContent>
               <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
                 Overview
@@ -42,7 +42,7 @@ function AboutUs() {
           </Card>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Card sx={{ backgroundColor: "#F4F6F8" }}>
+          <Card sx={{ backgroundColor: "background.main" }}>
             <CardContent>
               <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
                 Frequently Asked Questions

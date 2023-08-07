@@ -1,12 +1,9 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
-  Chip,
-  Stack,
   Typography,
 } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
@@ -26,15 +23,16 @@ function ProductCard({ product }) {
   return (
     <Card
       sx={{
-        height: "300px",
+        height: "350px",
         cursor: "pointer",
+        backgroundColor: "background.paper",
       }}
     >
       <CardMedia
         component={"img"}
         image={product.poster_path}
         title={product.name}
-        sx={{ height: "50%", objectFit: "contain" }}
+        sx={{ height: "60%", width: "100%", objectFit: "cover" }}
         onClick={() => navigate(`/product/${product._id}`)}
       />
       <CardContent>
@@ -56,6 +54,7 @@ function ProductCard({ product }) {
         <Button
           style={{
             backgroundColor: "black",
+            color: "white",
             margin: "auto",
             borderRadius: 14,
           }}

@@ -15,6 +15,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -58,6 +59,7 @@ function AdminOrders() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { orders, count, loading, error } = useSelector(
     (state) => state?.orders
   );
@@ -115,7 +117,7 @@ function AdminOrders() {
     setOrderStatus("");
     setOrderPaymentStatus("");
     setOrderPaymentMethod("");
-
+    setPage(0);
     dispatch(
       getOrders({
         page: page + 1,
@@ -153,10 +155,15 @@ function AdminOrders() {
                 alignItems: "center",
                 width: { xs: 250, sm: 400, md: 400, lg: 400 },
                 height: 50,
+                backgroundColor: "white",
               }}
             >
               <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{
+                  ml: 1,
+                  flex: 1,
+                  color: "black",
+                }}
                 placeholder="Search name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -239,7 +246,11 @@ function AdminOrders() {
                         return (
                           <TableRow
                             key={order._id}
-                            sx={{ backgroundColor: "white" }}
+                            style={{
+                              backgroundColor:
+                                theme.palette.mode === "dark" &&
+                                "paleturquoise",
+                            }}
                           >
                             <TableCell sx={{ fontWeight: "bold" }}>
                               {order._id}
@@ -287,6 +298,7 @@ function AdminOrders() {
               <TableFooter>
                 <TableRow>
                   <TablePagination
+                    sx={{ color: theme.palette.mode === "dark" && "black" }}
                     rowsPerPageOptions={[5, 10, 25]}
                     page={page}
                     count={count}

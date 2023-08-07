@@ -77,8 +77,8 @@ function OrderInfo() {
   return (
     <Grid container spacing={2} sx={{ mt: 2 }}>
       <Grid item xs={12} sm={12} lg={6}>
-        <Paper sx={{ padding: 3 }}>
-          <Typography sx={{ fontWeight: "bold" }}>
+        <Paper sx={{ padding: 3, backgroundColor: "#fff" }}>
+          <Typography sx={{ fontWeight: "bold", color: "black" }}>
             {" "}
             Order Sales in Last 7 Days
           </Typography>
@@ -91,8 +91,8 @@ function OrderInfo() {
         </Paper>
       </Grid>
       <Grid item xs={12} sm={12} lg={6}>
-        <Paper sx={{ padding: 3 }}>
-          <Typography sx={{ fontWeight: "bold" }}>
+        <Paper sx={{ padding: 3, backgroundColor: "#fff" }}>
+          <Typography sx={{ fontWeight: "bold", color: "black" }}>
             {" "}
             Order Sales in Last 30 Days
           </Typography>

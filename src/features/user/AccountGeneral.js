@@ -38,7 +38,9 @@ function AccountGeneral() {
             <FTextField name="phone" label="Phone Number" />
             <FTextField name="address" label="Address" />
           </Stack>
-          <Button color="red">Save Changes</Button>
+          <Button sx={{ backgroundColor: "black", color: "white", mt: 1 }}>
+            Save Changes
+          </Button>
         </Card>
       </Container>
     </FormProvider>

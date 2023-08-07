@@ -38,7 +38,7 @@ function ProductDetailPage() {
       <Card
         sx={{
           borderRadius: 2,
-          backgroundColor: "white",
+          backgroundColor: "background.paper",
         }}
       >
         {product && (
@@ -117,6 +117,7 @@ function ProductDetailPage() {
                       size="large"
                       style={{
                         backgroundColor: "black",
+                        color: "white",
                         margin: "auto",
                         borderRadius: 14,
                       }}

@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
   Container,
   IconButton,
   Paper,
@@ -25,6 +26,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 function CartPage() {
   const dispatch = useDispatch();
@@ -58,7 +60,10 @@ function CartPage() {
         My Cart
       </Typography>
       {cart?.length < 1 ? (
-        <Typography>Cart is Empty</Typography>
+        <Card sx={{ p: 3, textAlign: "center" }}>
+          <Typography variant="h3">Cart is Empty</Typography>
+          <ShoppingCartIcon style={{ fontSize: 50 }} />
+        </Card>
       ) : (
         <>
           <Paper>
@@ -145,6 +150,7 @@ function CartPage() {
               size="large"
               style={{
                 backgroundColor: "black",
+                color: "white",
                 margin: "auto",
                 borderRadius: 14,
               }}
