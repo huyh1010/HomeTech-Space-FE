@@ -92,37 +92,37 @@ export const AddProductQuantity = createAsyncThunk(
 // merge cart if cart exists
 // update cart with user id
 // then in cart page
-export const getProductFromCart = createAsyncThunk(
-  "carts/getProductFromCart",
-  async (_, { rejectWithValue }) => {
-    try {
-      const accessToken = window.localStorage.getItem("accessToken");
-      const user = JSON.parse(window.localStorage.getItem("user"));
-      if (accessToken && user) {
-        //if accesstoken or user => use api, else use localstorage
-        const id = user._id;
-        let url = `/carts/user/${id}`;
+// export const getProductFromCart = createAsyncThunk(
+//   "carts/getProductFromCart",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const accessToken = window.localStorage.getItem("accessToken");
+//       const user = JSON.parse(window.localStorage.getItem("user"));
+//       if (accessToken && user) {
+//         //if accesstoken or user => use api, else use localstorage
+//         const id = user._id;
+//         let url = `/carts/user/${id}`;
 
-        const res = await apiService.get(url);
-        const timeout = () => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve("ok");
-            }, 1000);
-          });
-        };
-        await timeout();
-        console.log(res.data.cart);
-        return res.data.cart;
-      } else {
-        const cart = JSON.parse(window.localStorage.getItem("cart"));
-        return cart;
-      }
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
+//         const res = await apiService.get(url);
+//         const timeout = () => {
+//           return new Promise((resolve) => {
+//             setTimeout(() => {
+//               resolve("ok");
+//             }, 1000);
+//           });
+//         };
+//         await timeout();
+//         console.log(res.data.cart);
+//         return res.data.cart;
+//       } else {
+//         const cart = JSON.parse(window.localStorage.getItem("cart"));
+//         return cart;
+//       }
+//     } catch (error) {
+//       rejectWithValue(error);
+//     }
+//   }
+// );
 
 // export const getProductFromUserCart = createAsyncThunk(
 //   "carts/getProductFromUserCart",
@@ -305,10 +305,10 @@ export const cartSlice = createSlice({
       state.loading = true;
       state.error = "";
     });
-    builder.addCase(getProductFromCart.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
+    // builder.addCase(getProductFromCart.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = "";
+    // });
     builder.addCase(updateCart.pending, (state) => {
       state.loading = true;
       state.error = "";
@@ -339,10 +339,10 @@ export const cartSlice = createSlice({
       state.loading = false;
       state.cart = action.payload;
     });
-    builder.addCase(getProductFromCart.fulfilled, (state, action) => {
-      state.loading = false;
-      state.cart = action.payload;
-    });
+    // builder.addCase(getProductFromCart.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.cart = action.payload;
+    // });
     builder.addCase(updateCart.fulfilled, (state, action) => {
       state.loading = false;
       state.cart = action.payload;
@@ -415,14 +415,14 @@ export const cartSlice = createSlice({
         state.error = action.error.message;
       }
     });
-    builder.addCase(getProductFromCart.rejected, (state, action) => {
-      state.loading = false;
-      if (action.payload) {
-        state.error = action.payload.message;
-      } else {
-        state.error = action.error.message;
-      }
-    });
+    // builder.addCase(getProductFromCart.rejected, (state, action) => {
+    //   state.loading = false;
+    //   if (action.payload) {
+    //     state.error = action.payload.message;
+    //   } else {
+    //     state.error = action.error.message;
+    //   }
+    // });
     builder.addCase(updateCart.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {

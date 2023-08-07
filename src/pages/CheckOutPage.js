@@ -8,10 +8,10 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import CartReview from "../features/cart/CartReview";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCart, getProductFromCart } from "../features/cart/cartSlice";
+import { clearCart } from "../features/cart/cartSlice";
 import { Controller, useForm } from "react-hook-form";
 import { FTextField, FormProvider } from "../components/form";
 import { LoadingButton } from "@mui/lab";
@@ -59,9 +59,6 @@ function CheckOutPage() {
     formState: { isSubmitting },
   } = methods;
 
-  useEffect(() => {
-    dispatch(getProductFromCart());
-  }, [dispatch]);
   const onSubmit = async (data, cart, user, totalPrice) => {
     const user_id = user._id;
     const customer_info = data;
