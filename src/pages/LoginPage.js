@@ -1,10 +1,17 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import * as yup from "yup";
 import {
   Alert,
+  Box,
+  Button,
   Container,
   IconButton,
   InputAdornment,
@@ -16,6 +23,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { LoadingButton } from "@mui/lab";
 import { FCheckbox, FTextField, FormProvider } from "../components/form";
 import useAuth from "../hooks/useAuth";
+import { FcGoogle } from "react-icons/fc";
+import apiService from "../app/apiService";
+import { BASE_URL } from "../app/config";
 
 const defaultValues = {
   email: "",
@@ -29,6 +39,7 @@ const loginSchema = yup.object({
 });
 function LoginPage() {
   const auth = useAuth();
+
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(loginSchema),
@@ -50,6 +61,10 @@ function LoginPage() {
       reset();
       setError("responseError", error);
     }
+  };
+
+  const handleGoogle = async () => {
+    window.open(`${BASE_URL}/auth/google`, "_self");
   };
 
   return (
@@ -107,6 +122,22 @@ function LoginPage() {
           Login
         </LoadingButton>
       </FormProvider>
+      <Box sx={{ textAlign: "center", mt: 1 }}>
+        <Button
+          onClick={handleGoogle}
+          fullWidth
+          size="large"
+          startIcon={<FcGoogle />}
+          style={{
+            backgroundColor: "white",
+            color: "#37474f",
+            textTransform: "none",
+            fontWeight: "bold",
+          }}
+        >
+          Sign in with Google
+        </Button>
+      </Box>
     </Container>
   );
 }

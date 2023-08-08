@@ -9,6 +9,8 @@ import {
 } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { authGoogle } from "../firebase/firebaseConfig";
 
 const initialState = {
   isInitialized: false,
@@ -127,6 +129,12 @@ const AuthProvider = ({ children }) => {
 
     callback();
   };
+
+  const loginWithGoogle = async ({ googleId }) => {
+    let url = "/auth/google/login/success";
+    const res = await apiService.post(url, { googleId });
+    console.log(res.data);
+  };
   const logout = async (callback) => {
     setSession(null);
 
@@ -136,7 +144,9 @@ const AuthProvider = ({ children }) => {
     callback();
   };
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ ...state, login, register, logout, loginWithGoogle }}
+    >
       {children}
     </AuthContext.Provider>
   );
