@@ -27,6 +27,7 @@ import AdminEditOrder from "../pages/AdminEditOrder";
 import AdminBundle from "../pages/AdminBundle";
 import AdminEditBundle from "../pages/AdminEditBundle";
 import AdminCreateBundle from "../pages/AdminCreateBundle";
+import AdminAccountGeneral from "../features/user/AdminAccountGeneral";
 
 function Router() {
   const { user } = useAuth();
@@ -48,6 +49,7 @@ function Router() {
           }
         >
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/account" element={<AdminAccountGeneral />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route
             path="/admin/products/edit/:id"

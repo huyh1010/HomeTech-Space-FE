@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AppBar,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -202,12 +203,13 @@ function NavBar() {
               </Stack>
 
               <Stack direction="row" alignItems="center">
-                <IconButton
-                  onClick={user ? handleProfileMenuOpen : handleLogin}
-                >
-                  {" "}
-                  <AccountCircleIcon />
-                </IconButton>
+                {user ? (
+                  <Avatar onClick={handleProfileMenuOpen} src={user?.avatarUrl}>
+                    {" "}
+                  </Avatar>
+                ) : (
+                  <AccountCircleIcon color="dark" onClick={handleLogin} />
+                )}
                 {renderMenu}
                 <IconButton onClick={() => navigate("/cart")}>
                   {" "}
@@ -340,12 +342,14 @@ function NavBar() {
                 </Button>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <IconButton
-                  onClick={user ? handleProfileMenuOpen : handleLogin}
-                >
-                  {" "}
-                  <AccountCircleIcon color="dark" />
-                </IconButton>
+                {user ? (
+                  <Avatar onClick={handleProfileMenuOpen} src={user?.avatarUrl}>
+                    {" "}
+                  </Avatar>
+                ) : (
+                  <AccountCircleIcon color="dark" onClick={handleLogin} />
+                )}
+
                 {renderMenu}
                 <IconButton onClick={() => navigate("/cart")}>
                   {" "}

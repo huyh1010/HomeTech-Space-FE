@@ -26,6 +26,8 @@ import useAuth from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import apiService from "../app/apiService";
 import { BASE_URL } from "../app/config";
+import { useDispatch, useSelector } from "react-redux";
+import { saveCartForGoogleUser } from "../features/cart/cartSlice";
 
 const defaultValues = {
   email: "",
@@ -39,6 +41,8 @@ const loginSchema = yup.object({
 });
 function LoginPage() {
   const auth = useAuth();
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state?.carts?.cart);
 
   const methods = useForm({
     defaultValues,
@@ -65,6 +69,8 @@ function LoginPage() {
 
   const handleGoogle = async () => {
     window.open(`${BASE_URL}/auth/google`, "_self");
+    dispatch(saveCartForGoogleUser(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   return (

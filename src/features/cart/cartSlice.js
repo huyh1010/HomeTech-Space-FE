@@ -284,6 +284,11 @@ export const cartSlice = createSlice({
         return res.data;
       }
     },
+    saveCartForGoogleUser: (state, action) => {
+      state.cart = action.payload;
+      state.cartItemCount = action.payload.length;
+      localStorage.setItem("cart", JSON.stringify(action.payload));
+    },
     logInUser: (state, action) => {
       state.cart = action.payload;
       state.cartItemCount = action.payload.length;
@@ -293,11 +298,13 @@ export const cartSlice = createSlice({
       state.cartItemCount = 0;
       state.cart = [];
       localStorage.removeItem("cart");
+      localStorage.removeItem("cartForGoogleUser");
     },
     clearCart: (state) => {
       state.cartItemCount = 0;
       state.cart = [];
       localStorage.removeItem("cart");
+      localStorage.removeItem("cartForGoogleUser");
     },
   },
   extraReducers: (builder) => {
@@ -475,6 +482,7 @@ export const {
   logInUser,
   logOutUser,
   clearCart,
+  saveCartForGoogleUser,
 } = cartSlice.actions;
 const { reducer } = cartSlice;
 

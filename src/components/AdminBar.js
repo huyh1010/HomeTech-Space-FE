@@ -20,7 +20,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuth from "../hooks/useAuth";
-import { Menu, MenuItem } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -28,6 +28,7 @@ import SpeakerIcon from "@mui/icons-material/Speaker";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { ColorModeContext } from "../theme";
+import { Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -141,6 +142,14 @@ export default function AdminBar() {
         </Typography>
       </Box>
       <Divider sx={{ borderStyle: "dashed" }} />
+      <MenuItem
+        onClick={handleClose}
+        component={RouterLink}
+        to="/admin/account"
+        sx={{ mx: 1, color: "black" }}
+      >
+        Profile
+      </MenuItem>
 
       <MenuItem onClick={handleLogout} sx={{ mx: 1, color: "black" }}>
         Logout
@@ -169,10 +178,11 @@ export default function AdminBar() {
             Welcome back {user.name}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton onClick={handleProfileMenuOpen}>
+
+          <Avatar onClick={handleProfileMenuOpen} src={user?.avatarUrl}>
             {" "}
-            <AccountCircleIcon color="dark" />
-          </IconButton>
+          </Avatar>
+
           {renderMenu}
           <IconButton
             sx={{ ml: 1 }}

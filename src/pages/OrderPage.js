@@ -78,7 +78,7 @@ function OrderPage() {
   }, [dispatch, page, user, rowsPerPage]);
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ py: 10 }}>
       <Typography variant="h3">Your Orders</Typography>
       <Paper sx={{ width: "100%", mt: 2 }}>
         <TableContainer>

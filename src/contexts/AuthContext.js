@@ -1,16 +1,9 @@
 import { createContext, useEffect, useReducer } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
-import {
-  assignCartToUser,
-  createCart,
-  logInUser,
-  logOutUser,
-} from "../features/cart/cartSlice";
+import { logInUser, logOutUser } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { authGoogle } from "../firebase/firebaseConfig";
 
 const initialState = {
   isInitialized: false,
@@ -22,7 +15,7 @@ const LOGIN_SUCCESS = "AUTH.LOGIN_SUCCESS";
 const REGISTER_SUCCESS = "AUTH.REGISTER_SUCCESS";
 const LOGOUT = "AUTH.LOGOUT";
 const INITIALIZE = "AUTH.INITIALIZE";
-// const UPDATE_PROFILE = "UPDATE.PROFILE_SUCCESS";
+const UPDATE_PROFILE = "UPDATE.PROFILE_SUCCESS";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,6 +28,18 @@ const reducer = (state, action) => {
     case INITIALIZE:
       const { isAuthenticated, user } = action.payload;
       return { ...state, isInitialized: true, isAuthenticated, user };
+    case UPDATE_PROFILE:
+      const { name, address, phone, avatarUrl } = action.payload;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name,
+          address,
+          phone,
+          avatarUrl,
+        },
+      };
     default:
       return state;
   }
@@ -57,6 +62,9 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
+  const cartForGoogleUser = JSON.parse(window.localStorage.getItem("cart"));
+  const updatedProfile = useSelector((state) => state.users.updateProfile);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -68,7 +76,7 @@ const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
           const res = await apiService.get("/users/me");
-          const user = res.data.user;
+          const user = res.data;
 
           dispatch({
             type: INITIALIZE,
@@ -92,6 +100,10 @@ const AuthProvider = ({ children }) => {
     initialize();
   }, []);
 
+  useEffect(() => {
+    if (updatedProfile)
+      dispatch({ type: UPDATE_PROFILE, payload: updatedProfile });
+  }, [updatedProfile]);
   const register = async ({ name, email, password }, callback) => {
     const res = await apiService.post("/users", {
       name,
@@ -132,8 +144,19 @@ const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async ({ googleId }) => {
     let url = "/auth/google/login/success";
-    const res = await apiService.post(url, { googleId });
-    console.log(res.data);
+
+    const res = await apiService.post(url, {
+      googleId,
+      cartForGoogleUser: cartForGoogleUser,
+    });
+    const { user, accessToken, userCart } = res.data;
+
+    dispatchFunction(logInUser(userCart.cart));
+    setSession(accessToken, user);
+    dispatch({ type: LOGIN_SUCCESS, payload: { user } });
+
+    // const from = location.state?.from?.pathname || "/";
+    // navigate(from, { replace: true });
   };
   const logout = async (callback) => {
     setSession(null);

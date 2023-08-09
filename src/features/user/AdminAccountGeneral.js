@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import useAuth from "../../hooks/useAuth.js";
 import { FTextField, FUploadAvatar, FormProvider } from "../../components/form";
-import { Box, Button, Card, Container, Stack, Typography } from "@mui/material";
+import { Box, Card, Container, Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,7 +14,7 @@ const UpdateUserSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
-function AccountGeneral() {
+function AdminAccountGeneral() {
   const { user } = useAuth();
   const { loading } = useSelector((state) => state?.users);
   const defaultValues = {
@@ -57,7 +57,7 @@ function AccountGeneral() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Container sx={{ py: 10, px: 3 }}>
-        <Typography variant="h3">Your Account</Typography>
+        <Typography variant="h3">Admin Account</Typography>
         <Card sx={{ p: 3, mt: 2 }}>
           <Stack spacing={2}>
             <FUploadAvatar
@@ -103,4 +103,4 @@ function AccountGeneral() {
   );
 }
 
-export default AccountGeneral;
+export default AdminAccountGeneral;

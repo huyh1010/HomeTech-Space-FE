@@ -13,9 +13,6 @@ function AuthRequire({ children }) {
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  // if (isAuthenticated && user.role === "admin") {
-  //   return <Navigate to="/admin" />;
-  // }
 
   return children;
 }
