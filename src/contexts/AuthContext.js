@@ -47,12 +47,10 @@ const reducer = (state, action) => {
 
 const AuthContext = createContext({ ...initialState });
 const setSession = (accessToken, user) => {
-  if (accessToken && user) {
-    window.localStorage.setItem("user", JSON.stringify(user));
+  if (accessToken) {
     window.localStorage.setItem("accessToken", accessToken);
     apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
-    window.localStorage.removeItem("user");
     window.localStorage.removeItem("accessToken");
     delete apiService.defaults.headers.common.Authorization;
   }
@@ -113,7 +111,8 @@ const AuthProvider = ({ children }) => {
     });
     const { user, accessToken, userCart } = res.data;
 
-    setSession(accessToken, user);
+    setSession(accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
     dispatchFunction(logInUser(userCart.cart));
     dispatch({ type: REGISTER_SUCCESS, payload: { user } });
     callback();
@@ -136,7 +135,8 @@ const AuthProvider = ({ children }) => {
       navigate(from, { replace: true });
     }
 
-    setSession(accessToken, user);
+    setSession(accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
 
     callback();
@@ -152,7 +152,8 @@ const AuthProvider = ({ children }) => {
     const { user, accessToken, userCart } = res.data;
 
     dispatchFunction(logInUser(userCart.cart));
-    setSession(accessToken, user);
+    setSession(accessToken);
+    window.localStorage.setItem("user", JSON.stringify(user));
     dispatch({ type: LOGIN_SUCCESS, payload: { user } });
 
     // const from = location.state?.from?.pathname || "/";

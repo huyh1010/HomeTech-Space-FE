@@ -49,7 +49,7 @@ function ProductPage() {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
 
-  let limit = 5;
+  let limit = 12;
 
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state?.products?.products);
@@ -94,8 +94,16 @@ function ProductPage() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
-        <Stack>
+      <Container
+        sx={{
+          display: "flex",
+          // minHeight: "100vh",
+          mt: 3,
+          flexDirection: { xs: "column", sm: "row", md: "row", lg: "row" },
+          // alignItems: "center",
+        }}
+      >
+        <Stack alignItems="center">
           <Stack spacing={3} sx={{ p: 3, width: 250 }}>
             <Card sx={{ p: 3 }}>
               <FormControl>
@@ -154,11 +162,12 @@ function ProductPage() {
             </Box>
           </Stack>
         </Stack>
+
         <Stack sx={{ flexGrow: 1, justifyContent: "center" }}>
           <Stack
             spacing={2}
             direction={{ xs: "column", sm: "row" }}
-            alignItems={{ sm: "center" }}
+            alignItems={{ xs: "center", sm: "center" }}
             justifyContent="space-between"
             mb={2}
           >

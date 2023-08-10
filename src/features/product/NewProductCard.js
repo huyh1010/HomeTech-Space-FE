@@ -37,7 +37,7 @@ function NewProductCard({ product }) {
             whiteSpace: "nowrap",
           }}
         >
-          {product.name}
+          {`${product.name.slice(0, 20)}...`}
         </Typography>
       </CardContent>
       <CardActions>

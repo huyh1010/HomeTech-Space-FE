@@ -3,7 +3,13 @@ import ProductCard from "./ProductCard";
 
 function ProductList({ products }) {
   return (
-    <Grid container spacing={2} mt={1}>
+    <Grid
+      container
+      spacing={2}
+      mt={1}
+      justifyContent={{ xs: "center", sm: "start", md: "start", lg: "start" }}
+      alignItems={{ xs: "center", sm: "start", md: "start", lg: "start" }}
+    >
       {products?.map((product, index) => (
         <Grid key={product._id} item xs={11} sm={6} md={4} lg={4}>
           <ProductCard product={product} />

@@ -72,9 +72,11 @@ function CartPage() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Product</TableCell>
+                    <TableCell></TableCell>
                     <TableCell>Price</TableCell>
                     <TableCell>Qty.</TableCell>
                     <TableCell>Sum</TableCell>
+                    <TableCell>Remove</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -82,33 +84,29 @@ function CartPage() {
                     <TableRow key={item._id}>
                       <TableCell
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
+                          // display: "flex",
+                          // alignItems: "center",
 
                           cursor: "pointer",
                         }}
                       >
+                        <Typography variant="body1">{item.name}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        {" "}
                         <Avatar
                           src={item.poster_path}
                           sx={{ mr: 2, width: 50, height: 50 }}
                           alt={item.name}
                         />
-                        <Typography variant="body1">{item.name}</Typography>
                       </TableCell>
                       <TableCell>{fCurrency(item.price)}</TableCell>
-                      <TableCell
-                        sx={{
-                          display: "flex",
-                          // alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
+
+                      <TableCell>
                         <IconButton onClick={() => handleIncrease(item._id)}>
                           <AddIcon />
                         </IconButton>
-                        {/* <Typography variant="subtitle2">
-                    
-                  </Typography> */}
+
                         {item.quantity}
                         <IconButton
                           onClick={() => handleDecrease(item._id)}

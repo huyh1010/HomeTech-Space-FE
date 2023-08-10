@@ -299,12 +299,14 @@ export const cartSlice = createSlice({
       state.cart = [];
       localStorage.removeItem("cart");
       localStorage.removeItem("cartForGoogleUser");
+      localStorage.removeItem("user");
     },
     clearCart: (state) => {
       state.cartItemCount = 0;
       state.cart = [];
       localStorage.removeItem("cart");
       localStorage.removeItem("cartForGoogleUser");
+      localStorage.removeItem("user");
     },
   },
   extraReducers: (builder) => {

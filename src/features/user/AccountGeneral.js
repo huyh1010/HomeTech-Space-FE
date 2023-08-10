@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import useAuth from "../../hooks/useAuth.js";
 import { FTextField, FUploadAvatar, FormProvider } from "../../components/form";
-import { Box, Button, Card, Container, Stack, Typography } from "@mui/material";
+import { Box, Card, Container, Stack, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";

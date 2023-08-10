@@ -189,7 +189,11 @@ function NavBar() {
           {isMatch ? (
             <Toolbar
               variant="dense"
-              sx={{ display: "flex", justifyContent: "space-around" }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
             >
               <Stack direction="row" alignItems="center">
                 <IconButton

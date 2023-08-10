@@ -149,7 +149,11 @@ function UserInfo() {
                           theme.palette.mode === "dark" && "plum",
                       }}
                     >
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{ fontWeight: "bold" }}
+                      >
                         {user._id}
                       </TableCell>
                       <TableCell>{user.name}</TableCell>
