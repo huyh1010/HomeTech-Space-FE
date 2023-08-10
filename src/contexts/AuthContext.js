@@ -46,7 +46,7 @@ const reducer = (state, action) => {
 };
 
 const AuthContext = createContext({ ...initialState });
-const setSession = (accessToken, user) => {
+const setSession = (accessToken) => {
   if (accessToken) {
     window.localStorage.setItem("accessToken", accessToken);
     apiService.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
@@ -60,7 +60,8 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
-  const cartForGoogleUser = JSON.parse(window.localStorage.getItem("cart"));
+  // const cartForGoogleUser = JSON.parse(window.localStorage.getItem("cart"));
+
   const updatedProfile = useSelector((state) => state.users.updateProfile);
 
   const navigate = useNavigate();
@@ -147,7 +148,7 @@ const AuthProvider = ({ children }) => {
 
     const res = await apiService.post(url, {
       googleId,
-      cartForGoogleUser: cartForGoogleUser,
+      cart: cart,
     });
     const { user, accessToken, userCart } = res.data;
 

@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import CartReview from "../features/cart/CartReview";
+
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../features/cart/cartSlice";
 import { Controller, useForm } from "react-hook-form";
@@ -18,6 +18,7 @@ import { LoadingButton } from "@mui/lab";
 import useAuth from "../hooks/useAuth";
 import { createOrder } from "../features/order/orderSlice";
 import { useNavigate } from "react-router-dom";
+import CartReview from "../features/cart/CartReview";
 
 function CheckOutPage() {
   const dispatch = useDispatch();

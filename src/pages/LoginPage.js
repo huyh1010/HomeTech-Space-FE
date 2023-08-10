@@ -69,8 +69,8 @@ function LoginPage() {
 
   const handleGoogle = async () => {
     window.open(`${BASE_URL}/auth/google`, "_self");
-    dispatch(saveCartForGoogleUser(cart));
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // dispatch(saveCartForGoogleUser(cart));
+    // localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   return (

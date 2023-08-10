@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
-import { getSingleProduct } from "../product/productSlice";
-import { useDispatch } from "react-redux";
-import useAuth from "../../hooks/useAuth";
 
 export const createCart = createAsyncThunk(
   "carts/createCart",
@@ -283,11 +280,6 @@ export const cartSlice = createSlice({
         const res = apiService.put(url, { cartOnLocal });
         return res.data;
       }
-    },
-    saveCartForGoogleUser: (state, action) => {
-      state.cart = action.payload;
-      state.cartItemCount = action.payload.length;
-      localStorage.setItem("cart", JSON.stringify(action.payload));
     },
     logInUser: (state, action) => {
       state.cart = action.payload;
