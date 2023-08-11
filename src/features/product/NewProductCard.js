@@ -8,8 +8,14 @@ import {
 } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../cart/cartSlice";
 
 function NewProductCard({ product }) {
+  const dispatch = useDispatch();
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+  };
   return (
     <Card
       sx={{
@@ -47,6 +53,7 @@ function NewProductCard({ product }) {
             margin: "auto",
             borderRadius: 14,
           }}
+          onClick={() => handleAddToCart(product)}
         >
           Add to Cart
         </Button>
