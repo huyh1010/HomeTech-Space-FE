@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import customizeComponents from "./customizations";
 import React, { useState } from "react";
-import { deepOrange, grey } from "@mui/material/colors";
 // import customizeComponents from "./customizations";
 const PRIMARY = {
   lighter: "#D6E4FF",

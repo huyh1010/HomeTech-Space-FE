@@ -1,26 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 
-export const createCart = createAsyncThunk(
-  "carts/createCart",
-  async ({ user_id, cart }, { rejectWithValue }) => {
-    try {
-      let url = "/carts";
-      const res = await apiService.post(url, { user_id, cart });
-      const timeout = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("ok");
-          }, 1000);
-        });
-      };
-      await timeout();
-      return res.data.cart;
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
+// export const createCart = createAsyncThunk(
+//   "carts/createCart",
+//   async ({ user_id, cart }, { rejectWithValue }) => {
+//     try {
+//       let url = "/carts";
+//       const res = await apiService.post(url, { user_id, cart });
+//       const timeout = () => {
+//         return new Promise((resolve) => {
+//           setTimeout(() => {
+//             resolve("ok");
+//           }, 1000);
+//         });
+//       };
+//       await timeout();
+//       return res.data.cart;
+//     } catch (error) {
+//       rejectWithValue(error);
+//     }
+//   }
+// );
 export const updateCart = createAsyncThunk(
   "carts/updateCart",
   async ({ id, cart }, { rejectWithValue }) => {
@@ -41,49 +41,49 @@ export const updateCart = createAsyncThunk(
     }
   }
 );
-export const removeProductQuantity = createAsyncThunk(
-  "carts/removeProductQuantity",
-  async (productId, { rejectWithValue }) => {
-    try {
-      let url = "/carts/quantity/dec";
-      const res = await apiService.put(url, { product_id: productId });
-      const timeout = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("ok");
-          }, 1000);
-        });
-      };
-      await timeout();
+// export const removeProductQuantity = createAsyncThunk(
+//   "carts/removeProductQuantity",
+//   async (productId, { rejectWithValue }) => {
+//     try {
+//       let url = "/carts/quantity/dec";
+//       const res = await apiService.put(url, { product_id: productId });
+//       const timeout = () => {
+//         return new Promise((resolve) => {
+//           setTimeout(() => {
+//             resolve("ok");
+//           }, 1000);
+//         });
+//       };
+//       await timeout();
 
-      return res.data;
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
+//       return res.data;
+//     } catch (error) {
+//       rejectWithValue(error);
+//     }
+//   }
+// );
 
-export const AddProductQuantity = createAsyncThunk(
-  "carts/AddProductQuantity",
-  async (productId, { rejectWithValue }) => {
-    try {
-      let url = "/carts/quantity/inc";
-      const res = await apiService.put(url, { product_id: productId });
-      const timeout = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("ok");
-          }, 1000);
-        });
-      };
-      await timeout();
-      console.log(res.data);
-      return res.data;
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
+// export const AddProductQuantity = createAsyncThunk(
+//   "carts/AddProductQuantity",
+//   async (productId, { rejectWithValue }) => {
+//     try {
+//       let url = "/carts/quantity/inc";
+//       const res = await apiService.put(url, { product_id: productId });
+//       const timeout = () => {
+//         return new Promise((resolve) => {
+//           setTimeout(() => {
+//             resolve("ok");
+//           }, 1000);
+//         });
+//       };
+//       await timeout();
+//       console.log(res.data);
+//       return res.data;
+//     } catch (error) {
+//       rejectWithValue(error);
+//     }
+//   }
+// );
 // after login ,back to cart
 // in login ,dispatch update cart with data from local storage
 // merge cart if cart exists
@@ -165,29 +165,29 @@ export const AddProductQuantity = createAsyncThunk(
 //   }
 // );
 
-export const removeProduct = createAsyncThunk(
-  "carts/removeProduct",
-  async (productId, { rejectWithValue }) => {
-    try {
-      let url = "/carts/product";
-      const res = await apiService.delete(url, {
-        data: { product_id: productId },
-      });
-      const timeout = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve("ok");
-          }, 1000);
-        });
-      };
-      await timeout();
+// export const removeProduct = createAsyncThunk(
+//   "carts/removeProduct",
+//   async (productId, { rejectWithValue }) => {
+//     try {
+//       let url = "/carts/product";
+//       const res = await apiService.delete(url, {
+//         data: { product_id: productId },
+//       });
+//       const timeout = () => {
+//         return new Promise((resolve) => {
+//           setTimeout(() => {
+//             resolve("ok");
+//           }, 1000);
+//         });
+//       };
+//       await timeout();
 
-      return res.data;
-    } catch (error) {
-      rejectWithValue(error);
-    }
-  }
-);
+//       return res.data;
+//     } catch (error) {
+//       rejectWithValue(error);
+//     }
+//   }
+// );
 // const cart =
 //   localStorage.getItem("cart") !== null
 //     ? JSON.parse(localStorage.getItem("cart"))
@@ -302,10 +302,10 @@ export const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createCart.pending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
+    // builder.addCase(createCart.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = "";
+    // });
     // builder.addCase(getProductFromCart.pending, (state) => {
     //   state.loading = true;
     //   state.error = "";
@@ -336,10 +336,10 @@ export const cartSlice = createSlice({
     //   state.error = "";
     // });
 
-    builder.addCase(createCart.fulfilled, (state, action) => {
-      state.loading = false;
-      state.cart = action.payload;
-    });
+    // builder.addCase(createCart.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.cart = action.payload;
+    // });
     // builder.addCase(getProductFromCart.fulfilled, (state, action) => {
     //   state.loading = false;
     //   state.cart = action.payload;
@@ -408,14 +408,14 @@ export const cartSlice = createSlice({
     //   localStorage.setItem("cart", JSON.stringify(state.cart));
     // });
 
-    builder.addCase(createCart.rejected, (state, action) => {
-      state.loading = false;
-      if (action.payload) {
-        state.error = action.payload.message;
-      } else {
-        state.error = action.error.message;
-      }
-    });
+    // builder.addCase(createCart.rejected, (state, action) => {
+    //   state.loading = false;
+    //   if (action.payload) {
+    //     state.error = action.payload.message;
+    //   } else {
+    //     state.error = action.error.message;
+    //   }
+    // });
     // builder.addCase(getProductFromCart.rejected, (state, action) => {
     //   state.loading = false;
     //   if (action.payload) {

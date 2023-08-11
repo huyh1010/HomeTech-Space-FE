@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
-import NewReleasesIcon from "@mui/icons-material/NewReleases";
 import React from "react";
 
 function NewProductCard({ product }) {

@@ -2,7 +2,6 @@ import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -18,7 +17,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
 import InventoryIcon from "@mui/icons-material/Inventory";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuth from "../hooks/useAuth";
 import { Avatar, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -190,9 +188,17 @@ export default function AdminBar() {
             color="inherit"
           >
             {theme.palette.mode === "dark" ? (
-              <Brightness7Icon color="dark" />
+              <Brightness7Icon
+                sx={{
+                  color: theme.palette.mode === "dark" ? "white" : "#181212",
+                }}
+              />
             ) : (
-              <Brightness4Icon color="dark" />
+              <Brightness4Icon
+                sx={{
+                  color: theme.palette.mode === "dark" ? "white" : "#181212",
+                }}
+              />
             )}
           </IconButton>
         </Toolbar>

@@ -1,12 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Link as RouterLink,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 import {
   Alert,
@@ -24,10 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import { FCheckbox, FTextField, FormProvider } from "../components/form";
 import useAuth from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
-import apiService from "../app/apiService";
 import { BASE_URL } from "../app/config";
-import { useDispatch, useSelector } from "react-redux";
-import { saveCartForGoogleUser } from "../features/cart/cartSlice";
 
 const defaultValues = {
   email: "",
@@ -41,8 +33,6 @@ const loginSchema = yup.object({
 });
 function LoginPage() {
   const auth = useAuth();
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state?.carts?.cart);
 
   const methods = useForm({
     defaultValues,
@@ -69,8 +59,6 @@ function LoginPage() {
 
   const handleGoogle = async () => {
     window.open(`${BASE_URL}/auth/google`, "_self");
-    // dispatch(saveCartForGoogleUser(cart));
-    // localStorage.setItem("cart", JSON.stringify(cart));
   };
 
   return (

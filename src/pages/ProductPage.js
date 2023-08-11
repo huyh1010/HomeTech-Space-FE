@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../features/product/productSlice";
 import {
@@ -13,14 +12,12 @@ import {
   FormControlLabel,
   FormLabel,
   IconButton,
-  InputAdornment,
   InputBase,
   Pagination,
   Paper,
   Radio,
   RadioGroup,
   Stack,
-  TextField,
 } from "@mui/material";
 import LoadingScreen from "../components/LoadingScreen";
 import ProductList from "../features/product/ProductList";

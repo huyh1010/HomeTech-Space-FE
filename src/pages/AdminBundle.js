@@ -58,8 +58,8 @@ function AdminBundle() {
   const { bundles, count } = useSelector((state) => state?.bundles?.bundles);
   const { loading, error } = useSelector((state) => state?.bundles);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (id) => {
+    setOpen(id);
   };
 
   const handleClose = () => {
@@ -187,11 +187,14 @@ function AdminBundle() {
                                 }}
                                 size="small"
                                 endIcon={<DeleteIcon />}
-                                onClick={handleClickOpen}
+                                onClick={() => handleClickOpen(bundle._id)}
                               >
                                 Delete
                               </Button>
-                              <Dialog open={open} onClose={handleClose}>
+                              <Dialog
+                                open={open === bundle._id}
+                                onClose={handleClose}
+                              >
                                 <DialogTitle
                                   sx={{
                                     textAlign: "center",

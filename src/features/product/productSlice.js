@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { CloudinaryUpload } from "../../utils/cloudinary";
 import { toast } from "react-toastify";
-import { PRODUCT_PER_PAGE } from "../../app/config";
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",

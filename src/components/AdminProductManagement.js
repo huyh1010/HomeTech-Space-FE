@@ -23,7 +23,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
   useTheme,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";

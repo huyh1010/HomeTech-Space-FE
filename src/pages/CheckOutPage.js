@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-
+import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../features/cart/cartSlice";
 import { Controller, useForm } from "react-hook-form";
@@ -19,6 +19,27 @@ import useAuth from "../hooks/useAuth";
 import { createOrder } from "../features/order/orderSlice";
 import { useNavigate } from "react-router-dom";
 import CartReview from "../features/cart/CartReview";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const defaultValues = {
+  name: "",
+  email: "",
+  phone: "",
+  shipping_address: "",
+  district: "",
+  city: "",
+  payment_method: "",
+};
+
+const CreateOrderSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  email: yup.string().required("Email is required"),
+  phone: yup.string().required("Phone is required"),
+  shipping_address: yup.string().required("Address is required"),
+  district: yup.string().required("District is required"),
+  city: yup.string().required("City is required"),
+  payment_method: yup.string().required("Payment Method is required"),
+});
 
 function CheckOutPage() {
   const dispatch = useDispatch();
@@ -43,13 +64,8 @@ function CheckOutPage() {
 
   const methods = useForm({
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      shipping_address: "",
-      district: "",
-      city: "",
-      payment_method: "",
+      defaultValues,
+      resolver: yupResolver(CreateOrderSchema),
     },
   });
   const {

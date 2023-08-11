@@ -278,7 +278,7 @@ function AdminCreateBundle() {
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  Save Changes
+                  Create Bundle
                 </LoadingButton>
               </Stack>
             </Card>

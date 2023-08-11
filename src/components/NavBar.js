@@ -212,24 +212,41 @@ function NavBar() {
                     {" "}
                   </Avatar>
                 ) : (
-                  <AccountCircleIcon color="dark" onClick={handleLogin} />
+                  <AccountCircleIcon
+                    onClick={handleLogin}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "white" : "#181212",
+                    }}
+                  />
                 )}
                 {renderMenu}
                 <IconButton onClick={() => navigate("/cart")}>
                   {" "}
                   <Badge badgeContent={cartItemCount} color="primary">
-                    <ShoppingCartIcon />
+                    <ShoppingCartIcon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   </Badge>
                 </IconButton>
-                <IconButton
-                  sx={{ ml: 1 }}
-                  onClick={colorMode.toggleColorMode}
-                  color="inherit"
-                >
+                <IconButton onClick={colorMode.toggleColorMode}>
                   {theme.palette.mode === "dark" ? (
-                    <Brightness7Icon />
+                    <Brightness7Icon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   ) : (
-                    <Brightness4Icon />
+                    <Brightness4Icon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   )}
                 </IconButton>
               </Stack>
@@ -351,14 +368,25 @@ function NavBar() {
                     {" "}
                   </Avatar>
                 ) : (
-                  <AccountCircleIcon color="dark" onClick={handleLogin} />
+                  <AccountCircleIcon
+                    onClick={handleLogin}
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "white" : "#181212",
+                    }}
+                  />
                 )}
 
                 {renderMenu}
                 <IconButton onClick={() => navigate("/cart")}>
                   {" "}
                   <Badge badgeContent={cartItemCount} color="primary">
-                    <ShoppingCartIcon color="dark" />
+                    <ShoppingCartIcon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   </Badge>
                 </IconButton>
                 <IconButton
@@ -367,9 +395,19 @@ function NavBar() {
                   color="inherit"
                 >
                   {theme.palette.mode === "dark" ? (
-                    <Brightness7Icon color="dark" />
+                    <Brightness7Icon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   ) : (
-                    <Brightness4Icon color="dark" />
+                    <Brightness4Icon
+                      sx={{
+                        color:
+                          theme.palette.mode === "dark" ? "white" : "#181212",
+                      }}
+                    />
                   )}
                 </IconButton>
               </Stack>
