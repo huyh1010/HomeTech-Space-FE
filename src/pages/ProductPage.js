@@ -114,11 +114,12 @@ function ProductPage() {
                   value={category}
                   onChange={(e, value) => handleFilterCategory(value)}
                 >
-                  {categories.map((category) => (
+                  {categories.map((category, index) => (
                     <FormControlLabel
                       value={category.id}
                       control={<Radio />}
                       label={category.name}
+                      key={index}
                     />
                   ))}
                 </RadioGroup>
@@ -136,11 +137,12 @@ function ProductPage() {
                   value={price}
                   onChange={(e, value) => handleFilterPrice(value)}
                 >
-                  {priceFilters.map((price) => (
+                  {priceFilters.map((price, index) => (
                     <FormControlLabel
                       value={price.value}
                       control={<Radio />}
                       label={price.label}
+                      key={index}
                     />
                   ))}
                 </RadioGroup>

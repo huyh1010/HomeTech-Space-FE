@@ -3,7 +3,6 @@ import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { isString } from "lodash";
 import RejectionFiles from "./RejectionFiles";
 
 const DropZoneStyle = styled("div")(({ theme }) => ({
