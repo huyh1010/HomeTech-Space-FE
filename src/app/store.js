@@ -19,7 +19,7 @@ import {
 const persistConfig = {
   key: "root",
   storage: storage,
-  // whitelist: ["carts"], // only navigation will be persisted
+  whitelist: ["carts"], // only navigation will be persisted
 };
 
 const reducer = combineReducers({
