@@ -15,8 +15,8 @@ import { cancelOrder, getUserOrder } from "./orderSlice";
 function OrderCancelStatus({ order, page, rowsPerPage, user }) {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (id) => {
+    setOpen(id);
   };
 
   const handleClose = () => {
@@ -40,7 +40,7 @@ function OrderCancelStatus({ order, page, rowsPerPage, user }) {
     return (
       <>
         <Button
-          onClick={handleClickOpen}
+          onClick={() => handleClickOpen(order._id)}
           size="small"
           variant="contained"
           style={{
@@ -50,7 +50,7 @@ function OrderCancelStatus({ order, page, rowsPerPage, user }) {
         >
           Cancel
         </Button>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open === order._id} onClose={handleClose}>
           <DialogTitle sx={{ textAlign: "center", fontWeight: "bold" }}>
             {"Cancel Order"}
           </DialogTitle>
