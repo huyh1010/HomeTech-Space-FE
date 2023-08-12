@@ -7,7 +7,11 @@ import {
   Card,
   Container,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
@@ -26,7 +30,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import LoadingScreen from "../components/LoadingScreen";
 import axios from "axios";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
-import AdminProductCategory from "../features/category/AdminProductCategory";
+import { getCategories } from "../features/category/categorySlice";
 
 const UpdateProductSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -84,6 +88,11 @@ function AdminEditProduct() {
   const [imageUrlLocal, setImageUrlLocal] = useState([]);
   const { loading } = useSelector((state) => state?.products);
   const { product } = useSelector((state) => state?.products?.product);
+  const [category, setCategory] = useState("");
+  const { categories } = useSelector((state) => state?.categories);
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   let [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
@@ -172,6 +181,7 @@ function AdminEditProduct() {
     data.features = String(data.features).split(",");
     data.price = Number(data.price);
     data.weight_kg = Number(data.weight_kg);
+    data.category = category;
 
     const formData = new FormData();
 
@@ -253,7 +263,24 @@ function AdminEditProduct() {
                     label="Price"
                     helperText="Input Number"
                   />
-                  <AdminProductCategory register={register} />
+                  <FormControl sx={{ mr: 1, minWidth: 120 }}>
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                      label="Category"
+                      name="category"
+                      onChange={(e) => setCategory(e.target.value)}
+                    >
+                      {categories?.map((category) => (
+                        <MenuItem
+                          sx={{ color: "black", backgroundColor: "white" }}
+                          key={category._id}
+                          value={category._id}
+                        >
+                          {category.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                   <FTextField name="brand" label="brand" />
                   <FTextField name="dimension_size" label="Size" />
                   <FTextField

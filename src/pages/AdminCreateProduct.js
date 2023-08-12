@@ -4,11 +4,15 @@ import {
   Card,
   Container,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
@@ -21,7 +25,7 @@ import { useDropzone } from "react-dropzone";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
 import axios from "axios";
 import { createProduct } from "../features/product/productSlice";
-import AdminProductCategory from "../features/category/AdminProductCategory";
+import { getCategories } from "../features/category/categorySlice";
 
 const defaultValues = {
   name: "",
@@ -91,6 +95,12 @@ function AdminCreateProduct() {
   let [files, setFiles] = useState([]);
   const [imageUrlLocal, setImageUrlLocal] = useState([]);
   const [secureUrls] = useState([]);
+  const [category, setCategory] = useState("");
+  const { categories } = useSelector((state) => state?.categories);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
@@ -130,7 +140,6 @@ function AdminCreateProduct() {
   const {
     handleSubmit,
     setValue,
-    register,
     formState: { isSubmitting },
   } = methods;
 
@@ -154,6 +163,7 @@ function AdminCreateProduct() {
     data.features = String(data.features).split(",");
     data.price = Number(data.price);
     data.weight_kg = Number(data.weight_kg);
+    data.category = category;
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -230,7 +240,24 @@ function AdminCreateProduct() {
                   label="Price"
                   helperText="Input Number"
                 />
-                <AdminProductCategory register={register} />
+                <FormControl sx={{ mr: 1, minWidth: 120 }}>
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    label="Category"
+                    name="category"
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    {categories?.map((category, index) => (
+                      <MenuItem
+                        sx={{ color: "black", backgroundColor: "white" }}
+                        key={index}
+                        value={category._id}
+                      >
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <FTextField name="brand" label="brand" />
                 <FTextField name="dimension_size" label="Size" />
                 <FTextField
