@@ -18,10 +18,10 @@ import { LoadingButton } from "@mui/lab";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import styled from "@emotion/styled";
 import { useDropzone } from "react-dropzone";
-import AdminProductCategory from "../features/category/AdminProductCategory";
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../app/config";
 import axios from "axios";
 import { createProduct } from "../features/product/productSlice";
+import AdminProductCategory from "../features/category/AdminProductCategory";
 
 const defaultValues = {
   name: "",
