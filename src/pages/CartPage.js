@@ -102,7 +102,7 @@ function CartPage() {
                       </TableCell>
                       <TableCell>{fCurrency(item.price)}</TableCell>
 
-                      <TableCell>
+                      <TableCell sx={{ textAlign: "center" }}>
                         <IconButton onClick={() => handleIncrease(item._id)}>
                           <AddIcon />
                         </IconButton>

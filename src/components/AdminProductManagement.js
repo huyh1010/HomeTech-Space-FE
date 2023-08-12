@@ -86,7 +86,7 @@ function AdminProductManagement() {
     <form onSubmit={handleSubmit}>
       <Box
         sx={{
-          display: { xs: "block", sm: "block", md: "flex", lg: "flex" },
+          display: { xs: "block", sm: "flex", md: "flex", lg: "flex" },
           justifyContent: "space-between",
         }}
       >
@@ -97,6 +97,7 @@ function AdminProductManagement() {
             alignItems: "center",
             width: { xs: 250, sm: 400, md: 400, lg: 400 },
             backgroundColor: "white",
+            mb: { xs: 1, sm: 0, md: 0, lg: 0 },
           }}
         >
           <InputBase

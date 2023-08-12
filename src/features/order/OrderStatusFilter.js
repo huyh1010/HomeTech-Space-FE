@@ -3,7 +3,9 @@ import React from "react";
 
 function OrderStatusFilter({ orderStatus, setOrderStatus }) {
   return (
-    <FormControl sx={{ mr: 1, minWidth: 120 }}>
+    <FormControl
+      sx={{ mr: 1, minWidth: 120, mb: { xs: 1, sm: 0, md: 0, lg: 0 } }}
+    >
       <InputLabel sx={{ color: "black" }}>Status</InputLabel>
       <Select
         label="Status"
