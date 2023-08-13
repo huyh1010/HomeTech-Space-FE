@@ -25,7 +25,7 @@ function ProductByCategoryPage() {
   const { products, totalPages } = useSelector(
     (state) => state?.products?.products
   );
-  console.log(products);
+
   const { loading, error } = useSelector((state) => state.products);
 
   useEffect(() => {
