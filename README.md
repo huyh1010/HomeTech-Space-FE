@@ -166,7 +166,7 @@ Run the project:
 $ npm start
 ```
 
-## <a name="third party">## Third-party libraries used in the project</a>
+## <a name="third party">Third-party libraries used in the project</a>
 
 • Material UI
 • axios
