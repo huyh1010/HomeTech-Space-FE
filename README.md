@@ -12,12 +12,12 @@
 
 # Table of contents
 
-1. [Application Description](#application description)
-2. [User Story](#user story)
+1. [Application Description](#application_description)
+2. [User Story](#user_story)
 3. [Installation](#installation)
-4. [Third party libraries](#third party)
+4. [Third party libraries](#third_party)
 
-## <a name="application description">Application Description</a>
+## <a name="application_description">Application Description</a>
 
 • This application offers a wide range of affordable smart home devices products at the moment where electronic equipments are unaffordable out of reach for the majority of consumers.
 
@@ -33,7 +33,7 @@
 
 • While the HomeTech Space does provide a viable choice for user to browse through products, we hope to implement a "popular section" feature to allow customer to look at the platform's best-selling product. We also hope to build a customization webpage feature that allows user to select their product from scratch. While our bundle options does provide somewhat similar feature, the products in the bundle are pre-selected by the store and user are not allowed to adjust and select their own preferred product in the bundle. It would be amazing to also include a customer's review section for product reviews.
 
-## <a name="user story">User Story</a>
+## <a name="user_story">User Story</a>
 
 ### Background
 
@@ -166,7 +166,7 @@ Run the project:
 $ npm start
 ```
 
-## <a name="third party">Third-party libraries used in the project</a>
+## <a name="third_party">Third-party libraries used in the project</a>
 
 • Material UI
 • axios
