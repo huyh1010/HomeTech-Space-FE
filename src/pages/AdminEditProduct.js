@@ -88,7 +88,7 @@ function AdminEditProduct() {
   const [imageUrlLocal, setImageUrlLocal] = useState([]);
   const { loading } = useSelector((state) => state?.products);
   const { product } = useSelector((state) => state?.products?.product);
-  const [category, setCategory] = useState(product.category);
+  const [category, setCategory] = useState("");
   const { categories } = useSelector((state) => state?.categories);
   useEffect(() => {
     dispatch(getCategories());
