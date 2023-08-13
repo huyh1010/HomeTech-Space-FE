@@ -60,7 +60,10 @@ function MainFooter() {
         <Box mt={5}>
           <Typography variant="body2" color="text.secondary" align="center">
             {"Copyright © "}
-            <Link color="inherit" href="https://your-website.com/">
+            <Link
+              color="inherit"
+              href="https://hometech-space-huyhuynh.netlify.app/"
+            >
               HomeTech Space
             </Link>{" "}
             {new Date().getFullYear()}
