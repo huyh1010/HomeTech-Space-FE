@@ -222,7 +222,6 @@ export const productSlice = createSlice({
     });
     builder.addCase(updateProduct.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload);
       toast.success("Product updated");
     });
     builder.addCase(deleteProduct.fulfilled, (state, action) => {

@@ -131,7 +131,7 @@ export const cancelOrder = createAsyncThunk(
 
 export const getUserOrder = createAsyncThunk(
   "/orders/getUserOrder",
-  async ({ user_id, page = 1, limit }, { rejectWithValue }) => {
+  async ({ user_id, page, limit }, { rejectWithValue }) => {
     try {
       let url = `/orders/user/${user_id}?page=${page}&limit=${limit}`;
       const res = await apiService.get(url);

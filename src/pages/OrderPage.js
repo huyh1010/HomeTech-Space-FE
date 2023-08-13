@@ -65,7 +65,7 @@ function OrderPage() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 5));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -75,7 +75,8 @@ function OrderPage() {
         getUserOrder({ user_id: user._id, page: page + 1, limit: rowsPerPage })
       );
     }
-  }, [dispatch, page, user, rowsPerPage]);
+    // eslint-disable-next-line
+  }, [dispatch, page, user]);
 
   return (
     <Container sx={{ py: 10 }}>

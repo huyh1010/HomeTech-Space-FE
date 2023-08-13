@@ -141,7 +141,7 @@ const initialState = {
   bundles: [],
   bundle: [],
   productsInBundle: [],
-
+  count: 0,
   loading: false,
   error: null,
 };
@@ -178,6 +178,7 @@ export const bundleSlice = createSlice({
     builder.addCase(getBundles.fulfilled, (state, action) => {
       state.loading = false;
       state.bundles = action.payload;
+      state.count = action.payload.count;
     });
     builder.addCase(getSingleBundle.fulfilled, (state, action) => {
       state.loading = false;

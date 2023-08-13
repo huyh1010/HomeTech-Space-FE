@@ -55,8 +55,8 @@ function AdminBundle() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
 
-  const { bundles, count } = useSelector((state) => state?.bundles?.bundles);
-  const { loading, error } = useSelector((state) => state?.bundles);
+  const { bundles } = useSelector((state) => state?.bundles?.bundles);
+  const { loading, error, count } = useSelector((state) => state?.bundles);
 
   const handleClickOpen = (id) => {
     setOpen(id);
@@ -80,7 +80,7 @@ function AdminBundle() {
     dispatch(getBundles({ page: page + 1, limit: rowsPerPage, name: name }));
   };
   useEffect(() => {
-    dispatch(getBundles({ page: page + 1, limit: rowsPerPage, name }));
+    dispatch(getBundles({ page: page + 1, limit: rowsPerPage, name: name }));
     // eslint-disable-next-line
   }, [dispatch, page]);
   return (
@@ -228,7 +228,7 @@ function AdminBundle() {
                                         dispatch(
                                           getBundles({
                                             page: page + 1,
-                                            limit: rowsPerPage,
+                                            limit: rowsPerPage + 1,
                                           })
                                         ),
                                         handleClose()

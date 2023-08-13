@@ -73,8 +73,8 @@ function AdminBundleList({ productList, setProductList, products, bundle }) {
         </Box>
       ) : (
         <Box>
-          {bundle?.products?.map((product) => (
-            <Paper sx={{ p: 2, mb: 1, border: "1px solid black" }}>
+          {bundle?.products?.map((product, index) => (
+            <Paper sx={{ p: 2, mb: 1, border: "1px solid black" }} key={index}>
               <Typography>{product.name}</Typography>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Avatar

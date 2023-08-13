@@ -29,7 +29,7 @@ function OrderCancelStatus({ order, page, rowsPerPage, user }) {
         getUserOrder({
           user_id: user._id,
           page: page + 1,
-          limit: rowsPerPage,
+          limit: rowsPerPage + 1,
         })
       ),
       handleClose()
