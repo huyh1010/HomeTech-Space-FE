@@ -61,6 +61,7 @@ const AuthProvider = ({ children }) => {
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
   // const cartForGoogleUser = JSON.parse(window.localStorage.getItem("cart"));
+  console.log(cart);
 
   const updatedProfile = useSelector((state) => state.users.updateProfile);
 
@@ -148,7 +149,7 @@ const AuthProvider = ({ children }) => {
 
     const res = await apiService.post(url, {
       googleId,
-      cart: cart,
+      cart,
     });
     const { user, accessToken, userCart } = res.data;
 
