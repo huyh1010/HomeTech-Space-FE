@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "./productSlice";
 import { Container, Grid, Typography } from "@mui/material";
-import NewProductCard from "./NewProductCard";
+import ProductCard from "./ProductCard";
 
 function NewProductList() {
   let page = 1;
@@ -29,7 +29,7 @@ function NewProductList() {
         {products &&
           products.map((product) => (
             <Grid item xs={12} sm={12} md={4} key={product._id}>
-              <NewProductCard product={product} />
+              <ProductCard product={product} />
             </Grid>
           ))}
       </Grid>
