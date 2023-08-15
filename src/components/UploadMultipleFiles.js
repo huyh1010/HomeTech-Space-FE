@@ -32,7 +32,7 @@ function UploadMultipleFiles({
     isDragReject,
     fileRejections,
   } = useDropzone({ multiple: false, ...other });
-  console.log(file);
+
   return (
     <Box sx={{ width: "100%", ...sx }}>
       <DropZoneStyle

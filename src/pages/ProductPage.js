@@ -97,7 +97,6 @@ function ProductPage() {
           // minHeight: "100vh",
           mt: 3,
           flexDirection: { xs: "column", sm: "row", md: "row", lg: "row" },
-          // alignItems: "center",
         }}
       >
         <Stack alignItems="center">

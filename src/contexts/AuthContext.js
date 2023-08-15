@@ -61,7 +61,6 @@ const AuthProvider = ({ children }) => {
   const dispatchFunction = useDispatch();
   const cart = useSelector((state) => state?.carts?.cart);
   // const cartForGoogleUser = JSON.parse(window.localStorage.getItem("cart"));
-  console.log(cart);
 
   const updatedProfile = useSelector((state) => state.users.updateProfile);
 
