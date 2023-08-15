@@ -101,7 +101,7 @@ function LoginPage() {
           sx={{ my: 2 }}
         >
           <FCheckbox name="remember" label="Remember me" />
-          <Link to="/" variant="subtitle2" component={RouterLink}>
+          <Link variant="subtitle2" component={RouterLink}>
             Forgot password?
           </Link>
         </Stack>
