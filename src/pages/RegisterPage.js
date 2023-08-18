@@ -15,6 +15,7 @@ import {
 import { FTextField, FormProvider } from "../components/form";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
+import { GlobalStyles } from "@mui/material";
 
 const defaultValues = {
   name: "",
@@ -37,6 +38,15 @@ function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
+  const homePageStyles = (
+    <GlobalStyles
+      styles={{
+        body: {
+          background: "white",
+        },
+      }}
+    />
+  );
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(registerSchema),
@@ -67,6 +77,7 @@ function RegisterPage() {
   };
   return (
     <Container maxWidth="xs">
+      {homePageStyles}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           {!!errors.responseError && (

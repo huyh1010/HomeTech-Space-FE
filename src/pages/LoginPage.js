@@ -20,6 +20,7 @@ import { FCheckbox, FTextField, FormProvider } from "../components/form";
 import useAuth from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { BASE_URL } from "../app/config";
+import { GlobalStyles } from "@mui/material";
 
 const defaultValues = {
   email: "",
@@ -33,6 +34,15 @@ const loginSchema = yup.object({
 });
 function LoginPage() {
   const auth = useAuth();
+  const homePageStyles = (
+    <GlobalStyles
+      styles={{
+        body: {
+          background: "white",
+        },
+      }}
+    />
+  );
 
   const methods = useForm({
     defaultValues,
@@ -63,6 +73,7 @@ function LoginPage() {
 
   return (
     <Container maxWidth="xs">
+      {homePageStyles}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           {!!errors.responseError && (
@@ -116,7 +127,7 @@ function LoginPage() {
           Login
         </LoadingButton>
       </FormProvider>
-      <Box sx={{ textAlign: "center", mt: 1 }}>
+      <Box sx={{ textAlign: "center", mt: 1, boxShadow: 3 }}>
         <Button
           onClick={handleGoogle}
           fullWidth
@@ -124,6 +135,7 @@ function LoginPage() {
           startIcon={<FcGoogle />}
           style={{
             backgroundColor: "white",
+
             color: "#37474f",
             textTransform: "none",
             fontWeight: "bold",
