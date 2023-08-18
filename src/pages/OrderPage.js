@@ -76,7 +76,7 @@ function OrderPage() {
       );
     }
     // eslint-disable-next-line
-  }, [dispatch, page, user]);
+  }, [dispatch, page, user, rowsPerPage]);
 
   return (
     <Container sx={{ py: 10 }}>

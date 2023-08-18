@@ -82,7 +82,7 @@ function AdminBundle() {
   useEffect(() => {
     dispatch(getBundles({ page: page + 1, limit: rowsPerPage, name: name }));
     // eslint-disable-next-line
-  }, [dispatch, page]);
+  }, [dispatch, page, rowsPerPage]);
   return (
     <form onSubmit={handleSubmit}>
       <Container sx={{ mt: 10 }}>

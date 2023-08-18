@@ -75,7 +75,7 @@ function AdminProductManagement() {
   useEffect(() => {
     dispatch(getProducts({ page: page + 1, limit: rowsPerPage, name: name }));
     // eslint-disable-next-line
-  }, [dispatch, page]);
+  }, [dispatch, page, rowsPerPage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
