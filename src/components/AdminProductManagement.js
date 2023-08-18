@@ -215,7 +215,7 @@ function AdminProductManagement() {
                                   dispatch(
                                     getProducts({
                                       page: page + 1,
-                                      limit: rowsPerPage + 1,
+                                      limit: rowsPerPage,
                                     })
                                   ),
                                   handleClose()
