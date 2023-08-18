@@ -52,6 +52,7 @@ function BundleCard({ bundle }) {
         <Button
           style={{
             backgroundColor: "black",
+            color: "white",
             margin: "auto",
             borderRadius: 14,
           }}
