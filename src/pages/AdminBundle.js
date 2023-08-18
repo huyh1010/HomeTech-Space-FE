@@ -225,12 +225,13 @@ function AdminBundle() {
                                       dispatch(
                                         deleteBundle({ id: bundle._id })
                                       ).then(
-                                        dispatch(() =>
-                                          getBundles({
-                                            page: page + 1,
-                                            limit: rowsPerPage,
-                                          })
-                                        ),
+                                        () =>
+                                          dispatch(
+                                            getBundles({
+                                              page: page + 1,
+                                              limit: rowsPerPage,
+                                            })
+                                          ),
                                         handleClose()
                                       )
                                     }

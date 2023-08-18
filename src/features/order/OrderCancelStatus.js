@@ -25,13 +25,14 @@ function OrderCancelStatus({ order, page, rowsPerPage, user }) {
 
   const handleCancel = (orderId) => {
     dispatch(cancelOrder({ id: orderId })).then(
-      dispatch(() =>
-        getUserOrder({
-          user_id: user._id,
-          page: page + 1,
-          limit: rowsPerPage,
-        })
-      ),
+      () =>
+        dispatch(
+          getUserOrder({
+            user_id: user._id,
+            page: page + 1,
+            limit: rowsPerPage,
+          })
+        ),
       handleClose()
     );
   };
