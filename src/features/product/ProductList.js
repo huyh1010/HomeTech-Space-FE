@@ -11,7 +11,7 @@ function ProductList({ products }) {
       alignItems={{ xs: "center", sm: "start", md: "start", lg: "start" }}
     >
       {products?.map((product, index) => (
-        <Grid key={product._id} item xs={11} sm={6} md={4} lg={4}>
+        <Grid key={product._id} item xs={11} sm={6} md={5} lg={4}>
           <ProductCard product={product} />
         </Grid>
       ))}

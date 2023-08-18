@@ -5,6 +5,8 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { fCurrency } from "../../utils/numberFormat";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +17,8 @@ import { addToCart } from "../cart/cartSlice";
 function ProductCard({ product }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const isResponsive = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
@@ -47,7 +51,7 @@ function ProductCard({ product }) {
             whiteSpace: "nowrap",
           }}
         >
-          {product.name}
+          {isResponsive ? `${product.name.slice(0, 20)}...` : product.name}{" "}
         </Typography>
       </CardContent>
       <CardActions>
