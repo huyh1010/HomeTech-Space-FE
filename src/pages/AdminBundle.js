@@ -225,10 +225,10 @@ function AdminBundle() {
                                       dispatch(
                                         deleteBundle({ id: bundle._id })
                                       ).then(
-                                        dispatch(
+                                        dispatch(() =>
                                           getBundles({
                                             page: page + 1,
-                                            limit: rowsPerPage + 1,
+                                            limit: rowsPerPage,
                                           })
                                         ),
                                         handleClose()

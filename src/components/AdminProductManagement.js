@@ -212,12 +212,13 @@ function AdminProductManagement() {
                                 dispatch(
                                   deleteProduct({ id: product._id })
                                 ).then(
-                                  dispatch(
-                                    getProducts({
-                                      page: page + 1,
-                                      limit: rowsPerPage,
-                                    })
-                                  ),
+                                  () =>
+                                    dispatch(
+                                      getProducts({
+                                        page: page + 1,
+                                        limit: rowsPerPage,
+                                      })
+                                    ),
                                   handleClose()
                                 )
                               }
