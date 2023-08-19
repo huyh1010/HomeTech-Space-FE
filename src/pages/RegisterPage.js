@@ -11,12 +11,10 @@ import {
   InputAdornment,
   Link,
   Stack,
-  useTheme,
 } from "@mui/material";
 import { FTextField, FormProvider } from "../components/form";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { GlobalStyles } from "@mui/material";
 
 const defaultValues = {
   name: "",

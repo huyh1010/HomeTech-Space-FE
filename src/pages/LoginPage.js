@@ -20,7 +20,6 @@ import { FCheckbox, FTextField, FormProvider } from "../components/form";
 import useAuth from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { BASE_URL } from "../app/config";
-import { GlobalStyles } from "@mui/material";
 
 const defaultValues = {
   email: "",
