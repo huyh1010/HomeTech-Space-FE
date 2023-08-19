@@ -32,17 +32,23 @@ const loginSchema = yup.object({
   email: yup.string().email("Invalid Email").required("Email is required"),
   password: yup.string().required("Password is required"),
 });
+
+// const textBorder = {
+//   "& .MuiOutlinedInput-root": {
+//     "& fieldset": {
+//       borderColor: "#181212",
+//     },
+//     "&:hover fieldset": {
+//       borderColor: "#181212",
+//     },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#181212",
+//     },
+//   },
+// };
+
 function LoginPage() {
   const auth = useAuth();
-  const homePageStyles = (
-    <GlobalStyles
-      styles={{
-        body: {
-          background: "white",
-        },
-      }}
-    />
-  );
 
   const methods = useForm({
     defaultValues,
@@ -73,13 +79,15 @@ function LoginPage() {
 
   return (
     <Container maxWidth="xs">
-      {homePageStyles}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           {!!errors.responseError && (
             <Alert severity="error">{errors.responseError.message}</Alert>
           )}
-          <Alert severity="info">
+          <Alert
+            severity="info"
+            sx={{ backgroundColor: "#e5f6fd", color: "#181212" }}
+          >
             Don't have an account?{" "}
             <Link variant="subtitle2" component={RouterLink} to="/register">
               Get started
@@ -111,7 +119,11 @@ function LoginPage() {
           alignItems="center"
           sx={{ my: 2 }}
         >
-          <FCheckbox name="remember" label="Remember me" />
+          <FCheckbox
+            name="remember"
+            label="Remember me"
+            sx={{ color: "#181212" }}
+          />
           <Link variant="subtitle2" component={RouterLink}>
             Forgot password?
           </Link>

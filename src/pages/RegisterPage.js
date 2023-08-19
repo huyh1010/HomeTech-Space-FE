@@ -11,6 +11,7 @@ import {
   InputAdornment,
   Link,
   Stack,
+  useTheme,
 } from "@mui/material";
 import { FTextField, FormProvider } from "../components/form";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -34,19 +35,28 @@ const registerSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Password must match"),
 });
 
+// const textBorder = {
+//   "& .MuiOutlinedInput-root": {
+//     "& fieldset": {
+//       borderColor: "#181212",
+//     },
+//     "&:hover fieldset": {
+//       borderColor: "#181212",
+//     },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "#181212",
+//     },
+//     "& .MuiOutlinedInput-input": {
+//       color: "black",
+//     },
+//   },
+// };
+
 function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
-  const homePageStyles = (
-    <GlobalStyles
-      styles={{
-        body: {
-          background: "white",
-        },
-      }}
-    />
-  );
+
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(registerSchema),
@@ -77,13 +87,15 @@ function RegisterPage() {
   };
   return (
     <Container maxWidth="xs">
-      {homePageStyles}
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           {!!errors.responseError && (
             <Alert severity="error">{errors.responseError.message}</Alert>
           )}
-          <Alert severity="info">
+          <Alert
+            severity="info"
+            sx={{ backgroundColor: "#e5f6fd", color: "#181212" }}
+          >
             Already have an account?{" "}
             <Link variant="subtitle2" component={RouterLink} to="/login">
               Sign in
