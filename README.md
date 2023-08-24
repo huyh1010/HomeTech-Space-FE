@@ -2,7 +2,9 @@
 <h3 align="center">A passionate Full Stack developer from Vietnam</h3>
 
 <h3 align="left">Connect with me:</h3>
-<p align="left">
+<a href="https://www.linkedin.com/in/huy-tien-huynh-4b0b3021b/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/huy-tien-huynh-4b0b3021b/" height="30" width="40" /></a>
+<a href="https://www.facebook.com/huy.huynh.1297943/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="https://www.facebook.com/huy.huynh.1297943/" height="30" width="40" /></a>
+<a href="https://www.instagram.com/huyh1010/" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="https://www.instagram.com/huyh1010/" height="30" width="40" /></a>
 </p>
 
 <h3 align="left">Languages and Tools:</h3>
